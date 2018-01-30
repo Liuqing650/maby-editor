@@ -2,7 +2,7 @@ export default {
   tools: [ // 工具栏
     { 'bold': '加粗' },
     { 'italic': '倾斜' },
-    { 'underline': '下划线' },
+    { 'underlined': '下划线' },
     { 'code': '代码块' },
   ],
   value: '', // 编辑器的值

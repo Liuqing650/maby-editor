@@ -39,7 +39,7 @@ const htmlRules = [
       switch (obj.type) {
         case 'bold': return <strong>{children}</strong>;
         case 'italic': return <em>{children}</em>;
-        case 'underline': return <u>{children}</u>;
+        case 'underlined': return <u>{children}</u>;
       }
     }
   }

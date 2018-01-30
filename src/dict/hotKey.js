@@ -2,7 +2,7 @@
 export default {
   'bold': 'mod+b',
   'italic': 'mod+i',
-  'underline': 'mod+u',
+  'underlined': 'mod+u',
   'code': 'mod+~',
   'strikethrough': 'mod+d',
 };

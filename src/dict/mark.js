@@ -1,7 +1,7 @@
 const MARK_TAGS = {
   strong: 'bold',
   em: 'italic',
-  u: 'underline',
+  u: 'underlined',
   s: 'strikethrough',
   code: 'code'
 }
