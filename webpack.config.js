@@ -30,7 +30,7 @@ if (env === 'prod') {
 let config = {
   entry: {
     'maby-edit': __dirname + '/src/index.js',
-    main: __dirname + '/src/test.js',
+    // main: __dirname + '/src/test.js',
   },
   devtool: devtool,
   output: {
