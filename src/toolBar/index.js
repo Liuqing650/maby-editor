@@ -1,28 +1,56 @@
 import React from 'react';
-import { isKeyHotkey } from 'is-hotkey';
 
-/**
- * Define hotkey matchers.
- *
- * @type {Function}
- */
-
-const isBoldHotkey = isKeyHotkey('mod+b');
-const isItalicHotkey = isKeyHotkey('mod+i');
-const isUnderlinedHotkey = isKeyHotkey('mod+u');
-const isCodeHotkey = isKeyHotkey('mod+`');
-
-
-class ToolBar extends React.Component {
-  render() {
-    const { 
-      tools, 
-      onSelect,
-    } = this.props;
+const ToolBar = ({
+  tools,
+  hasMark,
+  hasBlock,
+  onClickMark,
+  onClickBlock
+}) => {
+  const renderToolbar = () => {
+    let output = [];
+    if (!tools) {
+      return;
+    }
+    tools.map((item, index) => {
+      let id = (index + 1);
+      if (item.type === 'mark') {
+        output.push(renderMarkButton(item.key, item[item.key], id));
+      }
+      if (item.type === 'block') {
+        output.push(renderBlockButton(item.key, item[item.key], id));
+      }
+    });
     return (
-      <div className="maby-nav">
+      <div className="menu toolbar-menu">
+        {output}
       </div>
-    );
+    )
   }
+  const renderMarkButton = (type, icon, idx) => {
+    const isActive = hasMark(type)
+    const onMouseDown = event => onClickMark(event, type)
+
+    return (
+      <span className="button" key={idx} onMouseDown={onMouseDown} data-active={isActive}>
+        <span className="material-icons">{icon}</span>
+      </span>
+    )
+  }
+  const renderBlockButton = (type, icon, idx) => {
+    const isActive = hasBlock(type)
+    const onMouseDown = event => onClickBlock(event, type)
+
+    return (
+      <span className="button" key={idx} onMouseDown={onMouseDown} data-active={isActive}>
+        <span className="material-icons">{icon}</span>
+      </span>
+    )
+  }
+  return (
+    <div className="maby-nav">
+      {renderToolbar()}
+    </div>
+  );
 }
 export default ToolBar;
