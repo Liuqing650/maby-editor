@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MabyEdit from 'src/index';
+import MabyEdit from 'lib/index';
 export default class Example extends Component {
   state = {
     value: null

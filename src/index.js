@@ -12,7 +12,7 @@ import './index.less';
 
 const html = new Html({ rules: _rules.html });
 let hotKey = {};
-class MabyEdit extends React.Component {
+class MabyEditor extends React.Component {
   state = {
     value: Mapping.valueMapping(_default.value, _default.mode)
   };
@@ -169,4 +169,4 @@ class MabyEdit extends React.Component {
   }
 
 };
-export default MabyEdit
+export default MabyEditor;
