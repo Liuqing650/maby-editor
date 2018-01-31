@@ -1,6 +1,6 @@
 {
   "name": "maby-editor",
-  "version": "0.0.9",
+  "version": "0.0.1",
   "description": "一个基于Slate开发的富文本编辑器。",
   "main": "lib/index.js",
   "browser": "lib/index.js",
