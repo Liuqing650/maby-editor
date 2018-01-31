@@ -19,7 +19,6 @@ const htmlRules = [
       switch (obj.type) {
         case 'paragraph': return <p>{children}</p>;
         case 'quote': return <blockquote>{children}</blockquote>;
-        case 'code': return <pre><code>{children}</code></pre>;
       }
     }
   },
@@ -40,6 +39,7 @@ const htmlRules = [
         case 'bold': return <strong>{children}</strong>;
         case 'italic': return <em>{children}</em>;
         case 'underlined': return <u>{children}</u>;
+        case 'code': return <pre><code>{children}</code></pre>;
       }
     }
   }

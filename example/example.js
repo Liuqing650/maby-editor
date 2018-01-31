@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MabyEdit from 'lib/index';
+import MabyEditor from 'src/index';
 export default class Example extends Component {
   state = {
     value: null
@@ -9,11 +9,11 @@ export default class Example extends Component {
     this.setState({ value })
   }
   handleSubmit = (value) => {
-    // console.log('value---->', value);
+    console.log('value---->', value);
   }
   render() {
     const { value } = this.state;
-    const mabyEditProps = {
+    const mabyEditorProps = {
       placeholder: '输入一些文本吧',
       className: 'myEditor',
       value: value,
@@ -24,7 +24,7 @@ export default class Example extends Component {
     return (
       <div>
         <h2>测试maby-edit</h2>
-        <MabyEdit {...mabyEditProps} />
+        <MabyEditor {...mabyEditorProps} />
       </div>
     );
   }

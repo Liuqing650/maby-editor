@@ -7,9 +7,9 @@ SOURCE=./src
 LIB=./lib
 
 dev:
-	@$(WEBPACK_DEV_SERVER) --config webpack.dev.js --open
 	@mkdir -p $(LIB)
 	@cp -Rfv $(SOURCE)/* $(LIB)
+	@$(WEBPACK_DEV_SERVER) --config webpack.dev.js --open
 
 build:
 	@$(WEBPACK) --config webpack.prod.js
