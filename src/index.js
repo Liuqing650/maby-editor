@@ -23,7 +23,7 @@ class MabyEdit extends React.Component {
   setUp = (props) => {
     this.initProps = _initProps(props, html);
     const { value, mode, tools } = this.initProps;
-    console.log('initProps----->', this.initProps);
+    // console.log('initProps----->', this.initProps);
     hotKey = _hotKey.setHotKeys(tools);
     this.setState({
       value: Mapping.valueMapping(value, mode, html),
@@ -81,7 +81,6 @@ class MabyEdit extends React.Component {
     const change = value.change()
     const { document } = value
 
-    // Handle everything but list buttons.
     if (type != 'bulleted-list' && type != 'numbered-list') {
       const isActive = this._hasBlock(type)
       const isList = this._hasBlock('list-item')
@@ -99,7 +98,6 @@ class MabyEdit extends React.Component {
       }
     }
 
-    // Handle the extra wrapping required for list buttons.
     else {
       const isList = this._hasBlock('list-item')
       const isType = value.blocks.some((block) => {

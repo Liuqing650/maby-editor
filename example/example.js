@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import MabyEdit from '../index';
-export default class Examples extends Component {
+import MabyEdit from 'src/index';
+export default class Example extends Component {
   state = {
     value: null
   }

@@ -3,40 +3,31 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const env = process.env.WEBPACK_ENV;
 
-let libraryName = 'maby-edit';
+let plugins = [];
 
-let plugins = [], outputFile, devtool = 'source-map';
-console.log('✅ 当前是 %s 模式', env);
-if (env === 'prod') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
-  plugins.push(new CleanWebpackPlugin(['dist']));
-  outputFile = libraryName + '.min.js';
-} else {
-  plugins.push(
-    new HtmlWebpackPlugin({
-      title: 'maby-edit测试',
-      template: __dirname + '/public/index.html'
-    }));
-  plugins.push(
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common'
-    }));
-  outputFile = '[name].js';
-  devtool = 'inline-source-map';
-}
+console.log('✅ 当前是 开发 模式');
+
+plugins.push(
+  new HtmlWebpackPlugin({
+    title: 'maby-editor测试',
+    template: __dirname + '/public/index.html'
+  }));
+plugins.push(
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'common'
+  }));
 
 let config = {
   entry: {
-    'maby-edit': __dirname + '/src/index.js',
-    // main: __dirname + '/src/test.js',
+    'maby-editor': __dirname + '/src/index.js',
+    main: __dirname + '/example/index.js',
   },
-  devtool: devtool,
+  devtool: 'inline-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: outputFile,
-    library: libraryName,
+    filename: '[name].js',
+    library: 'maby-editor',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -45,6 +36,9 @@ let config = {
       path.resolve(__dirname, 'node_modules'),
       './'
     ],
+  },
+  devServer: {
+    contentBase: './dist'
   },
   module: {
     loaders: [
@@ -65,7 +59,7 @@ let config = {
         test: /\.less$/,
         use: [
           'style-loader',
-          'css-loader', 
+          'css-loader',
           'less-loader'
         ]
       },
@@ -73,9 +67,4 @@ let config = {
   },
   plugins: plugins
 };
-if (env === 'dev') {
-  config.devServer = {
-    contentBase: './dist'
-  }
-}
 module.exports = config;
