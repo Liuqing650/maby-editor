@@ -9,7 +9,7 @@ import * as _hotKey from './config/hotKey';
 import * as Mapping from './config/mapping';
 import ToolBar from './toolBar';
 import './index.less';
-
+const DEFAULT_NODE = 'paragraph';
 const html = new Html({ rules: _rules.html });
 let hotKey = {};
 class MabyEditor extends React.Component {
@@ -62,12 +62,12 @@ class MabyEditor extends React.Component {
         mark = temp.replace('HotKey', '');
       }
     });
-    if (!mark) {
-      return false;
+    if (mark) {
+      event.preventDefault();
+      change.toggleMark(mark);
+      return true;
     }
-    event.preventDefault();
-    change.toggleMark(mark);
-    return true;
+    return;
   }
   _onClickMark = (event, type) => {
     event.preventDefault();
@@ -75,7 +75,7 @@ class MabyEditor extends React.Component {
     const change = value.change().toggleMark(type);
     this._onChange(change);
   }
-  _onClickBlock = () => {
+  _onClickBlock = (event, type) => {
     event.preventDefault()
     const { value } = this.state
     const change = value.change()
@@ -96,9 +96,7 @@ class MabyEditor extends React.Component {
         change
           .setBlock(isActive ? DEFAULT_NODE : type)
       }
-    }
-
-    else {
+    } else {
       const isList = this._hasBlock('list-item')
       const isType = value.blocks.some((block) => {
         return !!document.getClosest(block.key, parent => parent.type == type)
@@ -119,7 +117,6 @@ class MabyEditor extends React.Component {
           .wrapBlock(type)
       }
     }
-
     this._onChange(change)
   }
   render() {

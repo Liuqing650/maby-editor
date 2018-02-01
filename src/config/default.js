@@ -1,5 +1,6 @@
 export default {
   tools: [ // 工具栏
+    { 'paragraph': '段落'},
     { 'bold': '加粗' },
     { 'italic': '倾斜' },
     { 'underlined': '下划线' },

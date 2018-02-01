@@ -10,6 +10,16 @@ const BLOCK_TAGS = {
   h4: 'heading-four',
   h5: 'heading-five',
   h6: 'heading-six'
-}
-export default BLOCK_TAGS;
-
+};
+const MARK_TAGS = {
+  strong: 'bold',
+  em: 'italic',
+  u: 'underlined',
+  s: 'strikethrough',
+  code: 'code'
+};
+const TAGS = {
+  BLOCK: BLOCK_TAGS,
+  MARK: MARK_TAGS
+};
+export default TAGS;

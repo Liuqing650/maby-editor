@@ -1,11 +1,11 @@
 import React from 'react';
-import BLOCK_TAGS from '../dict/block';
-import MARK_TAGS from '../dict/mark';
+import TAGS from '../dict/tags';
+const { BLOCK, MARK } = TAGS;
 const htmlRules = [
   {
     // 修改 deserialize 来处理更多类型的 block…
     deserialize(el, next) {
-      const type = BLOCK_TAGS[el.tagName.toLowerCase()]
+      const type = BLOCK[el.tagName.toLowerCase()]
       if (!type) return
       return {
         object: 'block',
@@ -25,7 +25,7 @@ const htmlRules = [
   {
     // 添加一条处理 mark 的新规则…
     deserialize(el, next) {
-      const type = MARK_TAGS[el.tagName.toLowerCase()]
+      const type = MARK[el.tagName.toLowerCase()]
       if (!type) return
       return {
         object: 'mark',

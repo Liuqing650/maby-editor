@@ -9,7 +9,7 @@ export default class Example extends Component {
     this.setState({ value })
   }
   handleSubmit = (value) => {
-    console.log('value---->', value);
+    console.log(value);
   }
   render() {
     const { value } = this.state;

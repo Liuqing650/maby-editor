@@ -15,10 +15,10 @@ const ToolBar = ({
     tools.map((item, index) => {
       let id = (index + 1);
       if (item.type === 'mark') {
-        output.push(renderMarkButton(item.key, item[item.key], id));
+        output.push(renderMarkButton(item, item[item.key], id));
       }
       if (item.type === 'block') {
-        output.push(renderBlockButton(item.key, item[item.key], id));
+        output.push(renderBlockButton(item, item[item.key], id));
       }
     });
     return (
@@ -27,22 +27,22 @@ const ToolBar = ({
       </div>
     )
   }
-  const renderMarkButton = (type, icon, idx) => {
-    const isActive = hasMark(type)
-    const onMouseDown = event => onClickMark(event, type)
+  const renderMarkButton = (item, icon, idx) => {
+    const isActive = hasMark(item.key)
+    const onMouseDown = event => onClickMark(event, item.key)
 
     return (
-      <span className="button" key={idx} onMouseDown={onMouseDown} data-active={isActive}>
+      <span className="button" key={idx} title={item.title ? item.title : ''} onMouseDown={onMouseDown} data-active={isActive}>
         <span className="material-icons">{icon}</span>
       </span>
     )
   }
-  const renderBlockButton = (type, icon, idx) => {
-    const isActive = hasBlock(type)
-    const onMouseDown = event => onClickBlock(event, type)
+  const renderBlockButton = (item, icon, idx) => {
+    const isActive = hasBlock(item.key)
+    const onMouseDown = event => onClickBlock(event, item.key)
 
     return (
-      <span className="button" key={idx} onMouseDown={onMouseDown} data-active={isActive}>
+      <span className="button" key={idx} title={item.title ? item.title : ''} onMouseDown={onMouseDown} data-active={isActive}>
         <span className="material-icons">{icon}</span>
       </span>
     )

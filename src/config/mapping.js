@@ -1,10 +1,10 @@
 import React from 'react';
 import Html from 'slate-html-serializer';
 import { Value } from 'slate';
-import BLOCK_TAGS from '../dict/block';
-import MARK_TAGS from '../dict/mark';
-
+import TAGS from '../dict/tags';
+import * as _hotKey from './hotKey';
 import Plain from 'slate-plain-serializer';
+const { BLOCK, MARK } = TAGS;
 // 创建初始值
 function valueModel (value) {
   return Value.fromJSON({
@@ -79,15 +79,18 @@ export function analysisTools(tools) {
     return;
   }
   tools.map((item) => {
-    Object.keys(BLOCK_TAGS).map((key) => {
-      if (item[BLOCK_TAGS[key]]) {
+    Object.keys(BLOCK).map((key) => {
+      if (item[BLOCK[key]]) {
         item.type = 'block';
+        item.key = BLOCK[key];
+        item.title = _hotKey.setHotKeysTitle(item.key);
       }
     });
-    Object.keys(MARK_TAGS).map((key) => {
-      if (item[MARK_TAGS[key]]) {
+    Object.keys(MARK).map((key) => {
+      if (item[MARK[key]]) {
         item.type = 'mark';
-        item.key = MARK_TAGS[key];
+        item.key = MARK[key];
+        item.title = _hotKey.setHotKeysTitle(item.key);
       }
     });
   });
