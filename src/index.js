@@ -8,6 +8,7 @@ import _rules from './config/rules';
 import * as _hotKey from './config/hotKey';
 import * as Mapping from './config/mapping';
 import ToolBar from './toolBar';
+import './icon/iconfont.less';
 import './index.less';
 const DEFAULT_NODE = 'paragraph';
 const html = new Html({ rules: _rules.html });
@@ -23,7 +24,6 @@ class MabyEditor extends React.Component {
   setUp = (props) => {
     this.initProps = _initProps(props, html);
     const { value, mode, tools } = this.initProps;
-    // console.log('initProps----->', this.initProps);
     hotKey = _hotKey.setHotKeys(tools);
     this.setState({
       value: Mapping.valueMapping(value, mode, html),
@@ -47,12 +47,12 @@ class MabyEditor extends React.Component {
     }
   };
   _hasMark = (type) => {
-    const { value } = this.state
+    const { value } = this.state;
     return value.activeMarks.some(mark => mark.type == type)
   }
   _hasBlock = (type) => {
-    const { value } = this.state
-    return value.blocks.some(node => node.type == type)
+    const { value } = this.state;
+    return value.blocks.some(node => node.type === type)
   }
   _onKeyDown(event, change) {
     let mark;
@@ -79,20 +79,16 @@ class MabyEditor extends React.Component {
     event.preventDefault()
     const { value } = this.state
     const change = value.change()
-    const { document } = value
-
+    const { document } = value;
     if (type != 'bulleted-list' && type != 'numbered-list') {
-      const isActive = this._hasBlock(type)
-      const isList = this._hasBlock('list-item')
-
+      const isActive = this._hasBlock(type);
+      const isList = this._hasBlock('list-item');
       if (isList) {
         change
           .setBlock(isActive ? DEFAULT_NODE : type)
           .unwrapBlock('bulleted-list')
           .unwrapBlock('numbered-list')
-      }
-
-      else {
+      } else {
         change
           .setBlock(isActive ? DEFAULT_NODE : type)
       }
@@ -121,7 +117,7 @@ class MabyEditor extends React.Component {
   }
   render() {
     const { value } = this.state;
-    const { placeholder, className } = this.props;
+    const { placeholder, className, height } = this.props;
     const { tools } = this.initProps;
     const toolBarProps = {
       tools: Mapping.analysisTools(tools),
@@ -130,12 +126,16 @@ class MabyEditor extends React.Component {
       onClickMark: this._onClickMark,
       onClickBlock: this._onClickBlock
     };
+    const editorStyle = {
+      height: height || 500
+    };
     return (
       <div className={className}>
         <ToolBar {...toolBarProps} />
         <Editor
           placeholder={placeholder ? placeholder : ''}
           value={value}
+          style={editorStyle}
           onKeyDown={this._onKeyDown}
           onChange={this._onChange}
           renderNode={this.renderNode}
@@ -145,23 +145,27 @@ class MabyEditor extends React.Component {
     );
   };
   renderNode = (props) => {
-    const { attributes, children, node } = props
+    const { attributes, children, node } = props;
     switch (node.type) {
-      case 'block-quote': return <blockquote {...attributes}>{children}</blockquote>
-      case 'bulleted-list': return <ul {...attributes}>{children}</ul>
-      case 'heading-one': return <h1 {...attributes}>{children}</h1>
-      case 'heading-two': return <h2 {...attributes}>{children}</h2>
-      case 'list-item': return <li {...attributes}>{children}</li>
-      case 'numbered-list': return <ol {...attributes}>{children}</ol>
+      case 'block-quote': return <blockquote {...attributes}>{children}</blockquote>;
+      case 'heading-one': return <h1 {...attributes}>{children}</h1>;
+      case 'heading-two': return <h2 {...attributes}>{children}</h2>;
+      case 'heading-three': return <h3 {...attributes}>{children}</h3>;
+      case 'heading-four': return <h4 {...attributes}>{children}</h4>;
+      case 'heading-five': return <h5 {...attributes}>{children}</h5>;
+      case 'heading-six': return <h6 {...attributes}>{children}</h6>;
+      case 'bulleted-list': return <ul {...attributes}>{children}</ul>;
+      case 'list-item': return <li {...attributes}>{children}</li>;
+      case 'numbered-list': return <ol {...attributes}>{children}</ol>;
     }
   }
   renderMark = (props) => {
     const { children, mark } = props
     switch (mark.type) {
-      case 'bold': return <strong>{children}</strong>
-      case 'code': return <code>{children}</code>
-      case 'italic': return <em>{children}</em>
-      case 'underlined': return <u>{children}</u>
+      case 'bold': return <strong>{children}</strong>;
+      case 'code': return <code>{children}</code>;
+      case 'italic': return <em>{children}</em>;
+      case 'underlined': return <u>{children}</u>;
     }
   }
 

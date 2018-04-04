@@ -11,7 +11,14 @@ let plugins = [];
 
 console.log('✅ 当前是 发布 模式');
 
-plugins.push(new UglifyJsPlugin({ minimize: true }));
+plugins.push(new UglifyJsPlugin({
+  minimize: true,
+  compress: {
+    warnings: false,
+    drop_debugger: true,
+    drop_console: true
+  }
+}));
 plugins.push(new CleanWebpackPlugin(['dist', 'lib']));
 console.log(' ./dist， ./lib 目录已删除，正在创建发布版本 %s', packageJSON.version);
 let config = {
@@ -54,7 +61,27 @@ let config = {
           'css-loader', 
           'less-loader'
         ]
-      },
+      }, {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ]
+      }, {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          'file-loader'
+        ]
+      }, {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 51200
+            }
+          }
+        ]
+      }
     ]
   },
   plugins: plugins
