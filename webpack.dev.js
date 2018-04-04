@@ -10,7 +10,7 @@ console.log('✅ 当前是 开发 模式');
 
 plugins.push(
   new HtmlWebpackPlugin({
-    title: 'maby-editor测试',
+    title: 'maby-editor-markdown测试',
     template: __dirname + '/public/index.html'
   }));
 plugins.push(
@@ -20,7 +20,7 @@ plugins.push(
 
 let config = {
   entry: {
-    'maby-editor': __dirname + '/src/index.js',
+    'maby-editor-markdown': __dirname + '/src/index.js',
     main: __dirname + '/example/index.js',
   },
   devtool: 'inline-source-map',

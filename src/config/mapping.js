@@ -4,7 +4,7 @@ import { Value } from 'slate';
 import TAGS from '../dict/tags';
 import * as _hotKey from './hotKey';
 import Plain from 'slate-plain-serializer';
-const { BLOCK, MARK, ICON_DICT } = TAGS;
+const { BLOCK, MARK, ICON_DICT, MARKDOWN } = TAGS;
 // 创建初始值
 function valueModel (value) {
   return Value.fromJSON({
@@ -31,7 +31,7 @@ function valueModel (value) {
 function htmlModel(value, html) {
   return html.deserialize(value || '<p></p>');
 };
-function handleDict(dict, tags, icons) {
+function handleDict(dict, tags) {
   const output = [];
   if (!dict || dict.length === 0) {
     return;
@@ -40,9 +40,7 @@ function handleDict(dict, tags, icons) {
     if (tags[key]) {
       const obj = {};
       obj[tags[key]] = key;
-      obj.icon = icons[key];
       obj.key = tags[key];
-      obj.title = _hotKey.setHotKeysTitle(key);
       output.push(obj);
     }
   });
@@ -101,7 +99,7 @@ export function analysisTools(tools) {
         Object.keys(BLOCK).map((key) => {
           if (dictItem === key) {
             item.type = 'block';
-            item.loop = handleDict(item.dict, BLOCK, ICON_DICT);
+            item.loop = handleDict(item.dict, BLOCK);
           }
         })
       });
@@ -133,7 +131,8 @@ export function analysisTools(tools) {
   return tools;
 }
 
-// renderNode
-export function renderNode(attributes, children, node) {
-
+export function getType(chars) {
+  // const special = ['**', '***', '****'];
+  const judgeBold = /^>(?:[\t ]*>)*/m.test(chars);
+  return (MARKDOWN[chars]) || null;
 }

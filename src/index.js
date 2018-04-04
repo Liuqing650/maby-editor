@@ -2,6 +2,7 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Html from 'slate-html-serializer';
+import Marked from 'marked';
 import _initProps from './config/init';
 import _default from './config/default';
 import _rules from './config/rules';
@@ -13,6 +14,7 @@ import './index.less';
 const DEFAULT_NODE = 'paragraph';
 const html = new Html({ rules: _rules.html });
 let hotKey = {};
+
 class MabyEditor extends React.Component {
   state = {
     value: Mapping.valueMapping(_default.value, _default.mode)
@@ -23,8 +25,7 @@ class MabyEditor extends React.Component {
   }
   setUp = (props) => {
     this.initProps = _initProps(props, html);
-    const { value, mode, tools } = this.initProps;
-    hotKey = _hotKey.setHotKeys(tools);
+    const { value, mode } = this.initProps;
     this.setState({
       value: Mapping.valueMapping(value, mode, html),
     })
@@ -54,20 +55,94 @@ class MabyEditor extends React.Component {
     const { value } = this.state;
     return value.blocks.some(node => node.type === type)
   }
-  _onKeyDown(event, change) {
-    let mark;
-    Object.keys(hotKey).map((key) => {
-      let temp = key.toString();
-      if (hotKey[key](event)) {
-        mark = temp.replace('HotKey', '');
-      }
-    });
-    if (mark) {
-      event.preventDefault();
-      change.toggleMark(mark);
-      return true;
+
+  /**
+   * On space, if it was after an auto-markdown shortcut, convert the current
+   * node into the shortcut's corresponding type.
+   *
+   * @param {Event} event
+   * @param {Change} change
+   */
+
+  onSpace = (event, change) => {
+    const { value } = change;
+    if (value.isExpanded) return
+
+    const { startBlock, startOffset } = value;
+    const chars = startBlock.text.slice(0, startOffset).replace(/\s*/g, '');
+    console.log('chars---->', chars);
+    const type = Mapping.getType(chars);
+    if (!type) return
+    if (type == 'list-item' && startBlock.type == 'list-item') return
+    event.preventDefault()
+
+    change.setBlock(type)
+
+    if (type == 'list-item') {
+      change.wrapBlock('bulleted-list')
     }
-    return;
+
+    change.extendToStartOf(startBlock).delete()
+    return true
+  }
+
+  /**
+   * On backspace, if at the start of a non-paragraph, convert it back into a
+   * paragraph node.
+   *
+   * @param {Event} event
+   * @param {Change} change
+   */
+
+  onBackspace = (event, change) => {
+    const { value } = change
+    if (value.isExpanded) return
+    if (value.startOffset != 0) return
+
+    const { startBlock } = value
+    if (startBlock.type == 'paragraph') return
+
+    event.preventDefault()
+    change.setBlock('paragraph')
+
+    if (startBlock.type == 'list-item') {
+      change.unwrapBlock('bulleted-list')
+    }
+
+    return true
+  }
+
+  /**
+   * On return, if at the end of a node type that should not be extended,
+   * create a new paragraph below it.
+   *
+   * @param {Event} event
+   * @param {Change} change
+   */
+
+  onEnter = (event, change) => {
+    const { value } = change
+    if (value.isExpanded) return
+
+    const { startBlock, startOffset, endOffset } = value
+    if (startOffset == 0 && startBlock.text.length == 0) return this.onBackspace(event, change)
+    if (endOffset != startBlock.text.length) return
+
+    if (
+      startBlock.type != 'heading-one' &&
+      startBlock.type != 'heading-two' &&
+      startBlock.type != 'heading-three' &&
+      startBlock.type != 'heading-four' &&
+      startBlock.type != 'heading-five' &&
+      startBlock.type != 'heading-six' &&
+      startBlock.type != 'blockquote'
+    ) {
+      return
+    }
+
+    event.preventDefault()
+    change.splitBlock().setBlock('paragraph')
+    return true
   }
   _onClickMark = (event, type) => {
     event.preventDefault();
@@ -118,25 +193,25 @@ class MabyEditor extends React.Component {
   render() {
     const { value } = this.state;
     const { placeholder, className, height, autoFocus } = this.props;
-    const { tools } = this.initProps;
-    const toolBarProps = {
-      tools: Mapping.analysisTools(tools),
-      hasMark: this._hasMark,
-      hasBlock: this._hasBlock,
-      onClickMark: this._onClickMark,
-      onClickBlock: this._onClickBlock
-    };
+    const self = this;
     const editorStyle = {
       height: height || 500
     };
+    const _onKeyDown = (event, change) => {
+      switch (event.key) {
+        case ' ': return self.onSpace(event, change);
+        case 'Backspace': return self.onBackspace(event, change);
+        case 'Enter': return self.onEnter(event, change);
+      }
+      return;
+    }
     return (
       <div className={className}>
-        <ToolBar {...toolBarProps} />
         <Editor
           placeholder={placeholder ? placeholder : ''}
           value={value}
           style={editorStyle}
-          onKeyDown={this._onKeyDown}
+          onKeyDown={_onKeyDown}
           onChange={this._onChange}
           renderNode={this.renderNode}
           renderMark={this.renderMark}
@@ -147,6 +222,9 @@ class MabyEditor extends React.Component {
   };
   renderNode = (props) => {
     const { attributes, children, node } = props;
+    const data = Marked(node.text);
+    console.log('data--------->', data);
+    // return data;
     switch (node.type) {
       case 'block-quote': return <blockquote {...attributes}>{children}</blockquote>;
       case 'heading-one': return <h1 {...attributes}>{children}</h1>;

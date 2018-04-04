@@ -19,7 +19,7 @@ const htmlRules = [
       switch (obj.type) {
         case 'paragraph': return <p>{children}</p>;
         case 'quote': return <blockquote>{children}</blockquote>;
-        case 'block-quote': return <blockquote>{children}</blockquote>;
+        case 'blockquote': return <blockquote>{children}</blockquote>;
         case 'heading-one': return <h1>{children}</h1>;
         case 'heading-two': return <h2>{children}</h2>;
         case 'heading-three': return <h3>{children}</h3>;

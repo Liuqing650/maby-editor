@@ -4,7 +4,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const path = require('path');
 
-let libraryName = 'maby-editor';
+let libraryName = 'maby-editor-markdown';
 
 let plugins = [];
 
@@ -25,7 +25,7 @@ plugins = [
 console.log(' ./dist， ./lib 目录已删除，正在创建发布版本 %s', packageJSON.version);
 let config = {
   entry: {
-    'maby-editor': __dirname + '/src/index.js',
+    'maby-editor-markdown': __dirname + '/src/index.js',
   },
   devtool: 'source-map',
   output: {

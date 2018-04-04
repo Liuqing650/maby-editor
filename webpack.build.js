@@ -5,7 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-let libraryName = 'maby-editor';
+let libraryName = 'maby-editor-markdown';
 
 let plugins = [];
 
@@ -13,7 +13,7 @@ console.log('✅ 当前是 发布 模式');
 
 plugins = [
   new HtmlWebpackPlugin({
-    title: 'maby-editor测试',
+    title: 'maby-editor-markdown测试',
     template: __dirname + '/public/index.html'
   }),
   new UglifyJsPlugin({

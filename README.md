@@ -1,8 +1,12 @@
-# maby-editor
+# maby-editor-markdown
 
 ## 预览
 
-[maby-editor](https://liuqing650.github.io/maby-editor/preview)
+[maby-editor-markdown](https://liuqing650.github.io/maby-editor/preview)
+
+## 备注
+
+喜欢不自由的自由,配置太多用起来还要熟悉文档,麻烦.
 
 ## 安装
 
