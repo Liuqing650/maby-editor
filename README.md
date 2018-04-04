@@ -1,5 +1,9 @@
 # maby-editor
 
+## 预览
+
+[maby-editor](https://liuqing650.github.io/maby-editor/preview)
+
 ## 安装
 
 ```bash

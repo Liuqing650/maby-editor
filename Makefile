@@ -12,6 +12,9 @@ dev:
 	@$(WEBPACK_DEV_SERVER) --config webpack.dev.js --open
 
 build:
+	@$(WEBPACK) --config webpack.build.js
+
+publish:
 	@$(WEBPACK) --config webpack.prod.js
 	@mkdir -p $(LIB)
 	@cp -Rfv $(SOURCE)/index.less $(LIB)

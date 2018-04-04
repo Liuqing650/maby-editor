@@ -85,12 +85,12 @@ class MabyEditor extends React.Component {
       const isList = this._hasBlock('list-item');
       if (isList) {
         change
-          .setBlock(isActive ? DEFAULT_NODE : type)
+          .setBlocks(isActive ? DEFAULT_NODE : type)
           .unwrapBlock('bulleted-list')
           .unwrapBlock('numbered-list')
       } else {
         change
-          .setBlock(isActive ? DEFAULT_NODE : type)
+          .setBlocks(isActive ? DEFAULT_NODE : type)
       }
     } else {
       const isList = this._hasBlock('list-item')
@@ -100,7 +100,7 @@ class MabyEditor extends React.Component {
 
       if (isList && isType) {
         change
-          .setBlock(DEFAULT_NODE)
+          .setBlocks(DEFAULT_NODE)
           .unwrapBlock('bulleted-list')
           .unwrapBlock('numbered-list')
       } else if (isList) {
@@ -109,7 +109,7 @@ class MabyEditor extends React.Component {
           .wrapBlock(type)
       } else {
         change
-          .setBlock('list-item')
+          .setBlocks('list-item')
           .wrapBlock(type)
       }
     }
@@ -117,7 +117,7 @@ class MabyEditor extends React.Component {
   }
   render() {
     const { value } = this.state;
-    const { placeholder, className, height } = this.props;
+    const { placeholder, className, height, autoFocus } = this.props;
     const { tools } = this.initProps;
     const toolBarProps = {
       tools: Mapping.analysisTools(tools),
@@ -140,6 +140,7 @@ class MabyEditor extends React.Component {
           onChange={this._onChange}
           renderNode={this.renderNode}
           renderMark={this.renderMark}
+          autoFocus={autoFocus || true}
         />
       </div>
     );
@@ -168,6 +169,5 @@ class MabyEditor extends React.Component {
       case 'underlined': return <u>{children}</u>;
     }
   }
-
 };
 export default MabyEditor;

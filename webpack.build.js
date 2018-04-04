@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const packageJSON = require('./package.json');
 const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 let libraryName = 'maby-editor';
@@ -10,8 +11,11 @@ let plugins = [];
 
 console.log('✅ 当前是 发布 模式');
 
-
 plugins = [
+  new HtmlWebpackPlugin({
+    title: 'maby-editor测试',
+    template: __dirname + '/public/index.html'
+  }),
   new UglifyJsPlugin({
     minimize: true,
     compress: {
@@ -20,16 +24,16 @@ plugins = [
       drop_console: true
     }
   }),
-  new CleanWebpackPlugin(['dist', 'lib'])
+  new CleanWebpackPlugin(['preview'])
 ];
-console.log(' ./dist， ./lib 目录已删除，正在创建发布版本 %s', packageJSON.version);
+console.log(' ./preview 目录已删除，正在打包当前版本 %s', packageJSON.version);
 let config = {
   entry: {
-    'maby-editor': __dirname + '/src/index.js',
+    main: __dirname + '/example/index.js',
   },
   devtool: 'source-map',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'preview'),
     filename: libraryName + '.min.js',
     library: libraryName,
     libraryTarget: 'umd',
@@ -60,7 +64,7 @@ let config = {
         test: /\.less$/,
         use: [
           'style-loader',
-          'css-loader', 
+          'css-loader',
           'less-loader'
         ]
       }, {

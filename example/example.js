@@ -23,7 +23,7 @@ export default class Example extends Component {
     };
     return (
       <div>
-        <h2>测试maby-edit</h2>
+        {/* <h2>测试maby-edit</h2> */}
         <MabyEditor {...mabyEditorProps} />
       </div>
     );
