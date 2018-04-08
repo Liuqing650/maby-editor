@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {createElement} from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Html from 'slate-html-serializer';
-import Marked from 'marked';
+import Marked from './assets/marked';
+import marksy from 'marksy';
 import _initProps from './config/init';
 import _default from './config/default';
 import _rules from './config/rules';
@@ -22,6 +23,10 @@ class MabyEditor extends React.Component {
   initProps = {};
   componentDidMount() {
     this.setUp(this.props);
+    // const editorNode = document.querySelector(`.${this.props.className}`);
+    // if (editorNode) {
+    //   editorNode.focus();
+    // }
   }
   setUp = (props) => {
     this.initProps = _initProps(props, html);
@@ -206,10 +211,11 @@ class MabyEditor extends React.Component {
       return;
     }
     return (
-      <div className={className}>
+      <div>
         <Editor
           placeholder={placeholder ? placeholder : ''}
           value={value}
+          className={className}
           style={editorStyle}
           onKeyDown={_onKeyDown}
           onChange={this._onChange}
@@ -223,7 +229,44 @@ class MabyEditor extends React.Component {
   renderNode = (props) => {
     const { attributes, children, node } = props;
     const data = Marked(node.text);
-    console.log('data--------->', data);
+    const compile = marksy({
+      // Pass in whatever creates elements for your
+      // virtual DOM library. h('h1', {})
+      createElement,
+
+      // You can override the default elements with
+      // custom VDOM trees
+      elements: {
+        h1({ children }) { return <h1 {...attributes}>{children}</h1> },
+        h2({ children }) { return <h2 {...attributes}>{children}</h2> },
+        h3({ children }) { return <h3 {...attributes}>{children}</h3> },
+        h4({ children }) { return <h4 {...attributes}>{children}</h4> },
+        h5({ children }) { return <h5 {...attributes}>{children}</h5> },
+        h6({ children }) { return <h6 {...attributes}>{children}</h6> },
+        blockquote({ children }) { return <blockquote {...attributes}>{children}</blockquote> },
+        hr() { },
+        ol({ children }) { return <ol {...attributes}>{children}</ol> },
+        ul({ children }) { return <ul {...attributes}>{children}</ul> },
+        p({ children }) { return <p {...attributes}>{children}</p> },
+        table({ children }) { },
+        thead({ children }) { },
+        tbody({ children }) { },
+        tr({ children }) { },
+        th({ children }) { },
+        td({ children }) { },
+        a({ href, title, target, children }) { },
+        strong({ children }) { },
+        em({ children }) { },
+        br() { },
+        del({ children }) { },
+        img({ src, alt }) { },
+        code({ language, code }) { },
+        codespan({ children }) { },
+      },
+    });
+    const compiled = compile(data);
+    console.log('compiled--------->', compiled);
+    // return compiled.tree;
     // return data;
     switch (node.type) {
       case 'block-quote': return <blockquote {...attributes}>{children}</blockquote>;

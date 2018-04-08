@@ -18,6 +18,7 @@ export default class Example extends Component {
       className: 'myEditor',
       value: value,
       mode: 'html',
+      autoFocus: true,
       onChange: this.onChange,
       handleValue: this.handleSubmit
     };
