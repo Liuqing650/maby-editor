@@ -132,7 +132,13 @@ export function analysisTools(tools) {
 }
 
 export function getType(chars) {
-  // const special = ['**', '***', '****'];
-  const judgeBold = /^>(?:[\t ]*>)*/m.test(chars);
-  return (MARKDOWN[chars]) || null;
+  if (MARKDOWN[chars]) {
+    return (MARKDOWN[chars]);
+  } else {
+    if (/^( {4}[^\n]+\n*)+/.test(chars)) {
+      return (MARKDOWN.code);
+    }
+    console.log('chars------>', /^( {4}[^\n]+\n*)+/.test(chars));
+    return null;
+  }
 }

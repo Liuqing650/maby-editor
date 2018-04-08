@@ -2,8 +2,7 @@ import React, {createElement} from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Html from 'slate-html-serializer';
-import Marked from './assets/marked';
-import marksy from 'marksy';
+import Prism from 'prismjs'
 import _initProps from './config/init';
 import _default from './config/default';
 import _rules from './config/rules';
@@ -15,6 +14,55 @@ import './index.less';
 const DEFAULT_NODE = 'paragraph';
 const html = new Html({ rules: _rules.html });
 let hotKey = {};
+
+Prism.languages.markdown = Prism.languages.extend("markup", {});
+Prism.languages.insertBefore("markdown", 
+  "prolog", { 
+    blockquote: { 
+      pattern: /^>(?:[\t ]*>)*/m, 
+      alias: "punctuation" 
+    }, 
+    code: [
+      { pattern: /^(?: {4}|\t).+/m, alias: "keyword" }, 
+      { pattern: /``.+?``|`[^`\n]+`/, alias: "keyword" }
+    ], 
+    title: [
+      { pattern: /\w+.*(?:\r?\n|\r)(?:==+|--+)/, alias: "important", inside: { punctuation: /==+$|--+$/ } }, 
+      { pattern: /(^\s*)#+.+/m, lookbehind: !0, alias: "important", inside: { punctuation: /^#+|#+$/ } }
+    ], 
+    hr: { pattern: /^ {0,3}((?:- *){3,}|(?:_ *){3,}|(?:\* *){3,})(?:\n+|$)/m, lookbehind: !0, alias: "punctuation" }, 
+    list: { pattern: /(^\s*)(?:[*+-]|\d+\.)(?=[\t ].)/m, lookbehind: !0, alias: "punctuation" }, 
+    "url-reference": { 
+      pattern: /!?\[[^\]]+\]:[\t ]+(?:\S+|<(?:\\.|[^>\\])+>)(?:[\t ]+(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\)))?/, 
+      inside: { 
+        variable: { pattern: /^(!?\[)[^\]]+/, lookbehind: !0 }, 
+        string: /(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\((?:\\.|[^)\\])*\))$/, 
+        punctuation: /^[\[\]!:]|[<>]/ 
+      }, 
+      alias: "url" 
+    }, 
+    bold: { 
+      pattern: /(^|[^\\])(\*\*|__)(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/, 
+      lookbehind: !0, 
+      inside: { punctuation: /^\*\*|^__|\*\*$|__$/ } 
+    }, 
+    italic: { 
+      pattern: /(^|[^\\])([*_])(?:(?:\r?\n|\r)(?!\r?\n|\r)|.)+?\2/, 
+      lookbehind: !0, 
+      inside: { punctuation: /^[*_]|[*_]$/ } 
+    }, 
+    url: { 
+      pattern: /!?\[[^\]]+\](?:\([^\s)]+(?:[\t ]+"(?:\\.|[^"\\])*")?\)| ?\[[^\]\n]*\])/, 
+      inside: {
+        variable: { pattern: /(!?\[)[^\]]+(?=\]$)/, lookbehind: !0 }, 
+        string: { pattern: /"(?:\\.|[^"\\])*"(?=\)$)/ } 
+      } 
+    }
+  });
+Prism.languages.markdown.bold.inside.url = Prism.util.clone(Prism.languages.markdown.url);
+Prism.languages.markdown.italic.inside.url = Prism.util.clone(Prism.languages.markdown.url);
+Prism.languages.markdown.bold.inside.italic = Prism.util.clone(Prism.languages.markdown.italic);
+Prism.languages.markdown.italic.inside.bold = Prism.util.clone(Prism.languages.markdown.bold);
 
 class MabyEditor extends React.Component {
   state = {
@@ -81,7 +129,7 @@ class MabyEditor extends React.Component {
     if (type == 'list-item' && startBlock.type == 'list-item') return
     event.preventDefault()
 
-    change.setBlock(type)
+    change.setBlocks(type)
 
     if (type == 'list-item') {
       change.wrapBlock('bulleted-list')
@@ -211,63 +259,22 @@ class MabyEditor extends React.Component {
       return;
     }
     return (
-      <div>
-        <Editor
-          placeholder={placeholder ? placeholder : ''}
-          value={value}
-          className={className}
-          style={editorStyle}
-          onKeyDown={_onKeyDown}
-          onChange={this._onChange}
-          renderNode={this.renderNode}
-          renderMark={this.renderMark}
-          autoFocus={autoFocus || true}
-        />
-      </div>
+      <Editor
+        placeholder={placeholder ? placeholder : ''}
+        value={value}
+        className={className}
+        autoFocus={autoFocus || true}
+        style={editorStyle}
+        onKeyDown={_onKeyDown}
+        onChange={this._onChange}
+        renderNode={this.renderNode}
+        renderMark={this.renderMark}
+        // decorateNode={this.decorateNode}
+      />
     );
   };
   renderNode = (props) => {
     const { attributes, children, node } = props;
-    const data = Marked(node.text);
-    const compile = marksy({
-      // Pass in whatever creates elements for your
-      // virtual DOM library. h('h1', {})
-      createElement,
-
-      // You can override the default elements with
-      // custom VDOM trees
-      elements: {
-        h1({ children }) { return <h1 {...attributes}>{children}</h1> },
-        h2({ children }) { return <h2 {...attributes}>{children}</h2> },
-        h3({ children }) { return <h3 {...attributes}>{children}</h3> },
-        h4({ children }) { return <h4 {...attributes}>{children}</h4> },
-        h5({ children }) { return <h5 {...attributes}>{children}</h5> },
-        h6({ children }) { return <h6 {...attributes}>{children}</h6> },
-        blockquote({ children }) { return <blockquote {...attributes}>{children}</blockquote> },
-        hr() { },
-        ol({ children }) { return <ol {...attributes}>{children}</ol> },
-        ul({ children }) { return <ul {...attributes}>{children}</ul> },
-        p({ children }) { return <p {...attributes}>{children}</p> },
-        table({ children }) { },
-        thead({ children }) { },
-        tbody({ children }) { },
-        tr({ children }) { },
-        th({ children }) { },
-        td({ children }) { },
-        a({ href, title, target, children }) { },
-        strong({ children }) { },
-        em({ children }) { },
-        br() { },
-        del({ children }) { },
-        img({ src, alt }) { },
-        code({ language, code }) { },
-        codespan({ children }) { },
-      },
-    });
-    const compiled = compile(data);
-    console.log('compiled--------->', compiled);
-    // return compiled.tree;
-    // return data;
     switch (node.type) {
       case 'block-quote': return <blockquote {...attributes}>{children}</blockquote>;
       case 'heading-one': return <h1 {...attributes}>{children}</h1>;
@@ -289,6 +296,77 @@ class MabyEditor extends React.Component {
       case 'italic': return <em>{children}</em>;
       case 'underlined': return <u>{children}</u>;
     }
+  }
+
+  /**
+   * Define a decorator for markdown styles.
+   *
+   * @param {Node} node
+   * @return {Array}
+   */
+
+  decorateNode(node) {
+    if (node.object != 'block') return;
+
+    const string = node.text
+    const texts = node.getTexts().toArray()
+    console.log('texts--->', texts);
+    const grammar = Prism.languages.markdown
+    const tokens = Prism.tokenize(string, grammar)
+    const decorations = []
+    let startText = texts.shift()
+    let endText = startText
+    let startOffset = 0
+    let endOffset = 0
+    let start = 0
+
+    console.log('startText--->', startText);
+    function getLength(token) {
+      if (typeof token == 'string') {
+        return token.length
+      } else if (typeof token.content == 'string') {
+        return token.content.length
+      } else {
+        return token.content.reduce((l, t) => l + getLength(t), 0)
+      }
+    }
+
+    for (const token of tokens) {
+      startText = endText
+      startOffset = endOffset
+
+      const length = getLength(token)
+      const end = start + length
+
+      let available = startText.text.length - startOffset
+      let remaining = length
+
+      endOffset = startOffset + remaining
+
+      while (available < remaining) {
+        endText = texts.shift()
+        remaining = length - available
+        available = endText.text.length
+        endOffset = remaining
+      }
+
+      if (typeof token != 'string') {
+        const range = {
+          anchorKey: startText.key,
+          anchorOffset: startOffset,
+          focusKey: endText.key,
+          focusOffset: endOffset,
+          marks: [{ type: token.type }],
+        }
+
+        decorations.push(range)
+      }
+
+
+      start = end
+    }
+
+    return decorations
   }
 };
 export default MabyEditor;

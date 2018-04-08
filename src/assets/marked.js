@@ -840,36 +840,69 @@
   };
 
   Renderer.prototype.hr = function () {
-    return this.options.xhtml ? '<hr/>\n' : '<hr>\n';
+    // return this.options.xhtml ? '<hr/>\n' : '<hr>\n';
+    return {
+      type: 'hr', // 标签类型
+      wrap: true // 换行
+    };
   };
 
   Renderer.prototype.list = function (body, ordered, start) {
     var type = ordered ? 'ol' : 'ul',
-      startatt = (ordered && start !== 1) ? (' start="' + start + '"') : '';
-    return '<' + type + startatt + '>\n' + body + '</' + type + '>\n';
+      startatt = (ordered && start !== 1) ? start : '';
+    // return '<' + type + startatt + '>\n' + body + '</' + type + '>\n';
+    return {
+      type: type,
+      start: startatt, // 第几步
+      content: body,
+      wrap: true
+    };
   };
 
   Renderer.prototype.listitem = function (text) {
-    return '<li>' + text + '</li>\n';
+    // return '<li>' + text + '</li>\n';
+    return {
+      type: 'li',
+      content: text,
+      wrap: true
+    };
   };
 
   Renderer.prototype.paragraph = function (text) {
-    return '<p>' + text + '</p>\n';
+    // return '<p>' + text + '</p>\n';
+    return {
+      type: 'p',
+      content: text,
+      wrap: true
+    };
   };
 
   Renderer.prototype.table = function (header, body) {
-    return '<table>\n'
-      + '<thead>\n'
-      + header
-      + '</thead>\n'
-      + '<tbody>\n'
-      + body
-      + '</tbody>\n'
-      + '</table>\n';
+    // return '<table>\n'
+    //   + '<thead>\n'
+    //   + header
+    //   + '</thead>\n'
+    //   + '<tbody>\n'
+    //   + body
+    //   + '</tbody>\n'
+    //   + '</table>\n';
+    return {
+      type: 'table',
+      content: {
+        header,
+        body
+      },
+      wrap: true
+    };
   };
 
   Renderer.prototype.tablerow = function (content) {
-    return '<tr>\n' + content + '</tr>\n';
+    // return '<tr>\n' + content + '</tr>\n';
+    return {
+      type: 'tr',
+      content: content,
+      wrap: true
+    };
   };
 
   Renderer.prototype.tablecell = function (content, flags) {
@@ -877,28 +910,53 @@
     var tag = flags.align
       ? '<' + type + ' style="text-align:' + flags.align + '">'
       : '<' + type + '>';
-    return tag + content + '</' + type + '>\n';
+    // return tag + content + '</' + type + '>\n';
+    return {
+      type: type,
+      content: content,
+      style: {
+        textAlign: flags.align
+      },
+      wrap: true
+    };
   };
 
   // span level renderer
   Renderer.prototype.strong = function (text) {
-    return '<strong>' + text + '</strong>';
+    // return '<strong>' + text + '</strong>';
+    return {
+      type: 'strong',
+      content: text
+    };
   };
 
   Renderer.prototype.em = function (text) {
-    return '<em>' + text + '</em>';
+    // return '<em>' + text + '</em>';
+    return {
+      type: 'em',
+      content: text
+    };
   };
 
   Renderer.prototype.codespan = function (text) {
-    return '<code>' + text + '</code>';
+    // return '<code>' + text + '</code>';
+    return {
+      type: 'code',
+      content: text
+    };
   };
 
   Renderer.prototype.br = function () {
-    return this.options.xhtml ? '<br/>' : '<br>';
+    // return this.options.xhtml ? '<br/>' : '<br>';
+    return { type: 'br' };
   };
 
   Renderer.prototype.del = function (text) {
-    return '<del>' + text + '</del>';
+    // return '<del>' + text + '</del>';
+    return {
+      type: 'del',
+      content: text
+    };
   };
 
   Renderer.prototype.link = function (href, title, text) {
@@ -934,7 +992,15 @@
       out += ' title="' + title + '"';
     }
     out += this.options.xhtml ? '/>' : '>';
-    return out;
+    // return out;
+    return {
+      type: 'img',
+      content: {
+        src: href,
+        alt: text,
+        title: title
+      }
+    };
   };
 
   Renderer.prototype.text = function (text) {

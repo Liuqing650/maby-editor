@@ -47,7 +47,9 @@ const MARKDOWN_TAGS = {
   '###': 'heading-three',
   '####': 'heading-four',
   '#####': 'heading-five',
-  '######': 'heading-six'
+  '######': 'heading-six',
+  'code': 'code',
+  'pre': 'pre',
 };
 
 const TAGS = {
