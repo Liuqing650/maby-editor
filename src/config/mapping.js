@@ -1,9 +1,10 @@
 import React from 'react';
 import Html from 'slate-html-serializer';
+import Plain from 'slate-plain-serializer';
 import { Value } from 'slate';
+import Marked from '../assets/marked';
 import TAGS from '../dict/tags';
 import * as _hotKey from './hotKey';
-import Plain from 'slate-plain-serializer';
 const { BLOCK, MARK, ICON_DICT, MARKDOWN } = TAGS;
 // 创建初始值
 function valueModel (value) {
@@ -135,10 +136,8 @@ export function getType(chars) {
   if (MARKDOWN[chars]) {
     return (MARKDOWN[chars]);
   } else {
-    if (/^( {4}[^\n]+\n*)+/.test(chars)) {
-      return (MARKDOWN.code);
-    }
-    console.log('chars------>', /^( {4}[^\n]+\n*)+/.test(chars));
+    const data = Marked(chars);
+    console.log('data------>', data);
     return null;
   }
 }

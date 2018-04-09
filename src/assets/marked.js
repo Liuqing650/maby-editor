@@ -7,6 +7,7 @@
 ; (function (root) {
   'use strict';
 
+  var modify = true;
   /**
    * Block-Level Grammar
    */
@@ -584,6 +585,7 @@
 
   InlineLexer.prototype.output = function (src) {
     var out = '',
+      outObj = [],
       link,
       text,
       href,
@@ -594,6 +596,7 @@
       if (cap = this.rules.escape.exec(src)) {
         src = src.substring(cap[0].length);
         out += cap[1];
+        outObj.push(cap[1]);
         continue;
       }
 
@@ -607,7 +610,9 @@
           text = escape(cap[1]);
           href = text;
         }
-        out += this.renderer.link(href, null, text);
+        var Templink = this.renderer.link(href, null, text);
+        out += Templink;
+        outObj.push(Templink);
         continue;
       }
 
@@ -626,7 +631,9 @@
             href = text;
           }
         }
-        out += this.renderer.link(href, null, text);
+        var Templink = this.renderer.link(href, null, text);
+        out += Templink;
+        outObj.push(Templink);
         continue;
       }
 
@@ -638,11 +645,13 @@
           this.inLink = false;
         }
         src = src.substring(cap[0].length);
-        out += this.options.sanitize
+        var Temptag = this.options.sanitize
           ? this.options.sanitizer
             ? this.options.sanitizer(cap[0])
             : escape(cap[0])
-          : cap[0]
+          : cap[0];
+        out += Temptag;
+        outObj.push(Temptag);
         continue;
       }
 
@@ -650,10 +659,12 @@
       if (cap = this.rules.link.exec(src)) {
         src = src.substring(cap[0].length);
         this.inLink = true;
-        out += this.outputLink(cap, {
+        var TempOutputLink = this.outputLink(cap, {
           href: cap[2],
           title: cap[3]
         });
+        out += TempOutputLink;
+        outObj.push(TempOutputLink);
         this.inLink = false;
         continue;
       }
@@ -670,7 +681,9 @@
           continue;
         }
         this.inLink = true;
-        out += this.outputLink(cap, link);
+        var TempOutputLink = this.outputLink(cap, link);
+        out += TempOutputLink;
+        outObj.push(TempOutputLink);
         this.inLink = false;
         continue;
       }
@@ -678,42 +691,54 @@
       // strong
       if (cap = this.rules.strong.exec(src)) {
         src = src.substring(cap[0].length);
-        out += this.renderer.strong(this.output(cap[4] || cap[3] || cap[2] || cap[1]));
+        var TempStrong = this.renderer.strong(this.output(cap[4] || cap[3] || cap[2] || cap[1]));
+        out += TempStrong;
+        outObj.push(TempStrong);
         continue;
       }
 
       // em
       if (cap = this.rules.em.exec(src)) {
         src = src.substring(cap[0].length);
-        out += this.renderer.em(this.output(cap[6] || cap[5] || cap[4] || cap[3] || cap[2] || cap[1]));
+        var TempEm = this.renderer.em(this.output(cap[6] || cap[5] || cap[4] || cap[3] || cap[2] || cap[1]));
+        out += TempEm;
+        outObj.push(TempEm);
         continue;
       }
 
       // code
       if (cap = this.rules.code.exec(src)) {
         src = src.substring(cap[0].length);
-        out += this.renderer.codespan(escape(cap[2].trim(), true));
+        var TempCode = this.renderer.codespan(escape(cap[2].trim(), true));
+        out += TempCode;
+        outObj.push(TempCode);
         continue;
       }
 
       // br
       if (cap = this.rules.br.exec(src)) {
         src = src.substring(cap[0].length);
-        out += this.renderer.br();
+        var TempBr = this.renderer.br();
+        out += TempBr;
+        outObj.push(TempBr);
         continue;
       }
 
       // del (gfm)
       if (cap = this.rules.del.exec(src)) {
         src = src.substring(cap[0].length);
-        out += this.renderer.del(this.output(cap[1]));
+        var TempDel = this.renderer.del(this.output(cap[1]));
+        out += TempDel
+        outObj.push(TempDel);
         continue;
       }
 
       // text
       if (cap = this.rules.text.exec(src)) {
         src = src.substring(cap[0].length);
-        out += this.renderer.text(escape(this.smartypants(cap[0])));
+        var TempText = this.renderer.text(escape(this.smartypants(cap[0])));
+        out += TempText;
+        outObj.push(TempText);
         continue;
       }
 
@@ -721,7 +746,10 @@
         throw new Error('Infinite loop on byte: ' + src.charCodeAt(0));
       }
     }
-
+    console.log('outObj--InlineLexer---->', outObj);
+    if (modify) {
+      return outObj;
+    }
     return out;
   };
 
@@ -792,29 +820,51 @@
   }
 
   Renderer.prototype.code = function (code, lang, escaped) {
-    if (this.options.highlight) {
-      var out = this.options.highlight(code, lang);
-      if (out != null && out !== code) {
-        escaped = true;
-        code = out;
+    if (modify) {
+      if (this.options.highlight) {
+        var out = this.options.highlight(code, lang);
+        if (out != null && out !== code) {
+          code = out;
+        }
       }
-    }
+      return {
+        type: 'code', // 标签类型
+        content: code,
+        lang: lang,
+        wrap: true
+      };
+    } else {
+      if (this.options.highlight) {
+        var out = this.options.highlight(code, lang);
+        if (out != null && out !== code) {
+          escaped = true;
+          code = out;
+        }
+      }
 
-    if (!lang) {
-      return '<pre><code>'
+      if (!lang) {
+        return '<pre><code>'
+          + (escaped ? code : escape(code, true))
+          + '\n</code></pre>';
+      }
+
+      return '<pre><code class="'
+        + this.options.langPrefix
+        + escape(lang, true)
+        + '">'
         + (escaped ? code : escape(code, true))
-        + '\n</code></pre>';
+        + '\n</code></pre>\n';
     }
-
-    return '<pre><code class="'
-      + this.options.langPrefix
-      + escape(lang, true)
-      + '">'
-      + (escaped ? code : escape(code, true))
-      + '\n</code></pre>\n';
   };
 
   Renderer.prototype.blockquote = function (quote) {
+    if (modify) {
+      return {
+        type: 'blockquote', // 标签类型
+        content: quote,
+        wrap: true
+      };
+    }
     return '<blockquote>\n' + quote + '</blockquote>\n';
   };
 
@@ -823,6 +873,13 @@
   };
 
   Renderer.prototype.heading = function (text, level, raw) {
+    if (modify) {
+      return {
+        type: `h${level}`, // 标签类型
+        content: text,
+        wrap: true
+      };
+    }
     if (this.options.headerIds) {
       return '<h'
         + level
@@ -840,69 +897,81 @@
   };
 
   Renderer.prototype.hr = function () {
-    // return this.options.xhtml ? '<hr/>\n' : '<hr>\n';
-    return {
-      type: 'hr', // 标签类型
-      wrap: true // 换行
-    };
+    if (modify) {
+      return {
+        type: 'hr', // 标签类型
+        wrap: true // 换行
+      };
+    }
+    return this.options.xhtml ? '<hr/>\n' : '<hr>\n';
   };
 
   Renderer.prototype.list = function (body, ordered, start) {
     var type = ordered ? 'ol' : 'ul',
       startatt = (ordered && start !== 1) ? start : '';
-    // return '<' + type + startatt + '>\n' + body + '</' + type + '>\n';
-    return {
-      type: type,
-      start: startatt, // 第几步
-      content: body,
-      wrap: true
-    };
+    if (modify) {
+      return {
+        type: type,
+        start: startatt, // 第几步
+        content: body,
+        wrap: true
+      };
+    }
+    return '<' + type + startatt + '>\n' + body + '</' + type + '>\n';
   };
 
   Renderer.prototype.listitem = function (text) {
-    // return '<li>' + text + '</li>\n';
-    return {
-      type: 'li',
-      content: text,
-      wrap: true
-    };
+    if (modify) {
+      return {
+        type: 'li',
+        content: text,
+        wrap: true
+      };
+    }
+    return '<li>' + text + '</li>\n';
   };
 
   Renderer.prototype.paragraph = function (text) {
-    // return '<p>' + text + '</p>\n';
-    return {
-      type: 'p',
-      content: text,
-      wrap: true
-    };
+    if (modify) {
+      return {
+        type: 'p',
+        content: text,
+        wrap: true
+      };
+    }
+    return '<p>' + text + '</p>\n';
   };
 
   Renderer.prototype.table = function (header, body) {
-    // return '<table>\n'
-    //   + '<thead>\n'
-    //   + header
-    //   + '</thead>\n'
-    //   + '<tbody>\n'
-    //   + body
-    //   + '</tbody>\n'
-    //   + '</table>\n';
-    return {
-      type: 'table',
-      content: {
-        header,
-        body
-      },
-      wrap: true
-    };
+    if (modify) {
+      return {
+        type: 'table',
+        content: {
+          header,
+          body
+        },
+        wrap: true
+      };
+    }
+    return '<table>\n'
+      + '<thead>\n'
+      + header
+      + '</thead>\n'
+      + '<tbody>\n'
+      + body
+      + '</tbody>\n'
+      + '</table>\n';
   };
 
   Renderer.prototype.tablerow = function (content) {
-    // return '<tr>\n' + content + '</tr>\n';
-    return {
-      type: 'tr',
-      content: content,
-      wrap: true
-    };
+    if (modify) {
+      return {
+        type: 'tr',
+        content: content,
+        wrap: true
+      };
+    }
+    return '<tr>\n' + content + '</tr>\n';
   };
 
   Renderer.prototype.tablecell = function (content, flags) {
@@ -910,53 +979,65 @@
     var tag = flags.align
       ? '<' + type + ' style="text-align:' + flags.align + '">'
       : '<' + type + '>';
-    // return tag + content + '</' + type + '>\n';
-    return {
-      type: type,
-      content: content,
-      style: {
-        textAlign: flags.align
-      },
-      wrap: true
-    };
+    if (modify) {
+      return {
+        type: type,
+        content: content,
+        style: {
+          textAlign: flags.align
+        },
+        wrap: true
+      };
+    }
+    return tag + content + '</' + type + '>\n';
   };
 
   // span level renderer
   Renderer.prototype.strong = function (text) {
-    // return '<strong>' + text + '</strong>';
-    return {
-      type: 'strong',
-      content: text
-    };
+    if (modify) {
+      return {
+        type: 'strong',
+        content: text
+      };
+    }
+    return '<strong>' + text + '</strong>';
   };
 
   Renderer.prototype.em = function (text) {
-    // return '<em>' + text + '</em>';
-    return {
-      type: 'em',
-      content: text
-    };
+    if (modify) {
+      return {
+        type: 'em',
+        content: text
+      };
+    }
+    return '<em>' + text + '</em>';
   };
 
   Renderer.prototype.codespan = function (text) {
-    // return '<code>' + text + '</code>';
-    return {
-      type: 'code',
-      content: text
-    };
+    if (modify) {
+      return {
+        type: 'code',
+        content: text
+      };
+    }
+    return '<code>' + text + '</code>';
   };
 
   Renderer.prototype.br = function () {
-    // return this.options.xhtml ? '<br/>' : '<br>';
-    return { type: 'br' };
+    if (modify) {
+      return { type: 'br' };
+    }
+    return this.options.xhtml ? '<br/>' : '<br>';
   };
 
   Renderer.prototype.del = function (text) {
-    // return '<del>' + text + '</del>';
-    return {
-      type: 'del',
-      content: text
-    };
+    if (modify) {
+      return {
+        type: 'del',
+        content: text
+      };
+    }
+    return '<del>' + text + '</del>';
   };
 
   Renderer.prototype.link = function (href, title, text) {
@@ -980,6 +1061,15 @@
       out += ' title="' + title + '"';
     }
     out += '>' + text + '</a>';
+    if (modify) {
+      return {
+        type: 'a',
+        content: {
+          href: href,
+          text: text
+        }
+      };
+    }
     return out;
   };
 
@@ -992,15 +1082,17 @@
       out += ' title="' + title + '"';
     }
     out += this.options.xhtml ? '/>' : '>';
-    // return out;
-    return {
-      type: 'img',
-      content: {
-        src: href,
-        alt: text,
-        title: title
-      }
-    };
+    if (modify) {
+      return {
+        type: 'img',
+        content: {
+          src: href,
+          alt: text,
+          title: title
+        }
+      };
+    }
+    return out;
   };
 
   Renderer.prototype.text = function (text) {
@@ -1069,10 +1161,15 @@
     this.tokens = src.reverse();
 
     var out = '';
+    var outObj = [];
     while (this.next()) {
-      out += this.tok();
+      var tok = this.tok();
+      out += tok
+      outObj.push(tok);
     }
-
+    if (modify) {
+      return outObj;
+    }
     return out;
   };
 
@@ -1206,9 +1303,16 @@
         var html = !this.token.pre && !this.options.pedantic
           ? this.inline.output(this.token.text)
           : this.token.text;
+        if (modify) {
+          return html;
+        }
         return this.renderer.html(html);
       }
       case 'paragraph': {
+        console.log('inline------->', this.inline);
+        if (modify) {
+          return this.inline.output(this.token.text);
+        }
         return this.renderer.paragraph(this.inline.output(this.token.text));
       }
       case 'text': {
@@ -1222,6 +1326,9 @@
    */
 
   function escape(html, encode) {
+    // if (modify) {
+    //   return html;
+    // }
     return html
       .replace(!encode ? /&(?!#?\w+;)/g : /&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -1330,7 +1437,6 @@
         tokens,
         pending,
         i = 0;
-
       try {
         tokens = Lexer.lex(src, opt)
       } catch (e) {
@@ -1389,6 +1495,10 @@
     }
     try {
       if (opt) opt = merge({}, marked.defaults, opt);
+      // console.log('Lexer---------->', Lexer.lex(src, opt));
+      if (modify) {
+        return Parser.parse(Lexer.lex(src, opt), opt);
+      }
       return Parser.parse(Lexer.lex(src, opt), opt);
     } catch (e) {
       e.message += '\nPlease report this to https://github.com/markedjs/marked.';
