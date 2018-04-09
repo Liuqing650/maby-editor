@@ -6,7 +6,7 @@ export default class Example extends Component {
   }
   onChange = ({ value }) => {
     console.log('value---->', value);
-    this.setState({ value })
+    // this.setState({ value })
   }
   handleSubmit = (value) => {
     console.log(value);
@@ -24,7 +24,6 @@ export default class Example extends Component {
     };
     return (
       <div>
-        {/* <h2>测试maby-edit</h2> */}
         <MabyEditor {...mabyEditorProps} />
       </div>
     );
