@@ -132,10 +132,19 @@ export function analysisTools(tools) {
   return tools;
 }
 
+// 获取类型
 export function getType(chars) {
   if (MARKDOWN[chars]) {
     return (MARKDOWN[chars]);
   } else {
+    /**
+     * 这里可能需要对多行类型进行状态管理,例如将多行
+     * 较好的标记方式为判断是否是空行,如果空行,那么清除原来样式
+     * 可以对每一行,也就是每一次回车进行标记
+     * 1. blockquote
+     * 2. code
+     * 3. table
+     */
     const data = Marked(chars);
     console.log('data------>', data);
     return null;

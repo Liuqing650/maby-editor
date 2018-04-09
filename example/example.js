@@ -5,7 +5,7 @@ export default class Example extends Component {
     value: null
   }
   onChange = ({ value }) => {
-    // console.log('value---->', value);
+    console.log('value---->', value);
     this.setState({ value })
   }
   handleSubmit = (value) => {

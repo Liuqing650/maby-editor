@@ -1,3 +1,7 @@
+
+@blockFontSize: 20px;
+@codeFontSize: 16px;
+
 :global {
   p {
     margin: 0;
@@ -10,13 +14,17 @@
   }
 
   :not(pre) > blockquote {
+    color: #222;
     font-family: monospace;
+    font-style: normal;
+    font-size: @blockFontSize;
     border-left: 5px solid #eee;
-    padding: 8px;
+    padding: 16px;
   }
 
   :not(pre) > code {
     font-family: monospace;
+    font-size: @codeFontSize;
     border-left: 5px solid #eee;
     padding: 8px;
   }
