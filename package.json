@@ -1,7 +1,7 @@
 {
   "name": "maby-editor",
-  "version": "0.0.10",
-  "description": "一个基于Slate开发的富文本编辑器。",
+  "version": "0.0.1",
+  "description": "一个基于Draft配置的富文本编辑器。",
   "main": "lib/index.js",
   "browser": "lib/index.js",
   "scripts": {
@@ -65,17 +65,8 @@
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "draft-js": "^0.10.5",
-    "immutable": "^3.8.2",
-    "is-hotkey": "^0.1.1",
-    "is-url": "^1.2.2",
-    "marked": "^0.3.19",
-    "prismjs": "^1.13.0",
-    "react-markdown": "^3.3.0",
-    "react-simplemde-editor": "^3.6.14",
-    "slate": "^0.33.4",
-    "slate-collapse-on-escape": "^0.6.0",
-    "slate-html-serializer": "^0.6.1",
-    "slate-react": "^0.12.4",
-    "slate-soft-break": "^0.6.0"
+    "draft-js-markdown-shortcuts-plugin": "^0.4.1",
+    "draft-js-plugins-editor": "^2.0.4",
+    "immutable": "^3.8.2"
   }
 }

@@ -6,19 +6,19 @@
 
 ## 备注
 
-希望能够实现一款所见即所得的md编辑器
+简单包装的一款富文本编辑器
 
 ## 安装
 
 ```bash
-npm install maby-editor --save
+npm install maby-markdown-editor --save // 暂未发布
 ```
 
 ## 示例
 
 ```jsx
 import React, { Component } from 'react';
-import MabyEditor from 'maby-editor';
+import MabyMarkdownEditor from 'maby-markdown-editor';
 export default class Example extends Component {
   state = {
     value: null
@@ -38,8 +38,7 @@ export default class Example extends Component {
     };
     return (
       <div>
-        <h2>测试maby-edit</h2>
-        <MabyEdit {...mabyEditProps} />
+        <MabyMarkdownEditor {...mabyEditProps} />
       </div>
     );
   }

@@ -1,8 +1,13 @@
 import React from 'react';
-import {Editor, EditorState} from 'draft-js';
+import Editor from 'draft-js-plugins-editor';
+import {EditorState} from 'draft-js';
+import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
 import Immutable from 'immutable';
 import './index.less';
 
+const plugins = [
+  createMarkdownShortcutsPlugin()
+];
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -16,26 +21,12 @@ class MabyEditor extends React.Component {
   render() {
     const { editorState } = this.state;
     const { placeholder, className, height, autoFocus } = this.props;
-    const blockRenderMap = Immutable.Map({
-      'maby-section': {
-        element: 'code'
-      },
-    });
-    function getBlockStyle(blockName) {
-      switch (blockName.getType()) {
-        case 'blockquote':
-          return 'maby-blockquote';
-        case 'code-block':
-          return 'maby-code';
-        default:
-          return null;
-      }
-    }
     return (
       <div>
         <Editor
           editorState={editorState}
           onChange={this.onChange}
+          plugins={plugins}
           ref="editor"
         />
       </div>

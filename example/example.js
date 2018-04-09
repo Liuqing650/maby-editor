@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MabyEditor from 'src/index';
+import MabyMarkdownEditor from 'src/index';
 export default class Example extends Component {
   state = {
     value: null
@@ -24,7 +24,7 @@ export default class Example extends Component {
     };
     return (
       <div>
-        <MabyEditor {...mabyEditorProps} />
+        <MabyMarkdownEditor {...mabyEditorProps} />
       </div>
     );
   }
