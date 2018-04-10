@@ -1,6 +1,22 @@
 更新日志
 =========
 
+~~v0.0.2~~
+------
+
+1. 自动获取焦点
+  ```
+    componentDidMount = () => {
+      const { editor } = this;
+      if (editor) {
+        setTimeout(editor.focus.bind(editor), 1000);
+      }
+    }
+    // Editor
+    <Editor ref={element => { this.editor = element; }} />
+  ```
+2. 引入css in js 测试样式文件
+
 ~~v0.0.1~~
 ------
 
