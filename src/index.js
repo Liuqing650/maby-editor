@@ -1,33 +1,80 @@
 import React from 'react';
 import Editor from 'draft-js-plugins-editor';
 import Draft, {
-  Editor,
-  RichUtils,
+  convertFromRaw,
   ContentState,
-  EditorState,
-  convertToRaw
+  EditorState
 } from 'draft-js';
-import createMarkdownShortcutsPlugin from 'draft-js-markdown-shortcuts-plugin';
-import Immutable from 'immutable';
-import 'prismjs/themes/prism-funky.css';
-import prismPlugin from './plugins/prism';
-// import codePlugin from './plugins/code';
+import createPrismPlugin from 'draft-js-prism-plugin';
+import createMarkdownPlugin from './draft-js-markdown-plugin';
 import customStyleMap from './styles';
-// import './styles/prism.less';
+import languageStyle from './styles/languageSelect';
+import styles from './index.less';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-scala';
+import 'prismjs/components/prism-go';
+import 'prismjs/components/prism-sql';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-c';
+import 'prismjs/components/prism-cpp';
+import 'prismjs/components/prism-kotlin';
+import 'prismjs/components/prism-perl';
+import 'prismjs/components/prism-ruby';
+import 'prismjs/components/prism-swift';
+import initialState from "./initstate";
+// code-theme
+import './styles/prism.less';
+
+const renderLanguageSelect = ({
+  options,
+  onChange,
+  selectedValue,
+  selectedLabel
+}) => {
+  return (
+    <div style={languageStyle.switcherContainer}>
+      <div style={languageStyle.switcher}>
+        <select
+          style={languageStyle.switcherSelect}
+          value={selectedValue}
+          onChange={onChange}
+        >
+          {options.map(({ label, value }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+        <div style={languageStyle.switcherLabel}>
+          {selectedLabel} {String.fromCharCode(9662)}
+        </div>
+      </div>
+    </div>
+  )
+};
+
+const prismPlugin = createPrismPlugin({
+  prism: Prism,
+});
+
 const plugins = [
-  // codePlugin,
   prismPlugin,
-  createMarkdownShortcutsPlugin()
-];
+  createMarkdownPlugin({ renderLanguageSelect })
+]
+
 const contentState = ContentState.createFromText('');
 const initialEditorState = EditorState.createWithContent(contentState);
 
+// const initialEditorState = EditorState.createWithContent(
+//   convertFromRaw(initialState)
+// );
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: initialEditorState};
-    this.Draft = Draft;
-    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+    this.state = { 
+      editorState: initialEditorState
+    };
   }
   componentDidMount = () => {
     const { editor } = this;
@@ -35,7 +82,7 @@ class MabyEditor extends React.Component {
       setTimeout(editor.focus.bind(editor), 1000);
     }
   }
-  onChange = (editorState) => {
+  onChange = editorState => {
     this.setState({ 
       editorState,
     })
@@ -48,9 +95,9 @@ class MabyEditor extends React.Component {
         <Editor
           editorState={editorState}
           onChange={this.onChange}
-          customStyleMap={customStyleMap}
           plugins={plugins}
           spellCheck
+          autoFocus
           ref={(element) => { this.editor = element; }}
         />
       </div>

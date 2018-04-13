@@ -1884,7 +1884,7 @@ decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
 
-decorate-component-with-props@^1.0.2, decorate-component-with-props@^1.1.0:
+decorate-component-with-props@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/decorate-component-with-props/-/decorate-component-with-props-1.1.0.tgz#b496c814c6a2aba0cf2ad26e44cbedb8ead42f15"
 
@@ -2096,12 +2096,11 @@ dot-prop@^4.1.1:
   dependencies:
     is-obj "^1.0.0"
 
-draft-js-checkable-list-item@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/draft-js-checkable-list-item/-/draft-js-checkable-list-item-3.0.1.tgz#040beb335f2a83c0d1b9a33236cf6950f48490cd"
+draft-js-checkable-list-item@^2.0.5:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/draft-js-checkable-list-item/-/draft-js-checkable-list-item-2.0.6.tgz#19dfb99421e07ac1a93736f4a5d04e222de2a647"
   dependencies:
-    draft-js-modifiers "~0.2.1"
-    immutable "~3.7.4"
+    draft-js-modifiers "^0.1.5"
 
 draft-js-code@^0.3.0:
   version "0.3.0"
@@ -2112,20 +2111,11 @@ draft-js-code@^0.3.0:
     ends-with "^0.2.0"
     immutable "3.x"
 
-draft-js-markdown-shortcuts-plugin@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/draft-js-markdown-shortcuts-plugin/-/draft-js-markdown-shortcuts-plugin-0.4.1.tgz#a539bbb530b09863e1cdb707ac4cf9f4576518c0"
+draft-js-modifiers@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/draft-js-modifiers/-/draft-js-modifiers-0.1.5.tgz#5134a6dbf3fa5b76b74dc269e1877b93f29336b0"
   dependencies:
-    decorate-component-with-props "^1.1.0"
-    draft-js "~0.10.5"
-    draft-js-checkable-list-item "^3.0.1"
-    immutable "~3.7.4"
-
-draft-js-modifiers@~0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/draft-js-modifiers/-/draft-js-modifiers-0.2.1.tgz#18f48e8ad59c0ae66b14847db42e5d595e5c038e"
-  dependencies:
-    draft-js "~0.10.5"
+    draft-js "~0.10.0"
     immutable "~3.7.4"
 
 draft-js-plugins-editor@^2.0.4:
@@ -2152,7 +2142,7 @@ draft-js-prism@^1.0.6:
     extend "^3.0.0"
     immutable "*"
 
-draft-js@^0.10.5, draft-js@~0.10.5:
+draft-js@^0.10.5, draft-js@~0.10.0:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/draft-js/-/draft-js-0.10.5.tgz#bfa9beb018fe0533dbb08d6675c371a6b08fa742"
   dependencies:
@@ -3037,6 +3027,10 @@ hmac-drbg@^1.0.0:
 hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
+
+hoist-non-react-statics@^2.1.1:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.0.tgz#d2ca2dfc19c5a91c5a6615ce8e564ef0347e2a40"
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -5103,6 +5097,12 @@ rc@^1.1.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-click-outside@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-click-outside/-/react-click-outside-3.0.1.tgz#6e77e84d2f17afaaac26dbad743cbbf909f5e24c"
+  dependencies:
+    hoist-non-react-statics "^2.1.1"
 
 react-dom@^16.2.0:
   version "16.2.0"
