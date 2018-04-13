@@ -1,6 +1,8 @@
 import React from 'react';
 import Editor from 'draft-js-plugins-editor';
 import Draft, {
+  Editor,
+  RichUtils,
   ContentState,
   EditorState,
   convertToRaw
@@ -12,21 +14,20 @@ import prismPlugin from './plugins/prism';
 // import codePlugin from './plugins/code';
 import customStyleMap from './styles';
 // import './styles/prism.less';
-
-window.Draft = Draft;
 const plugins = [
-  // prismPlugin,
+  // codePlugin,
+  prismPlugin,
   createMarkdownShortcutsPlugin()
 ];
 const contentState = ContentState.createFromText('');
 const initialEditorState = EditorState.createWithContent(contentState);
-const rawContentState = convertToRaw(initialEditorState.getCurrentContent());
 
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editorState: initialEditorState, rawContent: rawContentState};
+    this.state = { editorState: initialEditorState};
     this.Draft = Draft;
+    this.handleKeyCommand = (command) => this._handleKeyCommand(command);
   }
   componentDidMount = () => {
     const { editor } = this;
@@ -35,13 +36,9 @@ class MabyEditor extends React.Component {
     }
   }
   onChange = (editorState) => {
-    window.editorState = editorState;
-    window.rawContent = convertToRaw(editorState.getCurrentContent());
     this.setState({ 
       editorState,
-      rawContent: convertToRaw(editorState.getCurrentContent())
     })
-    // console.log('editorState', convertToRaw(editorState.getCurrentContent()));
   };
   render() {
     const { editorState } = this.state;

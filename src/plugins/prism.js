@@ -19,7 +19,9 @@ const prismPlugin = {
     new PrismDecorator({
       prism: Prism,
       getSyntax(block) {
+        console.log('block---->', block.getData());
         const language = block.getData().get('javascript');
+        console.log('language---->', language);
         if (typeof Prism.languages[language] === 'object') {
           return language;
         }

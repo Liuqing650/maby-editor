@@ -1,10 +1,9 @@
 const fontSize = '16px';
 export default {
   'CODE': {
-    fontFamily: 'monospace',
-    fontSize: fontSize,
-    borderLeft: '5px solid #eee',
-    color: 'red',
-    padding: '8px'
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+    fontSize: 16,
+    padding: 2
   }
 };
