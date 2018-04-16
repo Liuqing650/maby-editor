@@ -31,5 +31,5 @@ export const defaultBlockWhitelist = [
   "ordered-list-item",
   "unordered-list-item",
   CHECKABLE_LIST_ITEM,
-  "blockquote",
+  "blockquote"
 ];
