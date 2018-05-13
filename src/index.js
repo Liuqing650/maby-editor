@@ -2,15 +2,17 @@ import React from 'react';
 import Editor from 'draft-js-plugins-editor';
 import Draft, {
   convertFromRaw,
+  convertToRaw,
   ContentState,
   EditorState
 } from 'draft-js';
+// import {stateToHTML} from 'draft-js-export-html';
+// import {stateFromHTML} from 'draft-js-import-html';
 import createPrismPlugin from 'draft-js-prism-plugin';
+import Prism from 'prismjs';
 import createMarkdownPlugin from './draft-js-markdown-plugin';
-import customStyleMap from './styles';
 import languageStyle from './styles/languageSelect';
 import styles from './index.less';
-import Prism from 'prismjs';
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-scala';
 import 'prismjs/components/prism-go';
@@ -22,9 +24,8 @@ import 'prismjs/components/prism-kotlin';
 import 'prismjs/components/prism-perl';
 import 'prismjs/components/prism-ruby';
 import 'prismjs/components/prism-swift';
-import initialState from "./initstate";
 // code-theme
-import './styles/prism.less';
+import './styles/index.less';
 
 const renderLanguageSelect = ({
   options,
@@ -66,9 +67,6 @@ const plugins = [
 const contentState = ContentState.createFromText('');
 const initialEditorState = EditorState.createWithContent(contentState);
 
-// const initialEditorState = EditorState.createWithContent(
-//   convertFromRaw(initialState)
-// );
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -77,13 +75,37 @@ class MabyEditor extends React.Component {
     };
   }
   componentDidMount = () => {
-    const { editor } = this;
+    const { editor,props } = this;
     if (editor) {
       setTimeout(editor.focus.bind(editor), 1000);
     }
   }
+  componentDidUpdate = (newProps) => {
+    if (this.props.value !== newProps.value) {
+      this.setEditorState(this.props);
+    }
+  }
+  setEditorState = (props) => {
+    let setContentState = ContentState.createFromText('');
+    if (props.value) {
+      setContentState = convertFromRaw(props.value);
+    }
+    let initiEditorState = EditorState.createWithContent(setContentState);
+    this.setState({
+      editorState: initiEditorState
+    })
+  };
+  getEditorState = (editorState) => {
+    let exportState = editorState;
+    exportState = convertToRaw(editorState.getCurrentContent())
+    return exportState;
+  };
   onChange = editorState => {
-    this.setState({ 
+    if (this.props.onChange) {
+      const exportState = this.getEditorState(editorState, this.props);
+      this.props.onChange(exportState, editorState);
+    }
+    this.setState({
       editorState,
     })
   };
@@ -95,6 +117,8 @@ class MabyEditor extends React.Component {
         <Editor
           editorState={editorState}
           onChange={this.onChange}
+          placeholder={placeholder}
+          className={className || null}
           plugins={plugins}
           spellCheck
           autoFocus

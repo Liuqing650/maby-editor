@@ -6,7 +6,7 @@
 
 ## 备注
 
-简单包装的一款富文本编辑器
+包装的了markdown富文本编辑器,便于更易于自己项目中定制化使用.
 
 ## 安装
 
@@ -45,4 +45,4 @@ export default class Example extends Component {
 }
 ```
 
-> 还很不完善...
+> 特别注意: 插件来自于 [draft-js-markdown-plugin](https://github.com/withspectrum/draft-js-markdown-plugin)

@@ -29,10 +29,11 @@ import insertText from "./modifiers/insertText";
 import changeCurrentBlockType from "./modifiers/changeCurrentBlockType";
 import createLinkDecorator from "./decorators/link";
 import createImageDecorator from "./decorators/image";
-import { replaceText } from "./utils";
+import { replaceText, getCurrentLine } from "./utils";
 import {
   CODE_BLOCK_REGEX,
   CODE_BLOCK_TYPE,
+  ENTITY_TYPE,
   defaultInlineWhitelist,
   defaultBlockWhitelist,
 } from "./constants";
@@ -56,7 +57,7 @@ const defaultLanguages = {
   swift: "Swift",
 };
 
-const INLINE_STYLE_CHARACTERS = [" ", "*", "_"];
+const INLINE_STYLE_CHARACTERS = ["*", "_", "`", "~"];
 
 const defaultRenderSelect = ({ options, onChange, selectedValue }) => (
   <select value={selectedValue} onChange={onChange}>
@@ -101,13 +102,17 @@ function checkCharacterForState(config, editorState, character) {
     editorState === newEditorState &&
     config.features.inline.includes("IMAGE")
   ) {
-    newEditorState = handleImage(editorState, character);
+    newEditorState = handleImage(
+      editorState,
+      character,
+      config.entityType.IMAGE
+    );
   }
   if (
     editorState === newEditorState &&
     config.features.inline.includes("LINK")
   ) {
-    newEditorState = handleLink(editorState, character);
+    newEditorState = handleLink(editorState, character, config.entityType.LINK);
   }
   if (
     newEditorState === editorState &&
@@ -187,6 +192,8 @@ function checkReturnForState(config, editorState, ev) {
         text.replace(/```\s*$/, "")
       );
       newEditorState = insertEmptyBlock(newEditorState);
+    } else if (ev.shiftKey) {
+      newEditorState = insertEmptyBlock(newEditorState);
     } else {
       newEditorState = insertText(editorState, "\n");
     }
@@ -202,6 +209,7 @@ const defaultConfig = {
     inline: defaultInlineWhitelist,
     block: defaultBlockWhitelist,
   },
+  entityType: ENTITY_TYPE,
 };
 
 const createMarkdownPlugin = (_config = {}) => {
@@ -214,6 +222,10 @@ const createMarkdownPlugin = (_config = {}) => {
       ...defaultConfig.features,
       ..._config.features,
     },
+    entityType: {
+      ...defaultConfig.entityType,
+      ..._config.entityType,
+    },
   };
 
   return {
@@ -224,7 +236,14 @@ const createMarkdownPlugin = (_config = {}) => {
         wrapper: <pre spellCheck="false" />,
       },
     }).merge(checkboxBlockRenderMap),
-    decorators: [createLinkDecorator(), createImageDecorator()],
+    decorators: [
+      createLinkDecorator({
+        entityType: config.entityType.LINK,
+      }),
+      createImageDecorator({
+        entityType: config.entityType.IMAGE,
+      }),
+    ],
     initialize({ setEditorState, getEditorState }) {
       store.setEditorState = setEditorState;
       store.getEditorState = getEditorState;
@@ -275,10 +294,8 @@ const createMarkdownPlugin = (_config = {}) => {
       }
     },
     onTab(ev, { getEditorState, setEditorState }) {
-      // ev.preventDefault();
-      // ev.stopPropagation();
       const editorState = getEditorState();
-      let newEditorState = adjustBlockDepth(editorState, ev);
+      const newEditorState = adjustBlockDepth(editorState, ev);
       if (newEditorState !== editorState) {
         setEditorState(newEditorState);
         return "handled";
@@ -324,15 +341,15 @@ const createMarkdownPlugin = (_config = {}) => {
       return "not-handled";
     },
     handleBeforeInput(character, editorState, { setEditorState }) {
-      if (character !== " ") {
-        return "not-handled";
-      }
-
       // If we're in a code block - don't transform markdown
       if (inCodeBlock(editorState)) return "not-handled";
 
       // If we're in a link - don't transform markdown
       if (inLink(editorState)) return "not-handled";
+
+      // Don't let users type two spaces after another
+      if (character === " " && getCurrentLine(editorState).slice(-1) === " ")
+        return "handled";
 
       const newEditorState = checkCharacterForState(
         config,

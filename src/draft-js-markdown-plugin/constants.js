@@ -3,13 +3,18 @@ import { CHECKABLE_LIST_ITEM } from "draft-js-checkable-list-item";
 export const CODE_BLOCK_REGEX = /^```([\w-]+)?\s*$/;
 
 export const inlineMatchers = {
-  BOLD: [/\*\*(.+)\*\*$/g, /__(.+)__$/g],
-  ITALIC: [/\*(.+)\*$/g, /_(.+)_$/g],
-  CODE: [/`(.+)`$/g],
-  STRIKETHROUGH: [/~~(.+)~~$/g],
+  BOLD: [/\*(.+)\*$/g],
+  ITALIC: [/_(.+)_$/g],
+  CODE: [/`([^`]+)`$/g],
+  STRIKETHROUGH: [/~(.+)~$/g],
 };
 
 export const CODE_BLOCK_TYPE = "code-block";
+
+export const ENTITY_TYPE = {
+  IMAGE: "IMG",
+  LINK: "LINK",
+};
 
 export const defaultInlineWhitelist = [
   "BOLD",
@@ -31,5 +36,5 @@ export const defaultBlockWhitelist = [
   "ordered-list-item",
   "unordered-list-item",
   CHECKABLE_LIST_ITEM,
-  "blockquote"
+  "blockquote",
 ];
