@@ -17,7 +17,10 @@ build:
 publish:
 	@$(WEBPACK) --config webpack.prod.js
 	@mkdir -p $(LIB)
+	@mkdir -p $(LIB)/styles
 	@cp -Rfv $(SOURCE)/index.less $(LIB)
+	@cp -Rfv $(SOURCE)/styles/*.less $(LIB)/styles
+	@cp -Rfv $(SOURCE)/styles/*.css $(LIB)/styles
 	@$(BABEL) src --out-dir lib
 
 watch:
