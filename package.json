@@ -1,5 +1,5 @@
 {
-  "name": "maby-editor",
+  "name": "maby-markdown-editor",
   "version": "0.0.1",
   "description": "一个基于Draft配置的富文本编辑器。",
   "main": "lib/index.js",
