@@ -2,7 +2,7 @@
 
 ## 预览
 
-[maby-editor-markdown](https://liuqing650.github.io/maby-editor/preview/markdown)
+[maby-editor-markdown](https://liuqing650.github.io/maby-editor/preview/markdown/index.html)
 
 ## 备注
 
