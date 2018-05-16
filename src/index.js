@@ -11,8 +11,8 @@ import Draft, {
 import createPrismPlugin from 'draft-js-prism-plugin';
 import Prism from 'prismjs';
 import createMarkdownPlugin from './draft-js-markdown-plugin';
-import languageStyle from './styles/languageSelect';
-import styles from './index.less';
+import languageStyle from './styles/languageSelect.css';
+import styles from './index.css';
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-scala';
 import 'prismjs/components/prism-go';
@@ -25,7 +25,7 @@ import 'prismjs/components/prism-perl';
 import 'prismjs/components/prism-ruby';
 import 'prismjs/components/prism-swift';
 // code-theme
-import './styles/index.less';
+import './styles/index.css';
 
 const renderLanguageSelect = ({
   options,
@@ -34,10 +34,10 @@ const renderLanguageSelect = ({
   selectedLabel
 }) => {
   return (
-    <div style={languageStyle.switcherContainer}>
-      <div style={languageStyle.switcher}>
+    <div className="switcherContainer">
+      <div className="switcher">
         <select
-          style={languageStyle.switcherSelect}
+          className="switcherSelect"
           value={selectedValue}
           onChange={onChange}
         >
@@ -47,7 +47,7 @@ const renderLanguageSelect = ({
             </option>
           ))}
         </select>
-        <div style={languageStyle.switcherLabel}>
+        <div className="switcherLabel">
           {selectedLabel} {String.fromCharCode(9662)}
         </div>
       </div>
