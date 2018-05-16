@@ -33,7 +33,7 @@ let config = {
   },
   devtool: 'source-map',
   output: {
-    path: path.resolve(__dirname, 'preview'),
+    path: path.resolve(__dirname, 'preview/markdown/'),
     filename: libraryName + '.min.js',
     library: libraryName,
     libraryTarget: 'umd',
