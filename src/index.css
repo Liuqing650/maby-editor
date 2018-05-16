@@ -3,6 +3,7 @@ pre {
   padding: 20px;
   font-size: 20px;
   position: relative;
+  overflow: initial;
 }
 
 blockquote {
