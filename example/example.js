@@ -15,15 +15,10 @@ export default class Example extends Component {
     const { value } = this.state;
     const mabyEditorProps = {
       placeholder: '输入一些文本吧',
-      className: 'myEditor',
-      value: value,
-      mode: 'html',
-      onChange: this.onChange,
-      handleValue: this.handleSubmit
+      className: 'myEditor'
     };
     return (
       <div>
-        {/* <h2>测试maby-edit</h2> */}
         <MabyEditor {...mabyEditorProps} />
       </div>
     );

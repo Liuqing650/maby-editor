@@ -38,7 +38,13 @@ let config = {
     ],
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
+    historyApiFallback: true,
+    overlay: true,
+    stats: {
+      modules: false,
+      colors: true
+    },
   },
   module: {
     loaders: [
