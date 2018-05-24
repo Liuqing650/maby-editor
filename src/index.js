@@ -17,6 +17,8 @@ import './styles/index.css';
 const DEFAULT_NODE = 'paragraph';
 const SAVE_KEY = utils.DICT.SAVE_KEY;
 
+console.log('Editor--------->', Editor);
+
 // 获取本地缓存数据
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
 // 构建初始状态…
@@ -111,8 +113,10 @@ class MabyEditor extends React.Component {
   decorateNode = (node) => {
     if (node.type != 'code-block') return
     const language = node.data.get('language') || 'js';
+    // console.log('language-------->', language);
     const texts = node.getTexts().toArray()
     const string = texts.map(t => t.text).join('\n')
+    console.log('string-------->', string);
     const grammar = Prism.languages[language]
     const tokens = Prism.tokenize(string, grammar, language)
     const decorations = []
@@ -152,7 +156,7 @@ class MabyEditor extends React.Component {
           marks: [{ type: token.type }],
         }
 
-        decorations.push(range)
+        decorations.push(range);
       }
       start = end;
     }

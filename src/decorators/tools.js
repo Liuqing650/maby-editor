@@ -56,8 +56,8 @@ export const onEnter = (event, change, isExit) => {
       return true;
     }
     // 换行
-    // change.insertText('\n');
-    change.insertInline('code-line')
+    change.insertText('\n');
+    // change.insertInline('code-line');
     return true;
   } else {
     if (value.isExpanded) return;
