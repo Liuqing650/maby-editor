@@ -1,10 +1,12 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
+import Prism from 'prismjs';
 import * as initState from './initValue/initState';
 import * as tools from './decorators/tools';
 import * as utils from './utils';
 import CodeBlock from './components/codeBlock';
+import CodeBlockLine from './components/codeBlockLine';
 import Bold from './components/bold';
 import CodeInline from './components/codeInline';
 import EmInline from './components/EmInline';
@@ -17,9 +19,8 @@ const SAVE_KEY = utils.DICT.SAVE_KEY;
 
 // 获取本地缓存数据
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
-
 // 构建初始状态…
-const initialState = Value.fromJSON(existingValue) || initState.valueModel('A line of text in a paragraph.');
+const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
 
 // 插件
 const plugins = [
@@ -45,8 +46,10 @@ class MabyEditor extends React.Component {
   }
   renderNode = (props) => {
     const { attributes, children, node } = props;
+    console.log('node.type-=--------->', node.type);
     switch (node.type) {
       case 'code-block': return <CodeBlock {...props} />;
+      case 'code-line': return <CodeBlockLine {...props} />
       case 'header-one': return <h1 {...attributes}>{children}</h1>;
       case 'header-two': return <h2 {...attributes}>{children}</h2>;
       case 'header-three': return <h3 {...attributes}>{children}</h3>;
@@ -76,6 +79,15 @@ class MabyEditor extends React.Component {
     }
     return tools.onKeyDown(event, change, onSave)
   };
+  tokenToContent = (token) => {
+    if (typeof token == 'string') {
+      return token
+    } else if (typeof token.content == 'string') {
+      return token.content
+    } else {
+      return token.content.map(this.tokenToContent).join('')
+    }
+  }
   render() {
     const { placeholder, className, autoFocus } = this.props;
     return (
@@ -89,10 +101,63 @@ class MabyEditor extends React.Component {
           autoFocus={autoFocus || true}
           renderNode={this.renderNode}
           renderMark={this.renderMark}
+          decorateNode={this.decorateNode}
           ref={(element) => { this.editor = element; }}
         />
       </div>
     );
   };
+
+  decorateNode = (node) => {
+    if (node.type != 'code-block') return
+    const language = node.data.get('language') || 'js';
+    const texts = node.getTexts().toArray()
+    const string = texts.map(t => t.text).join('\n')
+    const grammar = Prism.languages[language]
+    const tokens = Prism.tokenize(string, grammar, language)
+    const decorations = []
+    let startText = texts.shift()
+    let endText = startText
+    let startOffset = 0
+    let endOffset = 0
+    let start = 0
+
+    for (const token of tokens) {
+      startText = endText
+      startOffset = endOffset
+
+      const content = this.tokenToContent(token)
+      const newlines = content.split('\n').length - 1
+      const length = content.length - newlines
+      const end = start + length
+
+      let available = startText.text.length - startOffset
+      let remaining = length
+
+      endOffset = startOffset + remaining
+
+      while (available < remaining && texts.length > 0) {
+        endText = texts.shift()
+        remaining = length - available
+        available = endText.text.length
+        endOffset = remaining
+      }
+
+      if (typeof token != 'string') {
+        const range = {
+          anchorKey: startText.key,
+          anchorOffset: startOffset,
+          focusKey: endText.key,
+          focusOffset: endOffset,
+          marks: [{ type: token.type }],
+        }
+
+        decorations.push(range)
+      }
+      start = end;
+    }
+
+    return decorations;
+  }
 };
 export default MabyEditor;

@@ -43,27 +43,42 @@ export const onBackspace = (event, change) => {
   return true;
 };
 
-export const onEnter = (event, change) => {
-  const { value } = change
-  if (value.isExpanded) return
+export const onEnter = (event, change, isExit) => {
+  const { value } = change;
+  const { startBlock, focusBlock,startOffset, endOffset } = value;
 
-  const { startBlock, startOffset, endOffset } = value
-  if (startOffset == 0 && startBlock.text.length == 0)
-    return onBackspace(event, change)
-  if (endOffset != startBlock.text.length) return
+  if (startBlock.type === 'code-block') {
+    // 删除选中的区域
+    if (value.isExpanded) change.delete();
+    // 连续空行则退出该模式
+    if (endOffset != startBlock.text.length) {
+      change.splitBlock().setBlocks('paragraph');
+      return true;
+    }
+    // 换行
+    // change.insertText('\n');
+    change.insertInline('code-line')
+    return true;
+  } else {
+    if (value.isExpanded) return;
 
-  if (
-    startBlock.type != 'header-one' &&
-    startBlock.type != 'header-two' &&
-    startBlock.type != 'header-three' &&
-    startBlock.type != 'header-four' &&
-    startBlock.type != 'header-five' &&
-    startBlock.type != 'header-six' &&
-    startBlock.type != 'block-quote'
-  ) {
-    return
+    if (startOffset == 0 && startBlock.text.length == 0)
+      return onBackspace(event, change)
+    if (endOffset != startBlock.text.length) return;
+
+    // 其他块状化退出效果
+    if (
+      startBlock.type != 'header-one' &&
+      startBlock.type != 'header-two' &&
+      startBlock.type != 'header-three' &&
+      startBlock.type != 'header-four' &&
+      startBlock.type != 'header-five' &&
+      startBlock.type != 'header-six' &&
+      startBlock.type != 'block-quote'
+    ) {
+      return
+    }
   }
-
   event.preventDefault()
   change.splitBlock().setBlocks('paragraph')
   return true
@@ -122,9 +137,7 @@ export const onKeyDown = (event, change, callback) => {
   switch (event.key) {
     case 'Enter':
       return onEnter(event, change);
-    case 'Tab': 
-      // event.preventDefault();
-      // return change.insertText('  ');
+    case 'Tab':
       return onTab(event, change);
     default:
       break;
