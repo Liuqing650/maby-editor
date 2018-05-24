@@ -65,6 +65,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
+    "detect-indent": "^5.0.0",
     "immutable": "^3.8.2",
     "is-hotkey": "^0.1.1",
     "is-url": "^1.2.2",
