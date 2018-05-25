@@ -2,10 +2,11 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
-// import EditCode from 'slate-edit-code';
+import EditCode from 'slate-edit-code';
 import * as initState from './initValue/initState';
 import * as tools from './decorators/tools';
 import * as utils from './utils';
+import schemaFn from './decorators/schema';
 import CodeBlock from './components/codeBlock';
 import CodeBlockLine from './components/codeBlockLine';
 import Bold from './components/bold';
@@ -22,13 +23,17 @@ const SAVE_KEY = utils.DICT.SAVE_KEY;
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
 // 构建初始状态…
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
-// const basePlugin = EditCode({
-//   containerType: 'code-block',
-//   lineType: 'code-line'
-// });
 
+const codeOptions = {
+  lineType: 'code-line',
+  containerType: 'code-block'
+}
+
+const schema = schemaFn(codeOptions);
+
+const basePlugin = EditCode(codeOptions);
 const customPlugin = {
-  // ...basePlugin,
+  ...basePlugin,
   onKeyDown(event, change, editor) {
     return basePlugin.onKeyDown(event, change, editor);
   }
@@ -60,7 +65,7 @@ class MabyEditor extends React.Component {
     const { attributes, children, node } = props;
     switch (node.type) {
       case 'code-block': return <CodeBlock {...props}  />;
-      case 'code-line': return <CodeBlockLine {...props} />
+      case 'code-line': return <CodeBlockLine {...props} />;
       case 'header-one': return <h1 {...attributes}>{children}</h1>;
       case 'header-two': return <h2 {...attributes}>{children}</h2>;
       case 'header-three': return <h3 {...attributes}>{children}</h3>;
@@ -115,6 +120,7 @@ class MabyEditor extends React.Component {
           placeholder={placeholder || ''}
           value={this.state.value}
           onChange={this.onChange}
+          // schema={schema}
           onKeyDown={this.handleKeyDown}
           autoFocus={autoFocus || true}
           renderNode={this.renderNode}
@@ -127,39 +133,40 @@ class MabyEditor extends React.Component {
   };
 
   decorateNode = (node) => {
-    if (node.type != 'code-block') return
+    if (node.type != 'code-block') return;
     const language = node.data.get('language') || 'js';
-    const texts = node.getTexts().toArray()
+    const texts = node.getTexts().toArray();
     const string = texts.map(t => t.text).join('\n');
-    const grammar = Prism.languages[language]
+    const grammar = Prism.languages[language];
+    // console.log('language-------->', language);
     // console.log('string-------->', string);
-    const tokens = Prism.tokenize(string, grammar, language)
-    const decorations = []
-    let startText = texts.shift()
-    let endText = startText
-    let startOffset = 0
-    let endOffset = 0
-    let start = 0
+    const tokens = Prism.tokenize(string, grammar, language);
+    const decorations = [];
+    let startText = texts.shift();
+    let endText = startText;
+    let startOffset = 0;
+    let endOffset = 0;
+    let start = 0;
     for (const token of tokens) {
-      startText = endText
-      startOffset = endOffset
+      startText = endText;
+      startOffset = endOffset;
 
-      const content = this.tokenToContent(token)
+      const content = this.tokenToContent(token);
       // const newlines = content.split('\n').length - 1;
       const newlines = 0; // 这里需要重置每一行的首个渲染计数数据
-      const length = content.length - newlines
-      const end = start + length
+      const length = content.length - newlines;
+      const end = start + length;
 
-      let available = startText.text.length - startOffset
-      let remaining = length
+      let available = startText.text.length - startOffset;
+      let remaining = length;
 
-      endOffset = startOffset + remaining
+      endOffset = startOffset + remaining;
 
       while (available < remaining && texts.length > 0) {
-        endText = texts.shift()
-        remaining = length - available
-        available = endText.text.length
-        endOffset = remaining
+        endText = texts.shift();
+        remaining = length - available;
+        available = endText.text.length;
+        endOffset = remaining;
       }
 
       if (typeof token != 'string') {
@@ -170,12 +177,10 @@ class MabyEditor extends React.Component {
           focusOffset: endOffset,
           marks: [{ type: token.type }],
         }
-
         decorations.push(range);
       }
       start = end;
     }
-
     return decorations;
   }
 };

@@ -1,14 +1,18 @@
-
+import detectIndent from 'detect-indent';
 import * as utils from '../utils';
 
 const onShiftTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
   event.stopPropagation();
+  const { isCollapsed } = value;
   const isCodeLine = value.blocks.some(block => block.type === 'code-line');
   const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
   const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
   const indent = utils.getCurrentIndent(value, type);
+  // if (isCollapsed) { // 选中的单行
+  //   return change.insertText(indent).focus();
+  // }
   return utils.dedentLines(change, indent, type);
 };
 
@@ -22,7 +26,7 @@ const onTab = (event, change) => {
   const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
   const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
   const indent = utils.getCurrentIndent(value, type);
-  if (isCollapsed) {
+  if (isCollapsed) { // 选中的单行
     return change.insertText(indent).focus();
   }
   return utils.indentLines(change, indent, type);
@@ -45,27 +49,22 @@ export const onBackspace = (event, change) => {
   return true;
 };
 
-export const onEnter = (event, change, isExit) => {
+export const onEnter = (event, change) => {
   const { value } = change;
   const { startBlock, focusBlock,startOffset, endOffset } = value;
-  console.log('value------>', value);
   if (startBlock.type === 'code-block' || startBlock.type === 'code-line') {
     // 删除选中的区域
     if (value.isExpanded) change.delete();
-    // 连续空行则退出该模式
-    if (endOffset !== startBlock.text.length) {
-      change.splitBlock().setBlocks('paragraph');
-      return true;
-    }
     // 换行
     change.insertText('\n');
+    // change.splitBlock().insertText('');
     return true;
   } else {
     if (value.isExpanded) return;
 
     if (startOffset == 0 && startBlock.text.length == 0)
       return onBackspace(event, change)
-    if (endOffset != startBlock.text.length) return;
+    if (endOffset !== startBlock.text.length) return;
 
     // 其他块状化退出效果
     if (
@@ -106,6 +105,17 @@ export const onKeyDown = (event, change, callback) => {
         change.setBlocks(isCode ? 'paragraph' : 'code-block');
         return true;
       }
+      case 'Enter': // 退出该模式
+        const isCodeLine = value.blocks.some(block => block.type === 'code-line');
+        const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
+        const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
+        // if (type) { // 代码块需特殊形式退出
+        //   utils.codeOnExit(change);
+        // } else {
+          event.preventDefault();
+          change.splitBlock().setBlocks('paragraph');
+        // }
+        return true;
       case '1':
       case '2':
       case '3':
