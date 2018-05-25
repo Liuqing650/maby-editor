@@ -2,6 +2,7 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
+// import EditCode from 'slate-edit-code';
 import * as initState from './initValue/initState';
 import * as tools from './decorators/tools';
 import * as utils from './utils';
@@ -17,15 +18,24 @@ import './styles/index.css';
 const DEFAULT_NODE = 'paragraph';
 const SAVE_KEY = utils.DICT.SAVE_KEY;
 
-console.log('Editor--------->', Editor);
-
 // 获取本地缓存数据
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
 // 构建初始状态…
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
+// const basePlugin = EditCode({
+//   containerType: 'code-block',
+//   lineType: 'code-line'
+// });
 
+const customPlugin = {
+  // ...basePlugin,
+  onKeyDown(event, change, editor) {
+    return basePlugin.onKeyDown(event, change, editor);
+  }
+}
 // 插件
 const plugins = [
+  // customPlugin,
   tools.MarkHotkey({ key: 'b', type: 'bold' }),
   tools.MarkHotkey({ key: '`', type: 'code' }),
   tools.MarkHotkey({ key: 'i', type: 'italic' }),
@@ -48,9 +58,8 @@ class MabyEditor extends React.Component {
   }
   renderNode = (props) => {
     const { attributes, children, node } = props;
-    console.log('node.type-=--------->', node.type);
     switch (node.type) {
-      case 'code-block': return <CodeBlock {...props} />;
+      case 'code-block': return <CodeBlock {...props}  />;
       case 'code-line': return <CodeBlockLine {...props} />
       case 'header-one': return <h1 {...attributes}>{children}</h1>;
       case 'header-two': return <h2 {...attributes}>{children}</h2>;
@@ -67,13 +76,20 @@ class MabyEditor extends React.Component {
       case 'code': return <CodeInline {...props} />;
       case 'italic': return <EmInline {...props} />;
       case 'strikethrough': return <DelInline {...props} />;
-      case 'underline': return <Underline {...props} />;
-      // case 'code': return <code>{children}</code>;
+      case 'comment':
+      case 'keyword':
+      case 'tag':
+      default:
+        if (mark.type) {
+          return <span {...props.attributes} className={`token ${mark.type}`}>
+            {children}
+          </span>;
+        }
+        break;
     }
   }
   handleKeyDown = (event, change) => {
     const { value } = this.state;
-    console.log('key------>', event.key);
     const onSave = () => {
       const content = JSON.stringify(value.toJSON());
       localStorage.setItem(SAVE_KEY, content);
@@ -113,11 +129,10 @@ class MabyEditor extends React.Component {
   decorateNode = (node) => {
     if (node.type != 'code-block') return
     const language = node.data.get('language') || 'js';
-    // console.log('language-------->', language);
     const texts = node.getTexts().toArray()
-    const string = texts.map(t => t.text).join('\n')
-    console.log('string-------->', string);
+    const string = texts.map(t => t.text).join('\n');
     const grammar = Prism.languages[language]
+    // console.log('string-------->', string);
     const tokens = Prism.tokenize(string, grammar, language)
     const decorations = []
     let startText = texts.shift()
@@ -125,13 +140,13 @@ class MabyEditor extends React.Component {
     let startOffset = 0
     let endOffset = 0
     let start = 0
-
     for (const token of tokens) {
       startText = endText
       startOffset = endOffset
 
       const content = this.tokenToContent(token)
-      const newlines = content.split('\n').length - 1
+      // const newlines = content.split('\n').length - 1;
+      const newlines = 0; // 这里需要重置每一行的首个渲染计数数据
       const length = content.length - newlines
       const end = start + length
 

@@ -1983,6 +1983,10 @@ detect-libc@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
 
+detect-newline@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
+
 detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
@@ -2131,6 +2135,10 @@ encoding@^0.1.11:
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
   dependencies:
     iconv-lite "~0.4.13"
+
+ends-with@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/ends-with/-/ends-with-0.2.0.tgz#2f9da98d57a50cfda4571ce4339000500f4e6b8a"
 
 enhanced-resolve@^3.4.0:
   version "3.4.1"
@@ -5631,6 +5639,15 @@ slate-dev-logger@^0.1.39:
   version "0.1.39"
   resolved "https://registry.yarnpkg.com/slate-dev-logger/-/slate-dev-logger-0.1.39.tgz#744a69b85034244713e6de51483af5713c345af4"
 
+slate-edit-code@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/slate-edit-code/-/slate-edit-code-0.15.0.tgz#079a2754a07e8b1d38e230ff444d6ebc6abf3b05"
+  dependencies:
+    detect-indent "^4.0.0"
+    detect-newline "^2.1.0"
+    ends-with "^0.2.0"
+    is-hotkey "^0.1.1"
+
 slate-html-serializer@^0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/slate-html-serializer/-/slate-html-serializer-0.6.1.tgz#ad9d22e13590efe3f2aabbdb95782f043bba1002"
@@ -5670,26 +5687,26 @@ slate-react@^0.12.4:
     slate-plain-serializer "^0.5.10"
     slate-prop-types "^0.4.27"
 
-slate-schema-violations@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/slate-schema-violations/-/slate-schema-violations-0.1.8.tgz#b6bfbcc4defaa4971a96bf2d324c5b67fb4a4e20"
+slate-schema-violations@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/slate-schema-violations/-/slate-schema-violations-0.1.10.tgz#165227c230ea6c1027e523b7171a73e860e73646"
 
 slate-soft-break@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/slate-soft-break/-/slate-soft-break-0.6.0.tgz#1e44815b7ff4ddada055bba14cd0d2d4ef0fd463"
 
-slate@^0.33.4:
-  version "0.33.4"
-  resolved "https://registry.yarnpkg.com/slate/-/slate-0.33.4.tgz#8f39000a7a0fb1ec04b211c3e264e45677dfd9d8"
+slate@^0.33.6:
+  version "0.33.6"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.33.6.tgz#0c7cb193cc5adeecec5c81e2ec0c86ab23dd6755"
   dependencies:
-    debug "^2.3.2"
+    debug "^3.1.0"
     direction "^0.1.5"
     esrever "^0.2.0"
     is-empty "^1.0.0"
     is-plain-object "^2.0.4"
     lodash "^4.17.4"
     slate-dev-logger "^0.1.39"
-    slate-schema-violations "^0.1.8"
+    slate-schema-violations "^0.1.10"
     type-of "^2.0.1"
 
 slice-ansi@1.0.0:

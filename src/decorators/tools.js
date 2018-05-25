@@ -5,8 +5,9 @@ const onShiftTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
   event.stopPropagation();
-  const isCode = value.blocks.some(block => block.type == 'code-block');
-  const type = isCode ? 'code-block' : false;
+  const isCodeLine = value.blocks.some(block => block.type === 'code-line');
+  const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
+  const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
   const indent = utils.getCurrentIndent(value, type);
   return utils.dedentLines(change, indent, type);
 };
@@ -17,8 +18,9 @@ const onTab = (event, change) => {
   event.stopPropagation();
 
   const { isCollapsed } = value;
-  const isCode = value.blocks.some(block => block.type == 'code-block');
-  const type = isCode ? 'code-block' : false;
+  const isCodeLine = value.blocks.some(block => block.type === 'code-line');
+  const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
+  const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
   const indent = utils.getCurrentIndent(value, type);
   if (isCollapsed) {
     return change.insertText(indent).focus();
@@ -46,18 +48,17 @@ export const onBackspace = (event, change) => {
 export const onEnter = (event, change, isExit) => {
   const { value } = change;
   const { startBlock, focusBlock,startOffset, endOffset } = value;
-
-  if (startBlock.type === 'code-block') {
+  console.log('value------>', value);
+  if (startBlock.type === 'code-block' || startBlock.type === 'code-line') {
     // 删除选中的区域
     if (value.isExpanded) change.delete();
     // 连续空行则退出该模式
-    if (endOffset != startBlock.text.length) {
+    if (endOffset !== startBlock.text.length) {
       change.splitBlock().setBlocks('paragraph');
       return true;
     }
     // 换行
     change.insertText('\n');
-    // change.insertInline('code-line');
     return true;
   } else {
     if (value.isExpanded) return;

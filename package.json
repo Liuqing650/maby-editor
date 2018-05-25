@@ -70,8 +70,9 @@
     "is-hotkey": "^0.1.1",
     "is-url": "^1.2.2",
     "prismjs": "^1.14.0",
-    "slate": "^0.33.4",
+    "slate": "^0.33.6",
     "slate-collapse-on-escape": "^0.6.0",
+    "slate-edit-code": "^0.15.0",
     "slate-html-serializer": "^0.6.1",
     "slate-react": "^0.12.4",
     "slate-soft-break": "^0.6.0"

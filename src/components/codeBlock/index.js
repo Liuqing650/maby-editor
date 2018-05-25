@@ -8,6 +8,7 @@ const CodeBlock = (props) => {
       c.setNodeByKey(node.key, { data: { language: event.target.value } })
     )
   }
+  //  className={`language-${language}`}
   return (
     <div style={{ position: 'relative' }}>
       <pre>
