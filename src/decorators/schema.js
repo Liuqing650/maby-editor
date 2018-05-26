@@ -18,6 +18,7 @@ function schema(opts) {
 				nodes: [{ types: [opts.lineType] }],
 				normalize(change, violation, context) {
 					const { node, child, index } = context;
+					console.log('violation----->', violation);
 					switch (violation) {
 						case CHILD_TYPE_INVALID:
 							return onlyLine(opts, change, context);
@@ -79,26 +80,20 @@ const deserializeCode = (opts, text) => {
  * A rule that ensure code blocks only contain lines of code, and no marks
  */
 function onlyLine(opts, change, context) {
-	// return change.setNodeByKey(
-	// 	child.key,
-	// 	index == 0 ? 'title' : 'paragraph'
-	// )
-	console.log('context----->', context);
+	// 复制的时候需要重新走新的路线
 	return change.withoutNormalization(c => {
 		let codeLines = List();
-		context.node.nodes.forEach(node => {
-			// if (node.object === opts.lineType) {
-			// 	return;
-			// }
+		context.node.nodes.map(child => {
+			if (child.object !== 'text') {
+				return;
+			}
 			codeLines = codeLines.concat(
-				deserializeCode(opts, node.text).nodes
+				deserializeCode(opts, child.text).nodes
 			);
-			c.removeNodeByKey(node.key);
+			// 会导致光标串行...
+			// c.removeNodeByKey(child.key);
 		});
-		
 		codeLines.forEach((codeLine, index) => {
-			console.log('codeLine----->', codeLine);
-			
 			if (codeLine) {
 				c.insertNodeByKey(context.node.key, index, codeLine);
 			}
