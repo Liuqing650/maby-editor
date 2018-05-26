@@ -86,12 +86,26 @@ class MabyEditor extends React.Component {
       case 'tag':
       default:
         if (mark.type) {
-          return <span {...props.attributes} className={`token ${mark.type}`}>
-            {children}
-          </span>;
+          return (
+            <span {...props.attributes} className={`token ${mark.type}`}>
+              {children}
+            </span>
+          );
         }
         break;
     }
+  }
+  onClickRedo = event => {
+    event.preventDefault()
+    const { value } = this.state
+    const change = value.change().redo()
+    this.onChange(change)
+  }
+  onClickUndo = event => {
+    event.preventDefault()
+    const { value } = this.state;
+    const change = value.change().undo()
+    this.onChange(change)
   }
   handleKeyDown = (event, change) => {
     const { value } = this.state;
@@ -99,6 +113,27 @@ class MabyEditor extends React.Component {
       const content = JSON.stringify(value.toJSON());
       localStorage.setItem(SAVE_KEY, content);
       console.log('文本已经保存...');
+    }
+    // 取消撤回
+    // if (event.shiftKey) {
+    //   switch (event.key) {
+    //     case 'z':
+    //       console.log(555);
+
+    //       return this.onClickRedo(event);
+    //     default:
+    //       break;
+    //   }
+    // }
+    if (event.ctrlKey) {
+      // 撤回
+      switch (event.key) {
+        case 'z':
+          console.log(666);
+          return this.onClickUndo(event);
+        default:
+          break;
+      }
     }
     return tools.onKeyDown(event, change, onSave)
   };
@@ -120,7 +155,7 @@ class MabyEditor extends React.Component {
           placeholder={placeholder || ''}
           value={this.state.value}
           onChange={this.onChange}
-          // schema={schema}
+          schema={schema}
           onKeyDown={this.handleKeyDown}
           autoFocus={autoFocus || true}
           renderNode={this.renderNode}
@@ -152,8 +187,8 @@ class MabyEditor extends React.Component {
       startOffset = endOffset;
 
       const content = this.tokenToContent(token);
-      // const newlines = content.split('\n').length - 1;
-      const newlines = 0; // 这里需要重置每一行的首个渲染计数数据
+      const newlines = content.split('\n').length - 1;
+      // const newlines = 0; // 这里需要重置每一行的首个渲染计数数据
       const length = content.length - newlines;
       const end = start + length;
 

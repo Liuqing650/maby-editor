@@ -1,6 +1,10 @@
 import detectIndent from 'detect-indent';
 import * as utils from '../utils';
 
+const CODEOPTIONS = {
+  lineType: 'code-line',
+  containerType: 'code-block'
+}
 const onShiftTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
@@ -8,12 +12,15 @@ const onShiftTab = (event, change) => {
   const { isCollapsed } = value;
   const isCodeLine = value.blocks.some(block => block.type === 'code-line');
   const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
-  const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-  const indent = utils.getCurrentIndent(value, type);
+  // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
+  const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
+  // const indent = utils.getCurrentIndent(value, type);
+  const indent = utils.getCurrentIndent(value, type, CODEOPTIONS);
   // if (isCollapsed) { // 选中的单行
   //   return change.insertText(indent).focus();
   // }
-  return utils.dedentLines(change, indent, type);
+  // return utils.dedentLines(change, indent, type);
+  return utils.dedentLines(change, indent, type, CODEOPTIONS);
 };
 
 const onTab = (event, change) => {
@@ -24,12 +31,15 @@ const onTab = (event, change) => {
   const { isCollapsed } = value;
   const isCodeLine = value.blocks.some(block => block.type === 'code-line');
   const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
-  const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-  const indent = utils.getCurrentIndent(value, type);
+  // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
+  const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
+  // const indent = utils.getCurrentIndent(value, type);
+  const indent = utils.getCurrentIndent(value, type, CODEOPTIONS);
   if (isCollapsed) { // 选中的单行
     return change.insertText(indent).focus();
   }
-  return utils.indentLines(change, indent, type);
+  // return utils.indentLines(change, indent, type);
+  return utils.indentLines(change, indent, type, CODEOPTIONS);
 };
 
 export const onBackspace = (event, change) => {
@@ -56,8 +66,8 @@ export const onEnter = (event, change) => {
     // 删除选中的区域
     if (value.isExpanded) change.delete();
     // 换行
-    change.insertText('\n');
-    // change.splitBlock().insertText('');
+    // change.insertText('\n');
+    change.splitBlock().insertText('');
     return true;
   } else {
     if (value.isExpanded) return;
@@ -109,12 +119,12 @@ export const onKeyDown = (event, change, callback) => {
         const isCodeLine = value.blocks.some(block => block.type === 'code-line');
         const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
         const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-        // if (type) { // 代码块需特殊形式退出
-        //   utils.codeOnExit(change);
-        // } else {
+        if (type) { // 代码块需特殊形式退出
+          utils.codeOnExit(change);
+        } else {
           event.preventDefault();
           change.splitBlock().setBlocks('paragraph');
-        // }
+        }
         return true;
       case '1':
       case '2':
