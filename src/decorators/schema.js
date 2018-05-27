@@ -22,13 +22,6 @@ function schema(opts) {
 					switch (violation) {
 						case CHILD_TYPE_INVALID:
 							return onlyLine(opts, change, context);
-						// case CHILD_REQUIRED: {
-						// 	const block = Block.create({
-						// 		type: opts.lineType,
-						// 		nodes: [Text.create(line)]
-						// 	})
-						// 	return change.insertNodeByKey(node.key, index, block)
-						// }
 						default:
 							return undefined;
 					}
@@ -87,6 +80,7 @@ function onlyLine(opts, change, context) {
 			if (child.object !== 'text') {
 				return;
 			}
+			
 			codeLines = codeLines.concat(
 				deserializeCode(opts, child.text).nodes
 			);

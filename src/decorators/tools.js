@@ -1,3 +1,5 @@
+import { Document } from 'slate';
+import { getEventTransfer } from 'slate-react';
 import detectIndent from 'detect-indent';
 import * as utils from '../utils';
 
@@ -176,4 +178,34 @@ export const MarkHotkey = (options) => {
       return true
     },
   };
+}
+
+// 复制
+export const onPaste = (event, change) => {
+  const { value } = change;
+  const { startBlock, endBlock } = value;
+  if (startBlock.type !== 'code-line') return;
+  const opts = CODEOPTIONS;
+  const data = getEventTransfer(event);
+  const currentCode = utils.getCurrentCode(value, startBlock.type, opts);
+
+  if (!currentCode || !currentCode.hasDescendant(endBlock.key)) {
+    return undefined;
+  }
+
+  let text;
+  if (data.type === 'fragment') {
+    text = data.fragment
+      .getTexts()
+      .map(t => t.text)
+      .join('\n');
+  } else {
+    text = data.text;
+  }
+
+  const lines = utils.deserializeCode(opts, text).nodes;
+
+  const fragment = Document.create({ nodes: lines });
+
+  return change.insertFragment(fragment);
 }

@@ -137,6 +137,11 @@ class MabyEditor extends React.Component {
     }
     return tools.onKeyDown(event, change, onSave)
   };
+  // 复制
+  onPaste = (event, change) => {
+    return tools.onPaste(event, change);
+  }
+  // 高亮字体
   tokenToContent = (token) => {
     if (typeof token == 'string') {
       return token
@@ -157,6 +162,7 @@ class MabyEditor extends React.Component {
           onChange={this.onChange}
           schema={schema}
           onKeyDown={this.handleKeyDown}
+          onPaste={this.onPaste}
           autoFocus={autoFocus || true}
           renderNode={this.renderNode}
           renderMark={this.renderMark}
