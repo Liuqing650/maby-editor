@@ -6,7 +6,12 @@ import * as utils from '../utils';
 const CODEOPTIONS = {
   lineType: 'code-line',
   containerType: 'code-block'
-}
+};
+const LISTOPTIONS = {
+  types: ['ul_list', 'ol_list'],
+  typeItem: 'list_item',
+  typeDefault: 'paragraph'
+};
 const onShiftTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
@@ -28,20 +33,34 @@ const onShiftTab = (event, change) => {
 const onTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
-  event.stopPropagation();
 
   const { isCollapsed } = value;
-  const isCodeLine = value.blocks.some(block => block.type === 'code-line');
-  const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
-  // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-  const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
-  // const indent = utils.getCurrentIndent(value, type);
-  const indent = utils.getCurrentIndent(value, type, CODEOPTIONS);
-  if (isCollapsed) { // 选中的单行
-    return change.insertText(indent).focus();
+  const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
+  console.log('nodeTypeInfo----->', nodeTypeInfo);
+  if (nodeTypeInfo.isValid) {
+    const isCodeLine = value.blocks.some(block => block.type === 'code-line');
+    const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
+    // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
+    const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
+    // const indent = utils.getCurrentIndent(value, type);
+    const indent = utils.getCurrentIndent(value, type, CODEOPTIONS);
+    if (isCollapsed) { // 选中的单行
+      return change.insertText(indent).focus();
+    }
+    // return utils.indentLines(change, indent, type);
+    return utils.indentLines(change, indent, type, CODEOPTIONS);
+  } else {
+    if (!isCollapsed || !utils.getCurrentItem(LISTOPTIONS, value)) {
+      return undefined;
+    }
+    // if (event.shiftKey) {
+    //   event.preventDefault();
+
+    //   return decreaseItemDepth(opts, change);
+    // }
+    // return utils.increaseItemDepth(LISTOPTIONS, change);
   }
-  // return utils.indentLines(change, indent, type);
-  return utils.indentLines(change, indent, type, CODEOPTIONS);
+  return undefined;
 };
 
 export const onBackspace = (event, change) => {
@@ -153,7 +172,7 @@ export const onKeyDown = (event, change, callback) => {
         return true;
       }
       default:
-        return false;
+        break;
     }
   }
   // 无ctrl

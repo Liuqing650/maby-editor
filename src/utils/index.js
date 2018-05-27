@@ -38,6 +38,15 @@ export const getCurrentIndent = (value, type, option) => {
     .join('\n');
   return getIndent(text);
 }
+
+export const getCurrentItem = (option, value) => {
+  const { document } = value;
+
+  if (!value.selection.startKey) return null;
+  const block = value.startBlock;
+  const parent = document.getParent(block.key);
+  return parent && parent.type === option.typeItem ? parent : null;
+}
 // 回退缩进
 export const dedentLines = (change, indent, type, option) => {
   const { value } = change;
@@ -109,3 +118,23 @@ export const deserializeCode = (opts, text) => {
 
   return code;
 }
+
+/**
+ * 检测节点类型
+ * @param {*object} value 检测节点
+ * @param {*array} expect 期望类型
+ */
+export const checkNodeType = (value, expect) => {
+  let output = {};
+  const expectArr = expect || [];
+  output.isValid = value.blocks.some(block => {
+    output.type = block.type;
+    console.log('type---->', block.type);
+    return expectArr.includes(block.type);
+  });
+  return output;
+}
+
+export const increaseItemDepth = (option, value) => {
+
+};

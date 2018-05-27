@@ -2,13 +2,14 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
-import EditCode from 'slate-edit-code';
+import PluginEditList from 'slate-edit-list';
 import * as initState from './initValue/initState';
 import * as tools from './decorators/tools';
 import * as utils from './utils';
 import schemaFn from './decorators/schema';
 import CodeBlock from './components/codeBlock';
 import CodeBlockLine from './components/codeBlockLine';
+import ListItem from './components/listItem';
 import Bold from './components/bold';
 import CodeInline from './components/codeInline';
 import EmInline from './components/EmInline';
@@ -30,21 +31,14 @@ const codeOptions = {
 }
 
 const schema = schemaFn(codeOptions);
-
-const basePlugin = EditCode(codeOptions);
-const customPlugin = {
-  ...basePlugin,
-  onKeyDown(event, change, editor) {
-    return basePlugin.onKeyDown(event, change, editor);
-  }
-}
+const editListPlugin = PluginEditList();
 // 插件
 const plugins = [
-  // customPlugin,
+  editListPlugin,
   tools.MarkHotkey({ key: 'b', type: 'bold' }),
-  tools.MarkHotkey({ key: '`', type: 'code' }),
+  tools.MarkHotkey({ key: '7', type: 'code' }),
   tools.MarkHotkey({ key: 'i', type: 'italic' }),
-  tools.MarkHotkey({ key: '~', type: 'strikethrough' }),
+  tools.MarkHotkey({ key: 'd', type: 'strikethrough' }),
   tools.MarkHotkey({ key: 'u', type: 'underline' }),
 ];
 class MabyEditor extends React.Component {
@@ -61,10 +55,15 @@ class MabyEditor extends React.Component {
   onChange = ({ value }) => {
     this.setState({ value })
   }
+  call(change) {
+    this.setState({
+      value: this.state.value.change().call(change).value
+    });
+  }
   renderNode = (props) => {
     const { attributes, children, node } = props;
     switch (node.type) {
-      case 'code-block': return <CodeBlock {...props}  />;
+      case 'code-block': return <CodeBlock {...props} />;
       case 'code-line': return <CodeBlockLine {...props} />;
       case 'header-one': return <h1 {...attributes}>{children}</h1>;
       case 'header-two': return <h2 {...attributes}>{children}</h2>;
@@ -72,6 +71,9 @@ class MabyEditor extends React.Component {
       case 'header-four': return <h4 {...attributes}>{children}</h4>;
       case 'header-five': return <h5 {...attributes}>{children}</h5>;
       case 'header-six': return <h6 {...attributes}>{children}</h6>;
+      case 'ul_list': return <ul {...attributes}>{children}</ul>;
+      case 'ol_list': return <ol {...attributes}>{children}</ol>;
+      case 'list_item': return <ListItem plugin={editListPlugin} {...props} />;
     }
   }
   renderMark = (props) => {
@@ -81,9 +83,7 @@ class MabyEditor extends React.Component {
       case 'code': return <CodeInline {...props} />;
       case 'italic': return <EmInline {...props} />;
       case 'strikethrough': return <DelInline {...props} />;
-      case 'comment':
-      case 'keyword':
-      case 'tag':
+      case 'underline': return <Underline {...props} />;
       default:
         if (mark.type) {
           return (
@@ -109,6 +109,13 @@ class MabyEditor extends React.Component {
   }
   handleKeyDown = (event, change) => {
     const { value } = this.state;
+    const {
+      wrapInList,
+      unwrapList,
+      increaseItemDepth,
+      decreaseItemDepth
+    } = editListPlugin.changes;
+    const inList = editListPlugin.utils.isSelectionInList(value);
     const onSave = () => {
       const content = JSON.stringify(value.toJSON());
       localStorage.setItem(SAVE_KEY, content);
@@ -129,8 +136,10 @@ class MabyEditor extends React.Component {
       // 撤回
       switch (event.key) {
         case 'z':
-          console.log(666);
           return this.onClickUndo(event);
+        case 'j':
+          event.preventDefault();
+          return this.call(inList ? unwrapList : wrapInList);
         default:
           break;
       }
@@ -167,6 +176,7 @@ class MabyEditor extends React.Component {
           renderNode={this.renderNode}
           renderMark={this.renderMark}
           decorateNode={this.decorateNode}
+          shouldNodeComponentUpdate={props => props.node.type === 'list_item'}
           ref={(element) => { this.editor = element; }}
         />
       </div>

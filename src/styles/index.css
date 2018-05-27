@@ -11,8 +11,15 @@ pre {
 
 :not(pre) > code {
   font-family: monospace;
-  border-left: 5px solid #eee;
-  padding: 8px;
+  font-size: inherit;
+  background-color: rgba(0,0,0,.06);
+  padding: 0 2px;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 2px 2px;
+  line-height: inherit;
+  word-wrap: break-word;
+  word-break: break-all;
+  text-indent: 0;
 }
 
 img {
@@ -25,7 +32,7 @@ img.active {
 }
 
 blockquote {
-  border-left: 2px solid #ddd;
+  border-left: 5px solid #eee;
   margin-left: 0;
   margin-right: 0;
   padding-left: 10px;
