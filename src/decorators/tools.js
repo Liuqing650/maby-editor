@@ -1,35 +1,20 @@
 import { Document } from 'slate';
 import { getEventTransfer } from 'slate-react';
 import detectIndent from 'detect-indent';
+import { CODE_BLOCK_OPTIONS, LIST_OPTIONS} from '../options';
 import { onTab as onListTab } from '../handlers';
-import * as utils from '../utils';
+import { Common, Code, ListFn } from '../utils';
 
-const CODEOPTIONS = {
-  lineType: 'code-line',
-  containerType: 'code-block',
-  exitBlockType: 'paragraph'
-};
-const LISTOPTIONS = {
-  types: ['ul_list', 'ol_list'],
-  typeItem: 'list_item',
-  typeDefault: 'paragraph'
-};
 const onShiftTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
   event.stopPropagation();
-  const { isCollapsed } = value;
-  const isCodeLine = value.blocks.some(block => block.type === 'code-line');
-  const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
-  // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-  const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
-  // const indent = utils.getCurrentIndent(value, type);
-  const indent = utils.getCurrentIndent(value, CODEOPTIONS);
-  // if (isCollapsed) { // 选中的单行
-  //   return change.insertText(indent).focus();
-  // }
-  // return utils.dedentLines(change, indent, type);
-  return utils.dedentLines(change, indent, CODEOPTIONS);
+  const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+  if (nodeTypeInfo.isValid) {
+    const indent = Code.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
+    return Code.dedentLines(change, indent, CODE_BLOCK_OPTIONS);
+  }
+  return undefined;
 };
 
 const onTab = (event, change) => {
@@ -37,25 +22,16 @@ const onTab = (event, change) => {
   event.preventDefault();
 
   const { isCollapsed } = value;
-  const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
-  console.log('nodeTypeInfo----->', nodeTypeInfo);
+  const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+  // console.log('nodeTypeInfo----->', nodeTypeInfo);
   if (nodeTypeInfo.isValid) {
-    const indent = utils.getCurrentIndent(value, CODEOPTIONS);
+    const indent = Code.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
     if (isCollapsed) { // 选中的单行
       return change.insertText(indent).focus();
     }
-    return utils.indentLines(change, indent, CODEOPTIONS);
+    return Code.indentLines(change, indent, CODE_BLOCK_OPTIONS);
   } else {
-    return onListTab(event, change, LISTOPTIONS);
-    // if (!isCollapsed || !utils.getCurrentItem(LISTOPTIONS, value)) {
-    //   return undefined;
-    // }
-    // if (event.shiftKey) {
-    //   event.preventDefault();
-
-    //   return decreaseItemDepth(opts, change);
-    // }
-    // return utils.increaseItemDepth(LISTOPTIONS, change);
+    return onListTab(event, change, LIST_OPTIONS);
   }
   return undefined;
 };
@@ -68,11 +44,11 @@ export const onBackspace = (event, change) => {
   const { startBlock } = value;
   if (startBlock.type == 'paragraph') return;
 
-  const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
-  console.log('nodeTypeInfo====>', nodeTypeInfo);
+  const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+  // console.log('nodeTypeInfo====>', nodeTypeInfo);
   if (nodeTypeInfo.isValid) {
     event.preventDefault();
-    return utils.deleteCodeBlock(change, CODEOPTIONS);
+    return Code.deleteCodeBlock(change, CODE_BLOCK_OPTIONS);
   } else if (startBlock.type == 'list-item') {
     // change.unwrapBlock('bulleted-list');
   } else {
@@ -135,7 +111,7 @@ export const onKeyDown = (event, change, callback) => {
     switch (event.key) {
       case 'm': {
         event.preventDefault();
-        const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
+        const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
         if (!nodeTypeInfo.isValid) {
           change.setBlocks('code-block');
           return true;
@@ -143,11 +119,9 @@ export const onKeyDown = (event, change, callback) => {
         
       }
       case 'Enter': // 退出该模式
-        const isCodeLine = value.blocks.some(block => block.type === 'code-line');
-        const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
-        const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-        if (type) { // 代码块需特殊形式退出
-          utils.codeOnExit(change, CODEOPTIONS);
+        const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+        if (nodeTypeInfo.isValid) { // 代码块需特殊形式退出
+          Code.exitCodeBlock(change, CODE_BLOCK_OPTIONS);
         } else {
           event.preventDefault();
           change.splitBlock().setBlocks('paragraph');
@@ -212,9 +186,9 @@ export const onPaste = (event, change) => {
   const { value } = change;
   const { startBlock, endBlock } = value;
   if (startBlock.type !== 'code-line') return;
-  const opts = CODEOPTIONS;
+  const opts = CODE_BLOCK_OPTIONS;
   const data = getEventTransfer(event);
-  const currentCode = utils.getCurrentCode(value, opts);
+  const currentCode = Code.getCurrentCode(value, opts);
 
   if (!currentCode || !currentCode.hasDescendant(endBlock.key)) {
     return undefined;
@@ -230,7 +204,7 @@ export const onPaste = (event, change) => {
     text = data.text;
   }
 
-  const lines = utils.deserializeCode(opts, text).nodes;
+  const lines = Code.deserializeCode(opts, text).nodes;
 
   const fragment = Document.create({ nodes: lines });
 

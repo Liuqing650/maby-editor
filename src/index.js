@@ -3,10 +3,12 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
 import PluginEditList from 'slate-edit-list';
+import DICT from './static';
+import { Common, Code, ListFn } from './utils';
+import { CODE_BLOCK_OPTIONS } from './options';
 import * as initState from './initValue/initState';
 import * as tools from './decorators/tools';
-import * as utils from './utils';
-import schemaFn from './decorators/schema';
+import schemaFn from './schemas';
 import CodeBlock from './components/codeBlock';
 import CodeBlockLine from './components/codeBlockLine';
 import ListItem from './components/listItem';
@@ -17,21 +19,15 @@ import DelInline from './components/DelInline';
 import Underline from './components/Underline';
 import './styles/index.css';
 
-const DEFAULT_NODE = 'paragraph';
-const SAVE_KEY = utils.DICT.SAVE_KEY;
+const DEFAULT_NODE = DICT.DEFAULT_NODE;
+const SAVE_KEY = DICT.SAVE_KEY;
 
 // 获取本地缓存数据
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
 // 构建初始状态…
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
 
-const codeOptions = {
-  lineType: 'code-line',
-  containerType: 'code-block',
-  exitBlockType: 'paragraph'
-}
-
-const schema = schemaFn(codeOptions);
+const schema = schemaFn(CODE_BLOCK_OPTIONS);
 const editListPlugin = PluginEditList();
 // 插件
 const plugins = [
@@ -191,8 +187,6 @@ class MabyEditor extends React.Component {
     const texts = node.getTexts().toArray();
     const string = texts.map(t => t.text).join('\n');
     const grammar = Prism.languages[language];
-    // console.log('language-------->', language);
-    // console.log('string-------->', string);
     const tokens = Prism.tokenize(string, grammar, language);
     const decorations = [];
     let startText = texts.shift();
@@ -206,7 +200,6 @@ class MabyEditor extends React.Component {
 
       const content = this.tokenToContent(token);
       const newlines = content.split('\n').length - 1;
-      // const newlines = 0; // 这里需要重置每一行的首个渲染计数数据
       const length = content.length - newlines;
       const end = start + length;
 
