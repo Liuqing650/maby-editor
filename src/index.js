@@ -27,7 +27,8 @@ const initialState = existingValue ? Value.fromJSON(existingValue) : initState.v
 
 const codeOptions = {
   lineType: 'code-line',
-  containerType: 'code-block'
+  containerType: 'code-block',
+  exitBlockType: 'paragraph'
 }
 
 const schema = schemaFn(codeOptions);
@@ -132,6 +133,7 @@ class MabyEditor extends React.Component {
     //       break;
     //   }
     // }
+    
     if (event.ctrlKey) {
       // 撤回
       switch (event.key) {

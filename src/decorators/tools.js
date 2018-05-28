@@ -5,7 +5,8 @@ import * as utils from '../utils';
 
 const CODEOPTIONS = {
   lineType: 'code-line',
-  containerType: 'code-block'
+  containerType: 'code-block',
+  exitBlockType: 'paragraph'
 };
 const LISTOPTIONS = {
   types: ['ul_list', 'ol_list'],
@@ -22,12 +23,12 @@ const onShiftTab = (event, change) => {
   // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
   const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
   // const indent = utils.getCurrentIndent(value, type);
-  const indent = utils.getCurrentIndent(value, type, CODEOPTIONS);
+  const indent = utils.getCurrentIndent(value, CODEOPTIONS);
   // if (isCollapsed) { // 选中的单行
   //   return change.insertText(indent).focus();
   // }
   // return utils.dedentLines(change, indent, type);
-  return utils.dedentLines(change, indent, type, CODEOPTIONS);
+  return utils.dedentLines(change, indent, CODEOPTIONS);
 };
 
 const onTab = (event, change) => {
@@ -38,17 +39,11 @@ const onTab = (event, change) => {
   const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
   console.log('nodeTypeInfo----->', nodeTypeInfo);
   if (nodeTypeInfo.isValid) {
-    const isCodeLine = value.blocks.some(block => block.type === 'code-line');
-    const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
-    // const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
-    const type = isCodeLine ? 'code-block' : isCodeBlock ? 'code-block' : false;
-    // const indent = utils.getCurrentIndent(value, type);
-    const indent = utils.getCurrentIndent(value, type, CODEOPTIONS);
+    const indent = utils.getCurrentIndent(value, CODEOPTIONS);
     if (isCollapsed) { // 选中的单行
       return change.insertText(indent).focus();
     }
-    // return utils.indentLines(change, indent, type);
-    return utils.indentLines(change, indent, type, CODEOPTIONS);
+    return utils.indentLines(change, indent, CODEOPTIONS);
   } else {
     if (!isCollapsed || !utils.getCurrentItem(LISTOPTIONS, value)) {
       return undefined;
@@ -71,13 +66,19 @@ export const onBackspace = (event, change) => {
   const { startBlock } = value;
   if (startBlock.type == 'paragraph') return;
 
-  event.preventDefault();
-  change.setBlocks('paragraph');
-
-  if (startBlock.type == 'list-item') {
+  const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
+  console.log('nodeTypeInfo====>', nodeTypeInfo);
+  if (nodeTypeInfo.isValid) {
+    event.preventDefault();
+    return utils.deleteCodeBlock(change, CODEOPTIONS);
+  } else if (startBlock.type == 'list-item') {
     // change.unwrapBlock('bulleted-list');
+  } else {
+    event.preventDefault();
+    change.setBlocks('paragraph');
+    return true;
   }
-  return true;
+  return undefined;
 };
 
 export const onEnter = (event, change) => {
@@ -132,16 +133,19 @@ export const onKeyDown = (event, change, callback) => {
     switch (event.key) {
       case 'm': {
         event.preventDefault();
-        const isCode = value.blocks.some(block => block.type == 'code-block');
-        change.setBlocks(isCode ? 'paragraph' : 'code-block');
-        return true;
+        const nodeTypeInfo = utils.checkNodeType(value, ['code-line', 'code-block']);
+        if (!nodeTypeInfo.isValid) {
+          change.setBlocks('code-block');
+          return true;
+        }
+        
       }
       case 'Enter': // 退出该模式
         const isCodeLine = value.blocks.some(block => block.type === 'code-line');
         const isCodeBlock = value.blocks.some(block => block.type === 'code-block');
         const type = isCodeLine ? 'code-line' : isCodeBlock ? 'code-block' : false;
         if (type) { // 代码块需特殊形式退出
-          utils.codeOnExit(change);
+          utils.codeOnExit(change, CODEOPTIONS);
         } else {
           event.preventDefault();
           change.splitBlock().setBlocks('paragraph');
@@ -181,6 +185,8 @@ export const onKeyDown = (event, change, callback) => {
       return onEnter(event, change);
     case 'Tab':
       return onTab(event, change);
+    case 'Backspace':
+      return onBackspace(event, change);
     default:
       break;
   }
@@ -206,7 +212,7 @@ export const onPaste = (event, change) => {
   if (startBlock.type !== 'code-line') return;
   const opts = CODEOPTIONS;
   const data = getEventTransfer(event);
-  const currentCode = utils.getCurrentCode(value, startBlock.type, opts);
+  const currentCode = utils.getCurrentCode(value, opts);
 
   if (!currentCode || !currentCode.hasDescendant(endBlock.key)) {
     return undefined;

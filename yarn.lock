@@ -2140,6 +2140,10 @@ ends-with@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/ends-with/-/ends-with-0.2.0.tgz#2f9da98d57a50cfda4571ce4339000500f4e6b8a"
 
+ends-with@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ends-with/-/ends-with-1.0.1.tgz#5265697706c6ac5150d6649a89ec2d019c25af90"
+
 enhanced-resolve@^3.4.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-3.4.1.tgz#0421e339fd71419b3da13d129b3979040230476e"

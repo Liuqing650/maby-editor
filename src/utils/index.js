@@ -1,5 +1,6 @@
 import { List } from 'immutable';
 import { Block, Text } from 'slate';
+import endsWith from 'ends-with';
 
 const DEFAULT_INDENTATION = '  ';
 const DEFAULT_NEWLINE = '\n';
@@ -12,7 +13,7 @@ export const getIndent = (text, defaultValue= DEFAULT_INDENTATION) => {
     return defaultValue;
 }
 
-export const getCurrentCode = (value, type, option) => {
+export const getCurrentCode = (value, option) => {
   const { document } = value;
 
   let currentBlock;
@@ -27,8 +28,8 @@ export const getCurrentCode = (value, type, option) => {
   return false;
 };
 
-export const getCurrentIndent = (value, type, option) => {
-  const currentCode = getCurrentCode(value, type, option);
+export const getCurrentIndent = (value, option) => {
+  const currentCode = getCurrentCode(value, option);
   if (!currentCode) {
     return '';
   }
@@ -48,7 +49,7 @@ export const getCurrentItem = (option, value) => {
   return parent && parent.type === option.typeItem ? parent : null;
 }
 // 回退缩进
-export const dedentLines = (change, indent, type, option) => {
+export const dedentLines = (change, indent, option) => {
   const { value } = change;
   const { document, selection } = value;
   const lines = document
@@ -65,7 +66,7 @@ export const dedentLines = (change, indent, type, option) => {
   }, change);
 };
 // 多行缩进
-export const indentLines = (change, indent, type, option) => {
+export const indentLines = (change, indent, option) => {
   const { value } = change;
   const { document, selection } = value;
   const lines = document
@@ -79,13 +80,40 @@ export const indentLines = (change, indent, type, option) => {
     return c.insertTextByKey(text.key, 0, indent);
   }, change);
 };
+// 删除代码
+export const deleteCodeBlock = (change, option) => {
+  const { value } = change;
+  if (value.isExpanded) {
+      return undefined;
+  }
+  const { startOffset, startText } = value;
 
-export const codeOnExit = (change) => {
+  const currentLine = value.startBlock;
+  // Detect and remove indentation at cursor
+  const indent = getCurrentIndent(value, option);
+  const beforeSelection = currentLine.text.slice(0, startOffset);
+  if (endsWith(beforeSelection, indent)) {
+    return change.deleteBackward(indent.length).focus();
+  } else if (option.exitBlockType) {
+    // 删除代码块的数据
+    const currentCode = getCurrentCode(value, option);
+    const isStartOfCode =
+      startOffset === 0 && currentCode.getFirstText() === startText;
+    const isEmpty =
+      currentCode.nodes.size === 1 && currentLine.text.length === 0;
+    if (isStartOfCode && isEmpty) {
+      return change.setBlocks(option.exitBlockType, { normalize: false }).unwrapNodeByKey(currentLine.key);
+    }
+  }
+  return undefined;
+};
+// 切换到下一行,并退出当前代码编辑模式
+export const codeOnExit = (change, option) => {
   // Default behavior: insert an exit block
   const range = change.value.selection;
 
   const exitBlock = Block.create({
-      type: 'paragraph',
+      type: option.exitBlockType,
       nodes: [Text.create()]
   });
   change.deleteAtRange(range, { normalize: false });
@@ -97,6 +125,7 @@ export const codeOnExit = (change) => {
 
   return change.collapseToStartOf(exitBlock);
 }
+
 // 包含文本的复制
 export const deserializeCode = (opts, text) => {
   const sep = DEFAULT_NEWLINE;

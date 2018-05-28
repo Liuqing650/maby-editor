@@ -17,8 +17,6 @@ function schema(opts) {
 			[opts.containerType]: {
 				nodes: [{ types: [opts.lineType] }],
 				normalize(change, violation, context) {
-					const { node, child, index } = context;
-					console.log('violation----->', violation);
 					switch (violation) {
 						case CHILD_TYPE_INVALID:
 							return onlyLine(opts, change, context);
@@ -30,6 +28,7 @@ function schema(opts) {
 			[opts.lineType]: {
 				nodes: [{ objects: ['text'], min: 1 }],
 				parent: { types: [opts.containerType] },
+				marks: [],
 				normalize(change, violation, context) {
 					switch (violation) {
 						case PARENT_TYPE_INVALID:
@@ -55,7 +54,7 @@ const deserializeCode = (opts, text) => {
 			lines.push(
 				Block.create({
 					type: opts.lineType,
-					nodes: [Text.create('')]
+					nodes: [Text.create(line)]
 				})
 			)
 		}
@@ -77,6 +76,10 @@ function onlyLine(opts, change, context) {
 	return change.withoutNormalization(c => {
 		let codeLines = List();
 		context.node.nodes.map(child => {
+			if (child.object === opts.lineType) {
+				return;
+			}
+
 			if (child.object !== 'text') {
 				return;
 			}
