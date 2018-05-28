@@ -1,6 +1,7 @@
 import { Document } from 'slate';
 import { getEventTransfer } from 'slate-react';
 import detectIndent from 'detect-indent';
+import { onTab as onListTab } from '../handlers';
 import * as utils from '../utils';
 
 const CODEOPTIONS = {
@@ -45,9 +46,10 @@ const onTab = (event, change) => {
     }
     return utils.indentLines(change, indent, CODEOPTIONS);
   } else {
-    if (!isCollapsed || !utils.getCurrentItem(LISTOPTIONS, value)) {
-      return undefined;
-    }
+    return onListTab(event, change, LISTOPTIONS);
+    // if (!isCollapsed || !utils.getCurrentItem(LISTOPTIONS, value)) {
+    //   return undefined;
+    // }
     // if (event.shiftKey) {
     //   event.preventDefault();
 

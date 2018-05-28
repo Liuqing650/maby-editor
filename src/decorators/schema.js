@@ -40,7 +40,6 @@ function schema(opts) {
 			}
 		}
 	};
-
 	if (!opts.allowMarks) {
 		baseSchema.blocks[opts.lineType].marks = [];
 	}
