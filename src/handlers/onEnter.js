@@ -1,5 +1,5 @@
 import { unwrapList, splitListItem, decreaseItemDepth } from '../changes';
-import { getCurrentItem, getItemDepth } from '../utils';
+import { ListFn } from '../utils';
 
 /**
  * User pressed Enter in an editor
@@ -8,6 +8,9 @@ import { getCurrentItem, getItemDepth } from '../utils';
  * Enter in an empty list item should remove it
  * Shift+Enter in a list item should make a new line
  */
+
+const { getCurrentItem, getItemDepth } = ListFn;
+
 function onEnter(event, change, editor, opts) {
     // Pressing Shift+Enter
     // should split block normally

@@ -9,14 +9,7 @@ import { CODE_BLOCK_OPTIONS } from './options';
 import * as initState from './initValue/initState';
 import * as tools from './decorators/tools';
 import schemaFn from './schemas';
-import CodeBlock from './components/codeBlock';
-import CodeBlockLine from './components/codeBlockLine';
-import ListItem from './components/listItem';
-import Bold from './components/bold';
-import CodeInline from './components/codeInline';
-import EmInline from './components/EmInline';
-import DelInline from './components/DelInline';
-import Underline from './components/Underline';
+import { CodeBlock, CodeBlockLine, ListItem, Bold, CodeInline, EmInline, DelInline, Underline, } from './components';
 import './styles/index.css';
 
 const DEFAULT_NODE = DICT.DEFAULT_NODE;
