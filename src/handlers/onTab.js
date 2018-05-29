@@ -1,30 +1,35 @@
-import { decreaseItemDepth, increaseItemDepth } from '../changes';
-import { getCurrentItem } from '../utils/list';
+import { CODE_BLOCK_OPTIONS } from '../options';
+import { CommonUtil, CodeUtil } from '../utils';
 
-/**
- * User pressed Tab in an editor.
- * Tab       -> Increase item depth if inside a list item
- * Shift+Tab -> Decrease item depth if inside a list item
- */
+// code类型的tab
+const codeOnTab = (event, change, opts) => {
+	const { value } = change;
+	const { isCollapsed } = value;
+	const indent = CodeUtil.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
+	// Shift+tab
+	if (event.shiftKey) {
+		event.preventDefault();
+  	event.stopPropagation();
+    return CodeUtil.dedentLines(change, indent, CODE_BLOCK_OPTIONS);
+	}
+
+	if (isCollapsed) { // 选中的单行
+		event.preventDefault();
+		return change.insertText(indent).focus();
+	}
+  event.preventDefault();
+	return CodeUtil.indentLines(change, indent, CODE_BLOCK_OPTIONS);
+};
+
 function onTab(event, change, opts) {
-    const { value } = change;
-    const { isCollapsed } = value;
-
-    if (!isCollapsed || !getCurrentItem(opts, value)) {
-        return undefined;
-    }
-
-    // Shift+tab reduce depth
-    if (event.shiftKey) {
-        event.preventDefault();
-
-        return decreaseItemDepth(opts, change);
-    }
-
-    // Tab increases depth
-    event.preventDefault();
-
-    return increaseItemDepth(opts, change);
+	const { value } = change;
+	// 判断是否是代码行
+	const nodeType = CommonUtil.getNodeType(value);
+	switch (nodeType.ntype) {
+		case 'code':
+			return codeOnTab(event, change, opts);
+		default:
+			return undefined;
+	}
 }
-
 export default onTab;

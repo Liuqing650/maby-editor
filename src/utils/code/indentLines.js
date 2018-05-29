@@ -4,7 +4,7 @@
  * @param {*any} indent
  * @param {*object} option
  */
-export default indentLines = (change, indent, option) => {
+const indentLines = (change, indent, option) => {
   const { value } = change;
   const { document, selection } = value;
   const lines = document
@@ -18,3 +18,4 @@ export default indentLines = (change, indent, option) => {
     return c.insertTextByKey(text.key, 0, indent);
   }, change);
 };
+export default indentLines;

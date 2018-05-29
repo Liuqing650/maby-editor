@@ -7,7 +7,7 @@ import getCurrentIndent from './getCurrentIndent';
  * @param {*change} change slate的change
  * @param {*object} option 
  */
-export default deleteCodeBlock = (change, option) => {
+const deleteCodeBlock = (change, option) => {
   const { value } = change;
   if (value.isExpanded) {
     return undefined;
@@ -33,3 +33,4 @@ export default deleteCodeBlock = (change, option) => {
   }
   return undefined;
 };
+export default deleteCodeBlock;

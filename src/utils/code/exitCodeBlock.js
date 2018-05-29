@@ -6,7 +6,7 @@ import { Block, Text } from 'slate';
  * @param {*change} change
  * @param {*object} option 
  */
-export default exitCodeBlock = (change, option) => {
+const exitCodeBlock = (change, option) => {
   // Default behavior: insert an exit block
   const range = change.value.selection;
 
@@ -23,3 +23,4 @@ export default exitCodeBlock = (change, option) => {
 
   return change.collapseToStartOf(exitBlock);
 }
+export default exitCodeBlock;

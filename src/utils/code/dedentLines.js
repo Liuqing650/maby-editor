@@ -4,7 +4,7 @@
  * @param {*any} indent 
  * @param {*object} option
  */
-export default dedentLines = (change, indent, option) => {
+const dedentLines = (change, indent, option) => {
   const { value } = change;
   const { document, selection } = value;
   const lines = document
@@ -19,3 +19,4 @@ export default dedentLines = (change, indent, option) => {
     return c.removeTextByKey(text.key, 0, lengthToRemove);
   }, change);
 };
+export default dedentLines;

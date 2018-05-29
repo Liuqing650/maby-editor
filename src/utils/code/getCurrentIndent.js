@@ -6,7 +6,7 @@ import getIndent from './getIndent';
  * @param {*value} value
  * @param {*object} option
  */
-export default getCurrentIndent = (value, option) => {
+const getCurrentIndent = (value, option) => {
   const currentCode = getCurrentCode(value, option);
   if (!currentCode) {
     return '';
@@ -17,3 +17,4 @@ export default getCurrentIndent = (value, option) => {
     .join('\n');
   return getIndent(text);
 }
+export default getCurrentIndent;

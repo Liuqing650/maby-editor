@@ -3,7 +3,7 @@
  * @param {*value} value 
  * @param {*object} option 
  */
-export default getCurrentCode = (value, option) => {
+const getCurrentCode = (value, option) => {
   const { document } = value;
 
   let currentBlock;
@@ -17,3 +17,4 @@ export default getCurrentCode = (value, option) => {
   }
   return false;
 };
+export default getCurrentCode;

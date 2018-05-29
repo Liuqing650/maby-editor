@@ -4,10 +4,11 @@ import { Value } from 'slate';
 import Prism from 'prismjs';
 import PluginEditList from 'slate-edit-list';
 import DICT from './static';
-import { Common, Code, ListFn } from './utils';
+import { CommonUtil, CodeUtil, ListUtil } from './utils';
 import { CODE_BLOCK_OPTIONS } from './options';
 import * as initState from './initValue/initState';
-import * as tools from './decorators/tools';
+// import * as tools from './decorators/tools';
+import { onKeyDown, onPaste, MarkHotkey } from './handlers';
 import schemaFn from './schemas';
 import { CodeBlock, CodeBlockLine, ListItem, Bold, CodeInline, EmInline, DelInline, Underline, } from './components';
 import './styles/index.css';
@@ -25,11 +26,11 @@ const editListPlugin = PluginEditList();
 // 插件
 const plugins = [
   editListPlugin,
-  tools.MarkHotkey({ key: 'b', type: 'bold' }),
-  tools.MarkHotkey({ key: '7', type: 'code' }),
-  tools.MarkHotkey({ key: 'i', type: 'italic' }),
-  tools.MarkHotkey({ key: 'd', type: 'strikethrough' }),
-  tools.MarkHotkey({ key: 'u', type: 'underline' }),
+  MarkHotkey({ key: 'b', type: 'bold' }),
+  MarkHotkey({ key: '7', type: 'code' }),
+  MarkHotkey({ key: 'i', type: 'italic' }),
+  MarkHotkey({ key: 'd', type: 'strikethrough' }),
+  MarkHotkey({ key: 'u', type: 'underline' }),
 ];
 class MabyEditor extends React.Component {
   state = {
@@ -75,7 +76,7 @@ class MabyEditor extends React.Component {
       case 'strikethrough': return <DelInline {...props} />;
       case 'underline': return <Underline {...props} />;
       default:
-        if (mark.type) {
+        if (mark.type) { // 高亮代码
           return (
             <span {...props.attributes} className={`token ${mark.type}`}>
               {children}
@@ -135,11 +136,11 @@ class MabyEditor extends React.Component {
           break;
       }
     }
-    return tools.onKeyDown(event, change, onSave)
+    return onKeyDown(event, change, onSave)
   };
   // 复制
   onPaste = (event, change) => {
-    return tools.onPaste(event, change);
+    return onPaste(event, change);
   }
   // 高亮字体
   tokenToContent = (token) => {

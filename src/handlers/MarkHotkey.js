@@ -1,6 +1,6 @@
 import onKeyDown from './onKeyDown';
 
-export default MarkHotkey = (options) => {
+const MarkHotkey = (options) => {
   const { type, key } = options;
   return {
     onKeyDown(event, change) {
@@ -11,3 +11,4 @@ export default MarkHotkey = (options) => {
     },
   };
 }
+export default MarkHotkey;

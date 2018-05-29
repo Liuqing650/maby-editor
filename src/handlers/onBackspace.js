@@ -1,39 +1,32 @@
-// @flow
-import { type Change } from 'slate';
+import { CODE_BLOCK_OPTIONS } from '../options';
+import { CommonUtil, CodeUtil } from '../utils';
 
-import type Options from '../options';
-import { unwrapList } from '../changes';
-import { getCurrentItem } from '../utils';
+const codeOnBackspace = (event, change, option) => {
+  event.preventDefault();
+  return CodeUtil.deleteCodeBlock(change, CODE_BLOCK_OPTIONS);
+};
 
-/**
- * User pressed Delete in an editor
- */
-function onBackspace(event, change, editor, opts) {
-    const { value } = change;
-    const { startOffset, selection } = value;
+const otherOnBackspace = (event, change, option) => {
+  const { value } = change;
+  if (value.isExpanded) return;
+  if (value.startOffset != 0) return;
+  const { startBlock } = value;
+  if (startBlock.type == 'paragraph') return;
+  event.preventDefault();
+  change.setBlocks('paragraph');
+  return true;
+};
 
-    // Only unwrap...
-    // ... with a collapsed selection
-    if (selection.isExpanded) {
-        return undefined;
-    }
-
-    // ... when at the beginning of nodes
-    if (startOffset > 0) {
-        return undefined;
-    }
-    // ... in a list
-    const currentItem = getCurrentItem(opts, value);
-    if (!currentItem) {
-        return undefined;
-    }
-    // ... more precisely at the beginning of the current item
-    if (!selection.isAtStartOf(currentItem)) {
-        return undefined;
-    }
-
-    event.preventDefault();
-    return unwrapList(opts, change);
+function onBackspace(event, change, option) {
+  const { value } = change;
+  const nodeType = CommonUtil.getNodeType(value);
+  console.log('nodeType----->', nodeType);
+  switch (nodeType.ntype) {
+    case 'code':
+      return codeOnBackspace(event, change, option);
+    default:
+      return otherOnBackspace(event, change, option);
+  }
 }
 
 export default onBackspace;

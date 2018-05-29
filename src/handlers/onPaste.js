@@ -1,14 +1,15 @@
 import { Document } from 'slate';
+import { getEventTransfer } from 'slate-react';
 import { CODE_BLOCK_OPTIONS} from '../options';
-import { Code } from '../utils';
+import { CodeUtil } from '../utils';
 // 复制
-export default onPaste = (event, change) => {
+const onPaste = (event, change) => {
   const { value } = change;
   const { startBlock, endBlock } = value;
   if (startBlock.type !== 'code-line') return;
   const opts = CODE_BLOCK_OPTIONS;
   const data = getEventTransfer(event);
-  const currentCode = Code.getCurrentCode(value, opts);
+  const currentCode = CodeUtil.getCurrentCode(value, opts);
 
   if (!currentCode || !currentCode.hasDescendant(endBlock.key)) {
     return undefined;
@@ -24,9 +25,10 @@ export default onPaste = (event, change) => {
     text = data.text;
   }
 
-  const lines = Code.deserializeCode(opts, text).nodes;
+  const lines = CodeUtil.deserializeCode(opts, text).nodes;
 
   const fragment = Document.create({ nodes: lines });
 
   return change.insertFragment(fragment);
 }
+export default onPaste;

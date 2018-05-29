@@ -1,48 +1,48 @@
-import { unwrapList, splitListItem, decreaseItemDepth } from '../changes';
-import { ListFn } from '../utils';
+import { CommonUtil, CodeUtil } from '../utils';
+import onBackspace from './onBackspace';
 
-/**
- * User pressed Enter in an editor
- *
- * Enter in a list item should split the list item
- * Enter in an empty list item should remove it
- * Shift+Enter in a list item should make a new line
- */
+const codeOnEnter = (event, change, option) => {
+  const { value } = change;
+  // 删除选中的区域
+  if (value.isExpanded) change.delete();
+  event.preventDefault();
+  change.splitBlock().insertText('');
+  return true;
+};
 
-const { getCurrentItem, getItemDepth } = ListFn;
+const otherOnEnter = (event, change, option) => {
+  const { value } = change;
+  const { startBlock, focusBlock, startOffset, endOffset } = value;
+  if (value.isExpanded) return;
+  if (startOffset == 0 && startBlock.text.length == 0) {
+    return onBackspace(event, change);
+  }
+  if (endOffset !== startBlock.text.length) return;
+  if (
+    startBlock.type !== 'header-one' &&
+    startBlock.type !== 'header-two' &&
+    startBlock.type !== 'header-three' &&
+    startBlock.type !== 'header-four' &&
+    startBlock.type !== 'header-five' &&
+    startBlock.type !== 'header-six' &&
+    startBlock.type !== 'block-quote'
+  ) {
+    return;
+  }
+  event.preventDefault();
+  change.splitBlock().setBlocks('paragraph');
+  return true;
+};
 
-function onEnter(event, change, editor, opts) {
-    // Pressing Shift+Enter
-    // should split block normally
-    if (event.shiftKey) {
-        return undefined;
-    }
-
-    const { value } = change;
-    const currentItem = getCurrentItem(opts, value);
-
-    // Not in a list
-    if (!currentItem) {
-        return undefined;
-    }
-
-    event.preventDefault();
-
-    // If expanded, delete first.
-    if (value.isExpanded) {
-        change.delete();
-    }
-
-    if (currentItem.isEmpty) {
-        // Block is empty, we exit the list
-        if (getItemDepth(opts, value) > 1) {
-            return decreaseItemDepth(opts, change);
-        }
-        // Exit list
-        return unwrapList(opts, change);
-    }
-    // Split list item
-    return splitListItem(opts, change);
+function onEnter(event, change, option) {
+  const { value } = change;
+  const nodeType = CommonUtil.getNodeType(value);
+  switch (nodeType.ntype) {
+    case 'code':
+      return codeOnEnter(event, change, option);
+    default:
+      return otherOnEnter(event, change, option);
+  }
 }
 
 export default onEnter;

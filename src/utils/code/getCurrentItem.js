@@ -3,7 +3,7 @@
  * @param {*object} option
  * @param {*value} value
  */
-export default getCurrentItem = (option, value) => {
+const getCurrentItem = (option, value) => {
   const { document } = value;
 
   if (!value.selection.startKey) return null;
@@ -11,3 +11,4 @@ export default getCurrentItem = (option, value) => {
   const parent = document.getParent(block.key);
   return parent && parent.type === option.typeItem ? parent : null;
 }
+export default getCurrentItem;

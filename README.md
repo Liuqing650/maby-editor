@@ -1,5 +1,9 @@
 # maby-editor
 
+
+## preview
+[maby-editor-slate](https://liuqing650.github.io/maby-editor/preview/slateDev)
+
 ## 备注
 
 这里是编辑器实验室
@@ -38,6 +42,9 @@
 |ctrl + 5|`inline`|标题5|
 |ctrl + 6|`inline`|标题6|
 |ctrl + m|`block`|高亮代码块|
+|ctrl + j|`list`|序号列表|
+|连续Enter|`list`|在序列中每次回车退出一级|
+|Shift + Enter|`list`|在该序列中换行继续编辑|
 |Tab|`block`|代码块缩进（可多行）|
 |Shift + Tab|`block`|代码块回退缩进（可多行）|
 |ctrl + z|`all`|撤销|

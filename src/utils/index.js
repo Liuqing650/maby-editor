@@ -1,9 +1,7 @@
-import * as Common from './common';
-import * as Code from './code';
-import * as ListFn from './list';
+import * as CommonUtil from './common';
+import * as CodeUtil from './code';
 
 export {
-  Common,
-  Code,
-  ListFn
+  CommonUtil,
+  CodeUtil
 }

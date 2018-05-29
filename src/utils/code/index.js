@@ -7,8 +7,6 @@ import getCurrentIndent from './getCurrentIndent';
 import getCurrentItem from './getCurrentItem';
 import getIndent from './getIndent';
 import indentLines from './indentLines';
-import dedentLines from './dedentLines';
-import deleteCodeBlock from './deleteCodeBlock';
 
 export {
   dedentLines,
@@ -20,6 +18,4 @@ export {
   getCurrentItem,
   getIndent,
   indentLines,
-  dedentLines,
-  deleteCodeBlock
 }

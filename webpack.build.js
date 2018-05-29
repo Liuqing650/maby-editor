@@ -24,7 +24,7 @@ plugins = [
       drop_console: true
     }
   }),
-  new CleanWebpackPlugin(['preview'])
+  new CleanWebpackPlugin(['preview/slateDev'])
 ];
 console.log(' ./preview 目录已删除，正在打包当前版本 %s', packageJSON.version);
 let config = {
@@ -33,7 +33,7 @@ let config = {
   },
   devtool: 'source-map',
   output: {
-    path: path.resolve(__dirname, 'preview'),
+    path: path.resolve(__dirname, 'preview/slateDev'),
     filename: libraryName + '.min.js',
     library: libraryName,
     libraryTarget: 'umd',

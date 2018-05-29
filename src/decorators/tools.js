@@ -3,16 +3,16 @@ import { getEventTransfer } from 'slate-react';
 import detectIndent from 'detect-indent';
 import { CODE_BLOCK_OPTIONS, LIST_OPTIONS} from '../options';
 import { onTab as onListTab } from '../handlers';
-import { Common, Code, ListFn } from '../utils';
+import { CommonUtil, CodeUtil, ListUtil } from '../utils';
 
 const onShiftTab = (event, change) => {
   const { value } = change;
   event.preventDefault();
   event.stopPropagation();
-  const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+  const nodeTypeInfo = CommonUtil.checkNodeType(value, ['code-line', 'code-block']);
   if (nodeTypeInfo.isValid) {
-    const indent = Code.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
-    return Code.dedentLines(change, indent, CODE_BLOCK_OPTIONS);
+    const indent = CodeUtil.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
+    return CodeUtil.dedentLines(change, indent, CODE_BLOCK_OPTIONS);
   }
   return undefined;
 };
@@ -22,14 +22,14 @@ const onTab = (event, change) => {
   event.preventDefault();
 
   const { isCollapsed } = value;
-  const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+  const nodeTypeInfo = CommonUtil.checkNodeType(value, ['code-line', 'code-block']);
   // console.log('nodeTypeInfo----->', nodeTypeInfo);
   if (nodeTypeInfo.isValid) {
-    const indent = Code.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
+    const indent = CodeUtil.getCurrentIndent(value, CODE_BLOCK_OPTIONS);
     if (isCollapsed) { // 选中的单行
       return change.insertText(indent).focus();
     }
-    return Code.indentLines(change, indent, CODE_BLOCK_OPTIONS);
+    return CodeUtil.indentLines(change, indent, CODE_BLOCK_OPTIONS);
   } else {
     return onListTab(event, change, LIST_OPTIONS);
   }
@@ -44,11 +44,11 @@ export const onBackspace = (event, change) => {
   const { startBlock } = value;
   if (startBlock.type == 'paragraph') return;
 
-  const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+  const nodeTypeInfo = CommonUtil.checkNodeType(value, ['code-line', 'code-block']);
   // console.log('nodeTypeInfo====>', nodeTypeInfo);
   if (nodeTypeInfo.isValid) {
     event.preventDefault();
-    return Code.deleteCodeBlock(change, CODE_BLOCK_OPTIONS);
+    return CodeUtil.deleteCodeBlock(change, CODE_BLOCK_OPTIONS);
   } else if (startBlock.type == 'list-item') {
     // change.unwrapBlock('bulleted-list');
   } else {
@@ -111,7 +111,7 @@ export const onKeyDown = (event, change, callback) => {
     switch (event.key) {
       case 'm': {
         event.preventDefault();
-        const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+        const nodeTypeInfo = CommonUtil.checkNodeType(value, ['code-line', 'code-block']);
         if (!nodeTypeInfo.isValid) {
           change.setBlocks('code-block');
           return true;
@@ -119,9 +119,9 @@ export const onKeyDown = (event, change, callback) => {
         
       }
       case 'Enter': // 退出该模式
-        const nodeTypeInfo = Common.checkNodeType(value, ['code-line', 'code-block']);
+        const nodeTypeInfo = CommonUtil.checkNodeType(value, ['code-line', 'code-block']);
         if (nodeTypeInfo.isValid) { // 代码块需特殊形式退出
-          Code.exitCodeBlock(change, CODE_BLOCK_OPTIONS);
+          CodeUtil.exitCodeBlock(change, CODE_BLOCK_OPTIONS);
         } else {
           event.preventDefault();
           change.splitBlock().setBlocks('paragraph');
@@ -188,7 +188,7 @@ export const onPaste = (event, change) => {
   if (startBlock.type !== 'code-line') return;
   const opts = CODE_BLOCK_OPTIONS;
   const data = getEventTransfer(event);
-  const currentCode = Code.getCurrentCode(value, opts);
+  const currentCode = CodeUtil.getCurrentCode(value, opts);
 
   if (!currentCode || !currentCode.hasDescendant(endBlock.key)) {
     return undefined;
@@ -204,7 +204,7 @@ export const onPaste = (event, change) => {
     text = data.text;
   }
 
-  const lines = Code.deserializeCode(opts, text).nodes;
+  const lines = CodeUtil.deserializeCode(opts, text).nodes;
 
   const fragment = Document.create({ nodes: lines });
 

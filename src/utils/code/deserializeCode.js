@@ -7,7 +7,7 @@ import DICT from '../../static';
  * @param {*} opts 
  * @param {*} text 
  */
-export default deserializeCode = (opts, text) => {
+const deserializeCode = (opts, text) => {
   const sep = DICT.DEFAULT_NEWLINE;
   let lines = [];
   List(text.split(sep)).map(line => {
@@ -24,3 +24,4 @@ export default deserializeCode = (opts, text) => {
   });
   return code;
 }
+export default deserializeCode;
