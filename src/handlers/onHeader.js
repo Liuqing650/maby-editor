@@ -8,10 +8,16 @@ const headerDict = {
   '6': 'header-six',
 };
 
-const onHeader = (event, change) => {
+/**
+ * 
+ * @param {*object} event 
+ * @param {*Slate} change 
+ * @param {*string} type 可选
+ */
+const onHeader = (event, change, type) => {
   event.preventDefault();
-  const isHeader = change.value.blocks.some(block => block.type == headerDict[event.key]);
-  change.setBlocks(isHeader ? 'paragraph' : headerDict[event.key]);
+  const isHeader = type ? change.value.blocks.some(block => block.type == type) : change.value.blocks.some(block => block.type == headerDict[event.key]);
+  change.setBlocks(isHeader ? 'paragraph' : type || headerDict[event.key]);
   return true;
 };
 

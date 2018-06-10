@@ -74,6 +74,7 @@
     "slate": "^0.33.6",
     "slate-collapse-on-escape": "^0.6.0",
     "slate-edit-list": "^0.11.3",
+    "slate-edit-table": "^0.15.0",
     "slate-html-serializer": "^0.6.1",
     "slate-react": "^0.12.4",
     "slate-soft-break": "^0.6.0"

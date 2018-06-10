@@ -60,3 +60,20 @@ export const getNodeType = (value) => {
   return output;
 }
 
+/**
+ * 是否
+ * @param {*Object} value state的value
+ * @param {*string} value 待检测的类型
+ */
+export const hasBlock = (value, type) => {
+  return value.blocks.some(node => node.type == type);
+}
+
+/**
+ * 是否
+ * @param {*Object} value state的value
+ * @param {*string} value 待检测的类型
+ */
+export const hasMark = (value, type) => {
+  return value.activeMarks.some(mark => mark.type == type);
+}

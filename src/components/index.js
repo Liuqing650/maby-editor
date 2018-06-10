@@ -6,6 +6,10 @@ import CodeInline from './codeInline';
 import EmInline from './EmInline';
 import DelInline from './DelInline';
 import Underline from './Underline';
+import Table from './Table';
+import TableRow from './TableRow';
+import TableCell from './TableCell';
+import Paragraph from './Paragraph';
 
 export {
   CodeBlock,
@@ -16,4 +20,8 @@ export {
   EmInline,
   DelInline,
   Underline,
+  Table,
+  TableRow,
+  TableCell,
+  Paragraph,
 }

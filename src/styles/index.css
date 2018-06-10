@@ -273,3 +273,11 @@ input:focus {
   background-color: #EBEBEB;
   display: inline-block;
 }
+
+.maby-editor-tool-btnGroup {
+  font-weight: 400;
+  cursor: pointer;
+}
+.maby-editor-tool-btnGroup[data-active='true'] {
+  font-weight: 900;
+}

@@ -3,14 +3,19 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
 import PluginEditList from 'slate-edit-list';
+import PluginEditTable from 'slate-edit-table';
 import DICT from './static';
 import { CommonUtil, CodeUtil, ListUtil } from './utils';
 import { CODE_BLOCK_OPTIONS } from './options';
 import * as initState from './initValue/initState';
 // import * as tools from './decorators/tools';
-import { onKeyDown, onPaste, MarkHotkey } from './handlers';
+import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
 import schemaFn from './schemas';
-import { CodeBlock, CodeBlockLine, ListItem, Bold, CodeInline, EmInline, DelInline, Underline, } from './components';
+import alignPlugin from './plugins/aligns';
+import { 
+  CodeBlock, CodeBlockLine, ListItem, Bold, CodeInline, EmInline, DelInline, Underline,
+  Table, TableRow, TableCell, Paragraph,
+} from './components';
 import './styles/index.css';
 
 const DEFAULT_NODE = DICT.DEFAULT_NODE;
@@ -23,9 +28,17 @@ const initialState = existingValue ? Value.fromJSON(existingValue) : initState.v
 
 const schema = schemaFn(CODE_BLOCK_OPTIONS);
 const editListPlugin = PluginEditList();
+const tablePlugin = PluginEditTable({
+  typeTable: 'table',
+  typeRow: 'table_row',
+  typeCell: 'table_cell',
+  typeContent: 'paragraph'
+})
 // 插件
 const plugins = [
   editListPlugin,
+  tablePlugin,
+  alignPlugin,
   MarkHotkey({ key: 'b', type: 'bold' }),
   MarkHotkey({ key: '7', type: 'code' }),
   MarkHotkey({ key: 'i', type: 'italic' }),
@@ -33,12 +46,18 @@ const plugins = [
   MarkHotkey({ key: 'u', type: 'underline' }),
 ];
 class MabyEditor extends React.Component {
-  state = {
-    value: initialState
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: initialState
+    };
+    this.editorREF;
+    this.submitChange;
+  }
   componentDidMount = () => {
     const { editor } = this;
     if (editor) {
+      this.setEditorComponent(editor);
       setTimeout(editor.focus.bind(editor), 1000);
     }
   }
@@ -46,11 +65,23 @@ class MabyEditor extends React.Component {
   onChange = ({ value }) => {
     this.setState({ value })
   }
+  
+  onSave = () => {
+    const { value } = this.state
+    const content = JSON.stringify(value.toJSON());
+    localStorage.setItem(SAVE_KEY, content);
+    console.log('文本已经保存...');
+  }
   call(change) {
     this.setState({
       value: this.state.value.change().call(change).value
     });
   }
+  //  表格使用
+  setEditorComponent = (ref) => {
+    this.editorREF = ref;
+    this.submitChange = ref.change;
+  };
   renderNode = (props) => {
     const { attributes, children, node } = props;
     switch (node.type) {
@@ -65,6 +96,10 @@ class MabyEditor extends React.Component {
       case 'ul_list': return <ul {...attributes}>{children}</ul>;
       case 'ol_list': return <ol {...attributes}>{children}</ol>;
       case 'list_item': return <ListItem plugin={editListPlugin} {...props} />;
+      case 'table': return <Table {...props} />;
+      case 'table_row': return <TableRow {...props} />;
+      case 'table_cell': return <TableCell {...props} />;
+      case 'paragraph': return <Paragraph {...props} />;
     }
   }
   renderMark = (props) => {
@@ -107,11 +142,6 @@ class MabyEditor extends React.Component {
       decreaseItemDepth
     } = editListPlugin.changes;
     const inList = editListPlugin.utils.isSelectionInList(value);
-    const onSave = () => {
-      const content = JSON.stringify(value.toJSON());
-      localStorage.setItem(SAVE_KEY, content);
-      console.log('文本已经保存...');
-    }
     // 取消撤回
     // if (event.shiftKey) {
     //   switch (event.key) {
@@ -136,7 +166,7 @@ class MabyEditor extends React.Component {
           break;
       }
     }
-    return onKeyDown(event, change, onSave)
+    return onKeyDown(event, change, this.onSave)
   };
   // 复制
   onPaste = (event, change) => {
@@ -152,10 +182,54 @@ class MabyEditor extends React.Component {
       return token.content.map(this.tokenToContent).join('')
     }
   }
+
+  renderToolbar = () => {
+    return (
+      <div className="menu toolbar-menu">
+        {this.renderMarkButton('bold', '加粗')}
+        {this.renderMarkButton('italic', '倾斜')}
+        {this.renderMarkButton('underlined', '下划线')}
+        {this.renderMarkButton('code', '标签')}
+        {this.renderBlockButton('header-one', '标题一')}
+        {this.renderBlockButton('header-two', '标题二')}
+        {this.renderBlockButton('header-three', '标题三')}
+        {this.renderBlockButton('header-four', '标题四')}
+        {this.renderBlockButton('header-five', '标题五')}
+        {this.renderBlockButton('header-six', '标题六')}
+        {this.renderBlockButton('code-block', '代码块')}
+        {this.renderBlockButton('save', '本地保存')}
+      </div>
+    )
+  }
+
+  renderMarkButton = (type, name) => {
+    const { value } = this.state;
+    const change = value.change();
+    const isActive = CommonUtil.hasMark(value, type);
+    const onClick = event => onToolBtn(event, change, type, DICT.MARK, this.onChange);
+    return (
+      <span className="maby-editor-tool-btnGroup" onMouseDown={onClick} data-active={isActive}>
+        <span className="maby-editor-tool-btn-title">{name}</span>
+      </span>
+    )
+  }
+
+  renderBlockButton = (type, name) => {
+    const { value } = this.state;
+    const change = value.change();
+    const isActive = CommonUtil.hasBlock(value, type);
+    const onClick = event => onToolBtn(event, change, type, DICT.BLOCK, type === 'save' ? this.onSave : this.onChange)
+    return (
+      <span className="maby-editor-tool-btnGroup" onMouseDown={onClick} data-active={isActive}>
+        <span className="maby-editor-tool-btn-title">{name}</span>
+      </span>
+    )
+  }
   render() {
     const { placeholder, className, autoFocus } = this.props;
     return (
       <div className={className}>
+        {this.renderToolbar()}
         <Editor
           plugins={plugins}
           placeholder={placeholder || ''}
@@ -164,7 +238,7 @@ class MabyEditor extends React.Component {
           schema={schema}
           onKeyDown={this.handleKeyDown}
           onPaste={this.onPaste}
-          autoFocus={autoFocus || true}
+          autoFocus
           renderNode={this.renderNode}
           renderMark={this.renderMark}
           decorateNode={this.decorateNode}

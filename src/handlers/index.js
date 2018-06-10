@@ -4,6 +4,7 @@ import onBackspace from './onBackspace';
 import onKeyDown from './onKeyDown';
 import onPaste from './onPaste';
 import MarkHotkey from './MarkHotkey';
+import onToolBtn from './onToolBtn';
 
 export { 
   onEnter, 
@@ -12,4 +13,5 @@ export {
   onKeyDown,
   onPaste,
   MarkHotkey,
+  onToolBtn,
 };
