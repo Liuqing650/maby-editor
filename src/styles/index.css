@@ -253,3 +253,13 @@ input:focus {
   background: #f6ffed;
   border-color: #b7eb8f;
 }
+/* 表格 */
+.maby-editor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.maby-editor-table table {
+  width: 100%;
+  border-collapse: collapse;
+}

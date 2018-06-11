@@ -3,7 +3,7 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
 import PluginEditList from 'slate-edit-list';
-import PluginEditTable from 'slate-edit-table';
+import PluginEditTable from 'plugins/slate-edit-table';
 import DICT from './static';
 import { CommonUtil, CodeUtil, ListUtil } from './utils';
 import { CODE_BLOCK_OPTIONS } from './options';
@@ -32,7 +32,8 @@ const tablePlugin = PluginEditTable({
   typeTable: 'table',
   typeRow: 'table_row',
   typeCell: 'table_cell',
-  typeContent: 'paragraph'
+  typeContent: 'paragraph',
+  exitBlockType: 'paragraph'
 })
 // 插件
 const plugins = [
@@ -198,6 +199,7 @@ class MabyEditor extends React.Component {
         {this.renderBlockButton('header-six', '标题六')}
         {this.renderBlockButton('code-block', '代码块')}
         {this.renderBlockButton('save', '本地保存')}
+        {this.renderBlockButton('table', '表格')}
       </div>
     )
   }
@@ -206,9 +208,9 @@ class MabyEditor extends React.Component {
     const { value } = this.state;
     const change = value.change();
     const isActive = CommonUtil.hasMark(value, type);
-    const onClick = event => onToolBtn(event, change, type, DICT.MARK, this.onChange);
+    const onMouseDown = event => onToolBtn(event, change, type, DICT.MARK, this.onChange);
     return (
-      <span className="maby-editor-tool-btnGroup" onMouseDown={onClick} data-active={isActive}>
+      <span className="maby-editor-tool-btnGroup" onMouseDown={onMouseDown} data-active={isActive}>
         <span className="maby-editor-tool-btn-title">{name}</span>
       </span>
     )
@@ -217,10 +219,32 @@ class MabyEditor extends React.Component {
   renderBlockButton = (type, name) => {
     const { value } = this.state;
     const change = value.change();
-    const isActive = CommonUtil.hasBlock(value, type);
-    const onClick = event => onToolBtn(event, change, type, DICT.BLOCK, type === 'save' ? this.onSave : this.onChange)
+    let isActive = CommonUtil.hasBlock(value, type);
+    const onMouseDown = event => {
+      switch (type) {
+        case 'table':
+          event.preventDefault();
+          const isInTable = tablePlugin.utils.isSelectionInTable(value);
+          if (!isInTable) {
+            this.submitChange(tablePlugin.changes.insertTable);
+          } else {
+            this.submitChange(tablePlugin.changes.removeTable);
+          }
+          break;
+        default:
+          onToolBtn(event, change, type, DICT.BLOCK, type === 'save' ? this.onSave : this.onChange);
+          break;
+      }
+    }
+    switch (type) {
+      case 'table':
+        isActive = tablePlugin.utils.isSelectionInTable(value);
+        break;
+      default:
+        break;
+    }
     return (
-      <span className="maby-editor-tool-btnGroup" onMouseDown={onClick} data-active={isActive}>
+      <span className="maby-editor-tool-btnGroup" onMouseDown={onMouseDown} data-active={isActive}>
         <span className="maby-editor-tool-btn-title">{name}</span>
       </span>
     )
