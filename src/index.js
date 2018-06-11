@@ -68,7 +68,7 @@ class MabyEditor extends React.Component {
   }
   
   onSave = () => {
-    const { value } = this.state
+    const { value } = this.state;
     const content = JSON.stringify(value.toJSON());
     localStorage.setItem(SAVE_KEY, content);
     console.log('文本已经保存...');
@@ -84,6 +84,7 @@ class MabyEditor extends React.Component {
     this.submitChange = ref.change;
   };
   renderNode = (props) => {
+    const { value } = this.state;
     const { attributes, children, node } = props;
     switch (node.type) {
       case 'code-block': return <CodeBlock {...props} />;
@@ -97,7 +98,9 @@ class MabyEditor extends React.Component {
       case 'ul_list': return <ul {...attributes}>{children}</ul>;
       case 'ol_list': return <ol {...attributes}>{children}</ol>;
       case 'list_item': return <ListItem plugin={editListPlugin} {...props} />;
-      case 'table': return <Table {...props} />;
+      case 'table': 
+        const isInTable = tablePlugin.utils.isSelectionInTable(value);
+        return <Table {...props} tablePlugin={tablePlugin} editorChange={this.editorTableChange} isInTable={isInTable} />;
       case 'table_row': return <TableRow {...props} />;
       case 'table_cell': return <TableCell {...props} />;
       case 'paragraph': return <Paragraph {...props} />;
@@ -183,7 +186,10 @@ class MabyEditor extends React.Component {
       return token.content.map(this.tokenToContent).join('')
     }
   }
-
+  // 表格模式变更
+  editorTableChange = (plugin) => {
+    this.submitChange(plugin);
+  };
   renderToolbar = () => {
     return (
       <div className="maby-editor-toolbar-menu maby-editor-menu">
