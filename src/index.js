@@ -185,7 +185,7 @@ class MabyEditor extends React.Component {
 
   renderToolbar = () => {
     return (
-      <div className="menu toolbar-menu">
+      <div className="maby-editor-toolbar-menu maby-editor-menu">
         {this.renderMarkButton('bold', '加粗')}
         {this.renderMarkButton('italic', '倾斜')}
         {this.renderMarkButton('underlined', '下划线')}
