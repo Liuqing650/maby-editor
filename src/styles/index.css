@@ -259,7 +259,7 @@ input:focus {
   border-collapse: collapse;
 }
 
-.maby-editor-table table {
+.maby-editor-table .table-content {
   width: 100%;
   border-collapse: collapse;
 }
