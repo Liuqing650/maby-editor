@@ -32,9 +32,13 @@ class Table extends React.Component {
 
   render() {
     const props = this.props;
+    const { isInTable, position } = props;
     const { isHeaderSelected } = this.state;
+    
+    console.log(position);
+    console.log('posAttr--> [row, col]: [%s, %s]   height: %s', position.getRowIndex(), position.getColumnIndex(), position.getHeight());
     return (
-      <div className={`maby-editor-table ${props.isInTable ? 'maby-editor-table-focus' : null}`}>
+      <div className={`maby-editor-table ${isInTable ? 'maby-editor-table-focus' : null}`}>
         <table className="table-content">
           <tbody {...props.attributes}>{props.children}</tbody>
         </table>

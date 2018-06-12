@@ -100,7 +100,15 @@ class MabyEditor extends React.Component {
       case 'list_item': return <ListItem plugin={editListPlugin} {...props} />;
       case 'table': 
         const isInTable = tablePlugin.utils.isSelectionInTable(value);
-        return <Table {...props} tablePlugin={tablePlugin} editorChange={this.editorTableChange} isInTable={isInTable} />;
+        const position = tablePlugin.utils.getPosition(value);
+        const tableProps = {
+          ...props,
+          tablePlugin,
+          editorChange: this.editorTableChange,
+          isInTable,
+          position
+        };
+        return <Table {...tableProps} />;
       case 'table_row': return <TableRow {...props} />;
       case 'table_cell': return <TableCell {...props} />;
       case 'paragraph': return <Paragraph {...props} />;
