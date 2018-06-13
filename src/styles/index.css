@@ -2,7 +2,7 @@
 p,pre {
   margin: 0;
 }
-
+span{margin:0;padding:0}
 pre {
   padding: 10px;
   background-color: #eee;
@@ -308,15 +308,17 @@ input:focus {
   border-radius: 8px 8px;
 }
 
-.maby-editor-table .table-tool-bar .header .inner .delete-table {
-  width: 32px;
-  height: 32px;
+.maby-editor-table .table-tool-bar .header .inner .operation-area {
+  width: auto;
+  height: 28px;
   position: absolute;
   border-radius: 3px 3px;
   background-color: #52c41a;
+  padding-left: 10px;
+  padding-right: 10px;
   z-index: 23;
   font-size: 12px;
-  color: #e8e8e8;
+  color: #FFF;
   line-height: 32px;
   text-align: center;
   cursor: pointer;
@@ -327,21 +329,27 @@ input:focus {
   transition: transform .3s ease;
   transition: transform .3s ease,-webkit-transform .3s ease;
   box-shadow: 0 3px 3px rgba(0,0,0,.2);
-  top: -32px;
+  top: -14px;
   left: 24px;
+  display: inline-block;
   -webkit-transform: translateX(-6px) translateY(6px);
   -ms-transform: translateX(-6px) translateY(6px);
   transform: translateX(-6px) translateY(6px);
 }
-
-.table-tool-bar .table-tool-bar .header .inner .editor-icon {
-  display: inline-block;
+.editor-table-icon {
+  line-height: 28px;
+  margin-left: 10px;
   font-style: normal;
-  vertical-align: baseline;
   text-align: center;
   text-transform: none;
-  line-height: 1;
   text-rendering: auto;
+  border-bottom: 1px solid transparent;
+}
+.editor-table-icon:first-child {
+  margin-left: 0;
+}
+.editor-table-icon:hover {
+  border-bottom-color: #fff;
 }
 
 .maby-editor-table .table-tool-bar .header-selected .table-select-selected {
@@ -349,10 +357,23 @@ input:focus {
   z-index: 3;
 }
 
-.maby-editor-table .table-tool-bar .header-selected .delete-table {
+.maby-editor-table .table-tool-bar .header-selected .operation-area {
   opacity: 1 !important;
   visibility: visible !important;
   -webkit-transform: translateX(0) translateY(0) !important;
   -ms-transform: translateX(0) translateY(0) !important;
   transform: translateX(0) translateY(0) !important;
+}
+.clearfix {
+  zoom: 1;
+}
+.clearfix:after,
+.clearfix:before
+{
+  display: table;
+  content: '';
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
 }

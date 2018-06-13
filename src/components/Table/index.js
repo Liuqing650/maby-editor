@@ -13,19 +13,40 @@ class Table extends React.Component {
   toolBarMouseEnter = (type) => {
     switch (type) {
       case TOOLBAR_HEADER:
-        this.change({ isHeaderSelected: !this.state.isHeaderSelected});
+        // this.change({ isHeaderSelected: !this.state.isHeaderSelected});
+        this.change({ isHeaderSelected: true});
         break;
       default:
         break;
     }
   };
 
-  // 删除表格
-  onDeleteTable = (even) => {
+  // 处理表格
+  onHandleTable = (even, method) => {
     event.preventDefault();
     const { tablePlugin, editorChange, isInTable } = this.props;
+    return;
     if (typeof editorChange === 'function' && isInTable) {
-      editorChange(tablePlugin.changes.removeTable);
+      switch (method) {
+        // 删除表格
+        case 'delete':
+          editorChange(tablePlugin.changes.removeTable);
+          break;
+        case 'insertCol':
+          editorChange(tablePlugin.changes.insertColumn);
+          break;
+        case 'insertRow':
+          editorChange(tablePlugin.changes.insertRow);
+          break;
+        case 'removeCol':
+          editorChange(tablePlugin.changes.removeColumn);
+          break;
+        case 'removeRow':
+          editorChange(tablePlugin.changes.removeRow);
+          break;
+        default:
+          break;
+      }
     };
     this.change({ isHeaderSelected: false });
   };
@@ -47,11 +68,13 @@ class Table extends React.Component {
               onMouseDown={() => this.toolBarMouseEnter(TOOLBAR_HEADER)}
             >
             <div className="inner">
-              <div className="inner">
-                <div className={`table-select ${isHeaderSelected ? 'table-select-selected' : null}`}></div>
-                <div className="delete-table" onMouseDown={this.onDeleteTable}>
-                  <span className="editor-icon icon-delete">DEL</span>
-                </div>
+              <div className={`table-select ${isHeaderSelected ? 'table-select-selected' : null}`}></div>
+              <div className="operation-area">
+                <span className="editor-table-icon icon-delete" onMouseDown={(even) => this.onHandleTable(even, 'delete')}>DEL</span>
+                <span className="editor-table-icon icon-insert" onMouseDown={(even) => this.onHandleTable(even, 'insertCol')}>INSERT_COL</span>
+                <span className="editor-table-icon icon-insert" onMouseDown={(even) => this.onHandleTable(even, 'insertRow')}>INSERT_ROW</span>
+                <span className="editor-table-icon icon-insert" onMouseDown={(even) => this.onHandleTable(even, 'removeCol')}>REMOVE_COL</span>
+                <span className="editor-table-icon icon-insert" onMouseDown={(even) => this.onHandleTable(even, 'removeRow')}>REMOVE_ROW</span>
               </div>
             </div>
           </div>
