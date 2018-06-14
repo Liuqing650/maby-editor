@@ -86,6 +86,16 @@ class MabyEditor extends React.Component {
   renderNode = (props) => {
     const { value } = this.state;
     const { attributes, children, node } = props;
+    const isInTable = tablePlugin.utils.isSelectionInTable(value);
+    const position = tablePlugin.utils.getPosition(value);
+    const tableProps = {
+      ...props,
+      tablePlugin,
+      onSetAlign: this.onSetAlign,
+      editorChange: this.editorTableChange,
+      isInTable,
+      position
+    };
     switch (node.type) {
       case 'code-block': return <CodeBlock {...props} />;
       case 'code-line': return <CodeBlockLine {...props} />;
@@ -98,17 +108,7 @@ class MabyEditor extends React.Component {
       case 'ul_list': return <ul {...attributes}>{children}</ul>;
       case 'ol_list': return <ol {...attributes}>{children}</ol>;
       case 'list_item': return <ListItem plugin={editListPlugin} {...props} />;
-      case 'table': 
-        const isInTable = tablePlugin.utils.isSelectionInTable(value);
-        const position = tablePlugin.utils.getPosition(value);
-        const tableProps = {
-          ...props,
-          tablePlugin,
-          editorChange: this.editorTableChange,
-          isInTable,
-          position
-        };
-        return <Table {...tableProps} />;
+      case 'table': return <Table {...tableProps} />;
       case 'table_row': return <TableRow {...props} />;
       case 'table_cell': return <TableCell {...props} />;
       case 'paragraph': return <Paragraph {...props} />;
@@ -197,6 +197,11 @@ class MabyEditor extends React.Component {
   // 表格模式变更
   editorTableChange = (plugin) => {
     this.submitChange(plugin);
+  };
+  onSetAlign = (align) => {
+    this.submitChange(change =>
+        alignPlugin.changes.setColumnAlign(change, align)
+    );
   };
   renderToolbar = () => {
     return (

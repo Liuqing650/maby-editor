@@ -9,30 +9,29 @@ const tablePlugin = PluginEditTable({
   typeCell: 'table_cell',
   typeContent: 'paragraph'
 });
-function setColumnAlign(change, align) {
+function setColumnWidth(change, width) {
   const pos = tablePlugin.utils.getPosition(change.value);
   const columnCells = tablePlugin.utils.getCellsAtColumn(
     pos.table,
     pos.getColumnIndex()
   );
   columnCells.forEach(cell => {
-    change.setNodeByKey(cell.key, { data: { align } });
+    change.setNodeByKey(cell.key, { data: { width } });
   });
   return change;
 }
 
-const alignPlugin = {
+const widthTablePlugin = {
   schema: {
     blocks: {
       table_cell: {
         data: {
-          // Make sure cells have an alignment
-          align: align => ['left', 'center', 'right'].includes(align)
+          width: width => (width > DICT.MIN_TABLE_WIDTH ? DICT.MIN_TABLE_WIDTH : width)
         },
         normalize(change, violation, context) {
           if (violation === NODE_DATA_INVALID) {
             change.setNodeByKey(context.node.key, {
-              data: context.node.data.set('align', DICT.TABLE_TEXT_ALIGIN)
+              data: context.node.data.set('width', DICT.MIN_TABLE_WIDTH)
             });
           }
         }
@@ -40,8 +39,10 @@ const alignPlugin = {
     }
   },
   changes: {
-    setColumnAlign
+    setColumnWidth
   }
 };
 
-export default alignPlugin;
+export {
+  widthTablePlugin
+};
