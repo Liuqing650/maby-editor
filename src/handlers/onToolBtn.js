@@ -6,9 +6,8 @@ import onBackspace from './onBackspace';
 import onExitModel from './onExitModel';
 import onSave from './onSave';
 import DICT from '../static';
+import { CommonUtil } from '../utils';
 
-const MARK = 'mark';
-const BLOCK = 'block';
 /**
  * 工具栏按键处理
  * @param {*object} event 
@@ -30,6 +29,11 @@ const onToolBtn = (event, change, type, tag, callback) => {
         return callback ? callback(change) : null;
       case 'code-block':
         createCodeBlock(event, change);
+        return callback ? callback(change) : null;
+      case 'hr':
+        event.preventDefault();
+        let isHr = CommonUtil.hasBlock(value, type);
+        change.setBlocks(isHr ? 'paragraph' : type);
         return callback ? callback(change) : null;
       case 'save':
         event.preventDefault();

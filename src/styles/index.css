@@ -370,6 +370,16 @@ input:focus {
   -ms-transform: translateX(0) translateY(0) !important;
   transform: translateX(0) translateY(0) !important;
 }
+/* 分割线 */
+.maby-editor-hr {
+  height: 10px;
+  padding-top: 5px;
+}
+.maby-editor-hr .hr {
+  height: 1px;
+  width: 100%;
+  border-bottom: 3px solid #222;
+}
 .clearfix {
   zoom: 1;
 }

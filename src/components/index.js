@@ -1,5 +1,6 @@
 import CodeBlock from './codeBlock';
 import CodeBlockLine from './codeBlockLine';
+import HrBlock from './HrBlock';
 import ListItem from './listItem';
 import Bold from './bold';
 import CodeInline from './codeInline';
@@ -14,6 +15,7 @@ import Paragraph from './Paragraph';
 export {
   CodeBlock,
   CodeBlockLine,
+  HrBlock,
   ListItem,
   Bold,
   CodeInline,

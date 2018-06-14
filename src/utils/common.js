@@ -66,7 +66,7 @@ export const getNodeType = (value) => {
  * @param {*string} value 待检测的类型
  */
 export const hasBlock = (value, type) => {
-  return value.blocks.some(node => node.type == type);
+  return value.blocks.some(node => node.type === type);
 }
 
 /**
@@ -75,5 +75,5 @@ export const hasBlock = (value, type) => {
  * @param {*string} value 待检测的类型
  */
 export const hasMark = (value, type) => {
-  return value.activeMarks.some(mark => mark.type == type);
+  return value.activeMarks.some(mark => mark.type === type);
 }

@@ -13,7 +13,7 @@ import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
 import schemaFn from './schemas';
 import alignPlugin from './plugins/aligns';
 import { 
-  CodeBlock, CodeBlockLine, ListItem, Bold, CodeInline, EmInline, DelInline, Underline,
+  CodeBlock, CodeBlockLine, HrBlock, ListItem, Bold, CodeInline, EmInline, DelInline, Underline,
   Table, TableRow, TableCell, Paragraph,
 } from './components';
 import './styles/index.css';
@@ -43,7 +43,7 @@ const plugins = [
   MarkHotkey({ key: 'b', type: 'bold' }),
   MarkHotkey({ key: '7', type: 'code' }),
   MarkHotkey({ key: 'i', type: 'italic' }),
-  MarkHotkey({ key: 'd', type: 'strikethrough' }),
+  MarkHotkey({ key: 'd', type: 'del' }),
   MarkHotkey({ key: 'u', type: 'underline' }),
 ];
 class MabyEditor extends React.Component {
@@ -96,6 +96,8 @@ class MabyEditor extends React.Component {
       isInTable,
       position
     };
+    console.log('node.type-------_>', node.type);
+    
     switch (node.type) {
       case 'code-block': return <CodeBlock {...props} />;
       case 'code-line': return <CodeBlockLine {...props} />;
@@ -111,6 +113,7 @@ class MabyEditor extends React.Component {
       case 'table': return <Table {...tableProps} />;
       case 'table_row': return <TableRow {...props} />;
       case 'table_cell': return <TableCell {...props} />;
+      case 'hr': return <HrBlock {...props} />;
       case 'paragraph': return <Paragraph {...props} />;
     }
   }
@@ -120,7 +123,7 @@ class MabyEditor extends React.Component {
       case 'bold': return <Bold {...props} />;
       case 'code': return <CodeInline {...props} />;
       case 'italic': return <EmInline {...props} />;
-      case 'strikethrough': return <DelInline {...props} />;
+      case 'del': return <DelInline {...props} />;
       case 'underline': return <Underline {...props} />;
       default:
         if (mark.type) { // 高亮代码
@@ -208,8 +211,10 @@ class MabyEditor extends React.Component {
       <div className="maby-editor-toolbar-menu maby-editor-menu">
         {this.renderMarkButton('bold', '加粗')}
         {this.renderMarkButton('italic', '倾斜')}
-        {this.renderMarkButton('underlined', '下划线')}
+        {this.renderMarkButton('underline', '下划线')}
+        {this.renderMarkButton('del', '删除线')}
         {this.renderMarkButton('code', '标签')}
+        {this.renderBlockButton('hr', '分割线')}
         {this.renderBlockButton('header-one', '标题一')}
         {this.renderBlockButton('header-two', '标题二')}
         {this.renderBlockButton('header-three', '标题三')}
@@ -239,7 +244,9 @@ class MabyEditor extends React.Component {
     const { value } = this.state;
     const change = value.change();
     let isActive = CommonUtil.hasBlock(value, type);
+    
     const onMouseDown = event => {
+      console.log('type---->', type);
       switch (type) {
         case 'table':
           event.preventDefault();
