@@ -2,21 +2,29 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
-import PluginEditList from 'slate-edit-list';
-import PluginEditTable from 'plugins/slate-edit-table';
-import DICT from './static';
+// utils
 import { CommonUtil, CodeUtil, ListUtil } from './utils';
-import { CODE_BLOCK_OPTIONS } from './options';
-import * as initState from './initValue/initState';
-// import * as tools from './decorators/tools';
-import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
-import schemaFn from './schemas';
+// plugins
+import PluginEditList from 'slate-edit-list';
+import PluginEditTable from './plugins/slate-edit-table';
 import alignPlugin from './plugins/aligns';
 import DropOrPasteImages from './plugins/slate-drop-or-paste-images';
+import PasteLinkify from './plugins/slate-paste-linkify';
+import AutoReplace from './plugins/slate-auto-replace';
+// static
+import DICT from './static';
+import { CODE_BLOCK_OPTIONS } from './options';
+// handler
+import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
+import schemaFn from './schemas';
+// components
 import { 
   CodeBlock, CodeBlockLine, HrBlock, ListItem, Bold, CodeInline, EmInline, DelInline, Underline,
-  Table, TableRow, TableCell, Paragraph, Image, 
+  Table, TableRow, TableCell, Paragraph, Image, LinkInline, BlockquoteBlock
 } from './components';
+// initSate
+import * as initState from './initValue/initState';
+// style
 import './styles/index.css';
 
 const DEFAULT_NODE = DICT.DEFAULT_NODE;
@@ -28,7 +36,6 @@ const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.g
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
 
 const schema = schemaFn(CODE_BLOCK_OPTIONS);
-const editListPlugin = PluginEditList();
 const tablePlugin = PluginEditTable({
   typeTable: 'table',
   typeRow: 'table_row',
@@ -36,6 +43,7 @@ const tablePlugin = PluginEditTable({
   typeContent: 'paragraph',
   exitBlockType: 'paragraph'
 });
+const editListPlugin = PluginEditList();
 const DropOrPasteImagesPlugins = DropOrPasteImages({
   insertImage: (transform, file) => {
     return transform.insertBlock({
@@ -44,19 +52,92 @@ const DropOrPasteImagesPlugins = DropOrPasteImages({
       data: { file },
     })
   }
-})
+});
+const PasteLinkifyPlugins = PasteLinkify({
+  type: 'link',
+  hrefProperty: 'url',
+  collapseTo: 'end'
+});
+const AutoReplacePlugins = [
+  AutoReplace({
+    trigger: 'space',
+    before: /^(>)$/,
+    transform: transform => transform.setBlocks('blockquote')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(-{4})$/,
+    transform: transform => transform.setBlocks('hr')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(1\.)$/,
+    transform: transform => transform.setBlocks('ol_list')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(\`\s\`)$/,
+    transform: transform => transform.toggleMark('code')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(\`\`\`)$/,
+    transform: transform => transform.setBlocks('code-block')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(\`\`\`\:)/,
+    transform: (transform, event, matches) => {
+      const language = CodeUtil.splitLanguage(matches);
+      if (language) {
+        return transform.setBlocks({
+          type: 'code-block',
+          data: { language },
+        })
+      }
+      return transform.setBlocks({
+        type: 'code-block'
+      })
+    }
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(-)$/,
+    transform: transform => transform.setBlocks('ul_list')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    before: /^(#{1,6})$/,
+    transform: (transform, event, matches) => {
+      const [ hashes ] = matches.before;
+      const level = hashes.length;
+      const headerDict = {
+        '1': 'header-one',
+        '2': 'header-two',
+        '3': 'header-three',
+        '4': 'header-four',
+        '5': 'header-five',
+        '6': 'header-six',
+      };
+      return transform.setBlocks({
+        type: headerDict[level + '']
+      })
+    }
+  }),
+];
 // 插件
 const plugins = [
-  editListPlugin,
   tablePlugin,
+  editListPlugin,
   alignPlugin,
   DropOrPasteImagesPlugins,
+  PasteLinkifyPlugins,
   MarkHotkey({ key: 'b', type: 'bold' }),
   MarkHotkey({ key: '7', type: 'code' }),
   MarkHotkey({ key: 'i', type: 'italic' }),
   MarkHotkey({ key: 'd', type: 'del' }),
   MarkHotkey({ key: 'u', type: 'underline' }),
-];
+].concat(AutoReplacePlugins);
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -125,6 +206,8 @@ class MabyEditor extends React.Component {
       case 'hr': return <HrBlock {...props} />;
       case 'paragraph': return <Paragraph {...props} />;
       case 'image': return <Image {...props} />;
+      case 'link': return <LinkInline {...props} />;
+      case 'blockquote': return <BlockquoteBlock {...props} />;
     }
   }
   renderMark = (props) => {
@@ -231,6 +314,7 @@ class MabyEditor extends React.Component {
         {this.renderBlockButton('header-four', '标题四')}
         {this.renderBlockButton('header-five', '标题五')}
         {this.renderBlockButton('header-six', '标题六')}
+        {this.renderBlockButton('blockquote', '引用')}
         {this.renderBlockButton('code-block', '代码块')}
         {this.renderBlockButton('save', '本地保存')}
         {this.renderBlockButton('table', '表格')}
@@ -314,6 +398,7 @@ class MabyEditor extends React.Component {
     const language = node.data.get('language') || 'js';
     const texts = node.getTexts().toArray();
     const string = texts.map(t => t.text).join('\n');
+    
     const grammar = Prism.languages[language];
     const tokens = Prism.tokenize(string, grammar, language);
     const decorations = [];

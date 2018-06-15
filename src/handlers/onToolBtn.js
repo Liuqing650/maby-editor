@@ -23,6 +23,7 @@ const onToolBtn = (event, change, type, tag, callback) => {
       onHeader(event, change, type);
       return callback ? callback(change) : null;
     }
+    const isExist = CommonUtil.hasBlock(value, type);
     switch (type) {
       case 'code-block':
         createCodeBlock(event, change);
@@ -30,10 +31,13 @@ const onToolBtn = (event, change, type, tag, callback) => {
       case 'code-block':
         createCodeBlock(event, change);
         return callback ? callback(change) : null;
+      case 'blockquote':
+        event.preventDefault();
+        change.setBlocks(isExist ? 'paragraph' : type);
+        return callback ? callback(change) : null;
       case 'hr':
         event.preventDefault();
-        let isHr = CommonUtil.hasBlock(value, type);
-        change.setBlocks(isHr ? 'paragraph' : type);
+        change.setBlocks(isExist ? 'paragraph' : type);
         return callback ? callback(change) : null;
       case 'save':
         event.preventDefault();

@@ -34,6 +34,7 @@ function onKeyDown(
     // Build arguments list
     const args = [event, change, editor, opts];
 
+            
     switch (event.key) {
         case KEY_ENTER:
             if (event.shiftKey && opts.exitBlockType) {

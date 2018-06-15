@@ -1,4 +1,5 @@
 import React from "react";
+import {LANGUAGE_OPTIONS} from "../../options";
 
 const CodeBlock = (props) => {
   const { editor, node } = props;
@@ -8,7 +9,9 @@ const CodeBlock = (props) => {
       c.setNodeByKey(node.key, { data: { language: event.target.value } })
     )
   }
-  //  className={`language-${language}`}
+  const createOption = () => {
+    return Object.keys(LANGUAGE_OPTIONS).map((key, idx) => (<option key={`${key}-${idx}`} value={key}>{LANGUAGE_OPTIONS[key]}</option>));
+  };
   return (
     <div style={{ position: 'relative' }}>
       <pre>
@@ -19,9 +22,7 @@ const CodeBlock = (props) => {
         style={{ position: 'absolute', top: '5px', right: '5px' }}
       >
         <select value={language} onChange={onChange}>
-          <option value="css">CSS</option>
-          <option value="js">JavaScript</option>
-          <option value="html">HTML</option>
+          {createOption()}
         </select>
       </div>
     </div>

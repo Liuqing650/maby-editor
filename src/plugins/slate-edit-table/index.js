@@ -16,7 +16,6 @@ function EditTable(
 
     return {
         ...corePlugin,
-
         onKeyDown: onKeyDown.bind(null, opts)
     };
 }

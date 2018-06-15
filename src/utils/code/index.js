@@ -7,6 +7,7 @@ import getCurrentIndent from './getCurrentIndent';
 import getCurrentItem from './getCurrentItem';
 import getIndent from './getIndent';
 import indentLines from './indentLines';
+import splitLanguage from './splitLanguage';
 
 export {
   dedentLines,
@@ -18,4 +19,5 @@ export {
   getCurrentItem,
   getIndent,
   indentLines,
+  splitLanguage,
 }

@@ -12,6 +12,8 @@ import TableRow from './TableRow';
 import TableCell from './TableCell';
 import Paragraph from './Paragraph';
 import Image from './Image';
+import LinkInline from './LinkInline';
+import BlockquoteBlock from './BlockquoteBlock';
 
 export {
   CodeBlock,
@@ -28,4 +30,6 @@ export {
   TableCell,
   Paragraph,
   Image,
+  LinkInline,
+  BlockquoteBlock,
 }
