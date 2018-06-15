@@ -14,6 +14,7 @@ import typeOf from 'type-of';
 function AutoReplace(opts = {}) {
   const { transform } = opts
   const trigger = normalizeTrigger(opts.trigger)
+  const extract = opts.extract || false;
   let ignoreIn
   let onlyIn
 
@@ -76,7 +77,8 @@ function AutoReplace(opts = {}) {
 
     startOffset -= totalRemoved
     change.moveOffsetsTo(startOffset, startOffset)
-
+    console.log('matches----->', matches);
+    
     return change.call(transform, event, matches, editor)
   }
 
@@ -104,7 +106,11 @@ function AutoReplace(opts = {}) {
       const string = text.slice(0, startOffset)
       const isCode = /^(\`\`\`\:)/.test(string) && opts.before.test(string);
       const language = isCode ? splitLanguage(string) : '';
-      before = string.match(isCode ? eval("/^(\`\`\`\:" + language +")/") : opts.before)
+      if (extract) {
+        before = opts.before.exec(string);
+      } else {
+        before = string.match(isCode ? eval("/^(\`\`\`\:" + language + ")/") : opts.before)
+      }
     }
 
     // If both sides, require that both are matched, otherwise null.
@@ -118,6 +124,9 @@ function AutoReplace(opts = {}) {
     if (before) {
       before[0] = before[0].replace(/^\s+/, '');
     }
+    console.log('after---->', after);
+    console.log('before---->', before);
+    
     return { before, after }
   }
 
@@ -135,11 +144,15 @@ function AutoReplace(opts = {}) {
     let totalRemoved = 0
 
     if (before) {
-      const match = before[0]
+      const match = before[0];
       let startOffset = 0
       let matchIndex = 0
-
+      console.log('start----->', start);
+      console.log('before.slice---->', before.slice(1, before.length));
+      
       before.slice(1, before.length).forEach((current) => {
+        console.log('current----->', current);
+        
         if (current === undefined) return
 
         matchIndex = match.indexOf(current, matchIndex)

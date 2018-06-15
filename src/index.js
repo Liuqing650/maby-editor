@@ -66,17 +66,24 @@ const AutoReplacePlugins = [
   }),
   AutoReplace({
     trigger: 'space',
-    before: /^(-{4})$/,
+    before: /^(-{3})$/,
     transform: transform => transform.setBlocks('hr')
   }),
   AutoReplace({
     trigger: 'space',
-    before: /^(1\.)$/,
+    before: /^([1-9]\.)$/,
     transform: transform => transform.setBlocks('ol_list')
   }),
   AutoReplace({
     trigger: 'space',
-    before: /^(\`\s\`)$/,
+    extract: true,
+    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\*{2}|_{2})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
+    transform: transform => transform.toggleMark('bold')
+  }),
+  AutoReplace({
+    trigger: 'space',
+    extract: true,
+    before: /``.+?``|`[^`\n]+`/,
     transform: transform => transform.toggleMark('code')
   }),
   AutoReplace({
