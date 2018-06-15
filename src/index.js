@@ -12,9 +12,10 @@ import * as initState from './initValue/initState';
 import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
 import schemaFn from './schemas';
 import alignPlugin from './plugins/aligns';
+import DropOrPasteImages from './plugins/slate-drop-or-paste-images';
 import { 
   CodeBlock, CodeBlockLine, HrBlock, ListItem, Bold, CodeInline, EmInline, DelInline, Underline,
-  Table, TableRow, TableCell, Paragraph,
+  Table, TableRow, TableCell, Paragraph, Image, 
 } from './components';
 import './styles/index.css';
 
@@ -34,12 +35,22 @@ const tablePlugin = PluginEditTable({
   typeCell: 'table_cell',
   typeContent: 'paragraph',
   exitBlockType: 'paragraph'
+});
+const DropOrPasteImagesPlugins = DropOrPasteImages({
+  insertImage: (transform, file) => {
+    return transform.insertBlock({
+      type: 'image',
+      isVoid: true,
+      data: { file },
+    })
+  }
 })
 // 插件
 const plugins = [
   editListPlugin,
   tablePlugin,
   alignPlugin,
+  DropOrPasteImagesPlugins,
   MarkHotkey({ key: 'b', type: 'bold' }),
   MarkHotkey({ key: '7', type: 'code' }),
   MarkHotkey({ key: 'i', type: 'italic' }),
@@ -96,8 +107,6 @@ class MabyEditor extends React.Component {
       isInTable,
       position
     };
-    console.log('node.type-------_>', node.type);
-    
     switch (node.type) {
       case 'code-block': return <CodeBlock {...props} />;
       case 'code-line': return <CodeBlockLine {...props} />;
@@ -115,6 +124,7 @@ class MabyEditor extends React.Component {
       case 'table_cell': return <TableCell {...props} />;
       case 'hr': return <HrBlock {...props} />;
       case 'paragraph': return <Paragraph {...props} />;
+      case 'image': return <Image {...props} />;
     }
   }
   renderMark = (props) => {

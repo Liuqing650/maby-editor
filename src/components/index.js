@@ -11,6 +11,7 @@ import Table from './Table';
 import TableRow from './TableRow';
 import TableCell from './TableCell';
 import Paragraph from './Paragraph';
+import Image from './Image';
 
 export {
   CodeBlock,
@@ -26,4 +27,5 @@ export {
   TableRow,
   TableCell,
   Paragraph,
+  Image,
 }

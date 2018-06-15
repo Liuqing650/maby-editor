@@ -379,6 +379,7 @@ input:focus {
   height: 1px;
   width: 100%;
   border-bottom: 3px solid #222;
+  opacity: 0.2;
 }
 .clearfix {
   zoom: 1;
