@@ -1,6 +1,7 @@
 
 import isHotkey from 'is-hotkey';
 import typeOf from 'type-of';
+import { CommonUtil } from '../../utils';
 
 // From: https://github.com/ianstormtaylor/slate-plugins/
 /**
@@ -65,21 +66,36 @@ function AutoReplace(opts = {}) {
     event.preventDefault()
 
     let startOffset = value.startOffset
-    let totalRemoved = 0
+    let totalRemoved = 0;
+    let moveStart = 0;
+    let moveEnd = 0;
     const offsets = getOffsets(matches, startOffset)
-
-    offsets.forEach((offset) => {
+    offsets.forEach((offset, index) => {
       change
         .moveOffsetsTo(offset.start, offset.end)
         .delete()
+      if (extract) {
+        switch (index) {
+          case 0:
+            moveStart = offset.start;
+            break;
+          case 1:
+            moveEnd = offset.start;
+            break;
+          default:
+            break;
+        }
+      }
       totalRemoved += offset.total
     })
-
     startOffset -= totalRemoved
-    change.moveOffsetsTo(startOffset, startOffset)
-    console.log('matches----->', matches);
-    
-    return change.call(transform, event, matches, editor)
+    if (extract) {
+      change.moveOffsetsTo(moveStart, moveEnd)
+    } else {
+      change.moveOffsetsTo(startOffset, startOffset)
+    }
+    change.call(transform, event, matches, editor)
+    return true;
   }
 
   /**
@@ -106,7 +122,7 @@ function AutoReplace(opts = {}) {
       const string = text.slice(0, startOffset)
       const isCode = /^(\`\`\`\:)/.test(string) && opts.before.test(string);
       const language = isCode ? splitLanguage(string) : '';
-      if (extract) {
+      if (extract) { // 行内元素如: **bold** 则返回解析内容数组
         before = opts.before.exec(string);
       } else {
         before = string.match(isCode ? eval("/^(\`\`\`\:" + language + ")/") : opts.before)
@@ -124,9 +140,6 @@ function AutoReplace(opts = {}) {
     if (before) {
       before[0] = before[0].replace(/^\s+/, '');
     }
-    console.log('after---->', after);
-    console.log('before---->', before);
-    
     return { before, after }
   }
 
@@ -147,26 +160,41 @@ function AutoReplace(opts = {}) {
       const match = before[0];
       let startOffset = 0
       let matchIndex = 0
-      console.log('start----->', start);
-      console.log('before.slice---->', before.slice(1, before.length));
-      
-      before.slice(1, before.length).forEach((current) => {
-        console.log('current----->', current);
-        
-        if (current === undefined) return
-
-        matchIndex = match.indexOf(current, matchIndex)
-        startOffset = start - totalRemoved + matchIndex - match.length
-
-        offsets.push({
-          start: startOffset,
-          end: startOffset + current.length,
-          total: current.length
+      if (extract) {
+        let beforeContent = '';
+        before.slice(1, before.length).forEach((current, index) => {
+          if (!current || current === undefined) return
+          if (index === 1) {
+            beforeContent = current;
+            matchIndex += beforeContent.length;
+          } else {
+            matchIndex = match.indexOf(current, matchIndex);
+            startOffset = start - totalRemoved + matchIndex - match.length
+            offsets.push({
+              start: startOffset,
+              end: startOffset + current.length
+            })
+            totalRemoved = current.length;
+          }
         })
 
-        totalRemoved += current.length
-        matchIndex += current.length
-      })
+      } else {
+        before.slice(1, before.length).forEach((current) => {
+          if (current === undefined) return
+
+          matchIndex = match.indexOf(current, matchIndex)
+          startOffset = start - totalRemoved + matchIndex - match.length
+
+          offsets.push({
+            start: startOffset,
+            end: startOffset + current.length,
+            total: current.length
+          })
+
+          totalRemoved += current.length
+          matchIndex += current.length
+        })
+      }
     }
 
     if (after) {

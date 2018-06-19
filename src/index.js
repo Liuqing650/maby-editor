@@ -74,17 +74,29 @@ const AutoReplacePlugins = [
     before: /^([1-9]\.)$/,
     transform: transform => transform.setBlocks('ol_list')
   }),
-  AutoReplace({
+  AutoReplace({// 加粗
     trigger: 'space',
     extract: true,
     before: /(?:^|\s|\n|[^A-z0-9_*~`])(\*{2}|_{2})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
     transform: transform => transform.toggleMark('bold')
   }),
-  AutoReplace({
+  AutoReplace({ // 标签
     trigger: 'space',
     extract: true,
-    before: /``.+?``|`[^`\n]+`/,
+    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\`{1}|_{1})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
     transform: transform => transform.toggleMark('code')
+  }),
+  AutoReplace({ // 倾斜
+    trigger: 'space',
+    extract: true,
+    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\*{1})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
+    transform: transform => transform.toggleMark('italic')
+  }),
+  AutoReplace({ // 删除线
+    trigger: 'space',
+    extract: true,
+    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\~{1})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
+    transform: transform => transform.toggleMark('del')
   }),
   AutoReplace({
     trigger: 'space',
@@ -347,7 +359,6 @@ class MabyEditor extends React.Component {
     let isActive = CommonUtil.hasBlock(value, type);
     
     const onMouseDown = event => {
-      console.log('type---->', type);
       switch (type) {
         case 'table':
           event.preventDefault();

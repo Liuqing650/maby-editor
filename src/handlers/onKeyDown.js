@@ -4,6 +4,7 @@ import onTab from './onTab';
 import onHeader from './onHeader';
 import onBackspace from './onBackspace';
 import onExitModel from './onExitModel';
+import onExitInlineModel from './onExitInlineModel';
 import onSave from './onSave';
 
 const onKeyDown = (event, change, callback) => {
@@ -19,6 +20,7 @@ const onKeyDown = (event, change, callback) => {
       case '6': return onHeader(event, change);
       case 'm': return createCodeBlock(event, change);
       case 'Enter': return onExitModel(event, change);// 退出模式
+      case 'e': return onExitInlineModel(event, change);// 退出行内模式
       case 's': 
         event.preventDefault();
         return onSave(event, callback);// 保存
