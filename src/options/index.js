@@ -1,3 +1,8 @@
+import BLOCKS from "./blocks";
+import INLINES from "./inlines";
+import MARKS from "./marks";
+import TABLEALIGN from "./table-align";
+
 // code 选项
 const CODE_BLOCK_OPTIONS = {
   lineType: 'code-line',
@@ -20,4 +25,8 @@ export {
   CODE_BLOCK_OPTIONS,
   LIST_OPTIONS,
   LANGUAGE_OPTIONS,
+  BLOCKS,
+  INLINES,
+  MARKS,
+  TABLEALIGN
 };

@@ -9,4 +9,6 @@ export default {
   MAX_TABLE_ROW: 30,                                // 最大表格行
   MIN_TABLE_WIDTH: 40,                              // 最小表格宽度
   TABLE_TEXT_ALIGIN: 'left',                        // 表格内容位置
+  KEY_ENTER: 'Enter',                               // 回车键
+  KEY_ENTER: ' ',                                   // 空格键
 };
