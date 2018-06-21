@@ -8,6 +8,7 @@ import getCurrentItem from './getCurrentItem';
 import getIndent from './getIndent';
 import indentLines from './indentLines';
 import splitLanguage from './splitLanguage';
+import isInCodeBlock from './isInCodeBlock';
 
 export {
   dedentLines,
@@ -20,4 +21,5 @@ export {
   getIndent,
   indentLines,
   splitLanguage,
+  isInCodeBlock,
 }

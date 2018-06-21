@@ -4,7 +4,7 @@ import {
   UL_LIST,
   LIST_ITEM,
   PARAGRAPH
-} from "@canner/slate-constant/lib/blocks";
+} from "../options/blocks";
 
 export const DEFAULT = {
   types: [OL_LIST, UL_LIST],

@@ -21,9 +21,14 @@ const LANGUAGE_OPTIONS = {
   js: 'JavaScript',
   html: 'HTML',
 };
+// 辅助配置项
+const HELP = {
+  LOCAL_SAVE: 'save',
+};
 export {
   CODE_BLOCK_OPTIONS,
   LIST_OPTIONS,
+  HELP,
   LANGUAGE_OPTIONS,
   BLOCKS,
   INLINES,

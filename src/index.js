@@ -6,14 +6,16 @@ import Prism from 'prismjs';
 import { CommonUtil, CodeUtil, ListUtil } from './utils';
 // plugins
 import PluginEditList from 'slate-edit-list';
+import EditBlockquote from "slate-edit-blockquote";
 import PluginEditTable from './plugins/slate-edit-table';
 import alignPlugin from './plugins/aligns';
 import DropOrPasteImages from './plugins/slate-drop-or-paste-images';
 import PasteLinkify from './plugins/slate-paste-linkify';
 import AutoReplace from './plugins/slate-auto-replace';
+import mdPlugin from "./plugins/markdownPlugin";
 // static
 import DICT from './static';
-import { CODE_BLOCK_OPTIONS } from './options';
+import { CODE_BLOCK_OPTIONS, HELP, MARKS, BLOCKS, INLINES } from './options';
 // handler
 import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
 import schemaFn from './schemas';
@@ -43,6 +45,7 @@ const tablePlugin = PluginEditTable({
   typeContent: 'paragraph',
   exitBlockType: 'paragraph'
 });
+const MarkdownPlugin = mdPlugin;
 const editListPlugin = PluginEditList();
 const DropOrPasteImagesPlugins = DropOrPasteImages({
   insertImage: (transform, file) => {
@@ -144,19 +147,30 @@ const AutoReplacePlugins = [
     }
   }),
 ];
+
+const options = {
+  markdownOption: {
+    blocks: BLOCKS,
+    marks: MARKS,
+    inlines: INLINES
+  },
+  blockquoteOption: {},
+};
 // 插件
 const plugins = [
+  MarkdownPlugin(options.markdownOption),
+  EditBlockquote(options.blockquoteOption),
   tablePlugin,
   editListPlugin,
   alignPlugin,
   DropOrPasteImagesPlugins,
   PasteLinkifyPlugins,
-  MarkHotkey({ key: 'b', type: 'bold' }),
-  MarkHotkey({ key: '7', type: 'code' }),
-  MarkHotkey({ key: 'i', type: 'italic' }),
-  MarkHotkey({ key: 'd', type: 'del' }),
-  MarkHotkey({ key: 'u', type: 'underline' }),
-].concat(AutoReplacePlugins);
+  MarkHotkey({ key: 'b', type: MARKS.BOLD }),
+  MarkHotkey({ key: '7', type: MARKS.CODE }),
+  MarkHotkey({ key: 'i', type: MARKS.ITALIC }),
+  MarkHotkey({ key: 'd', type: MARKS.STRIKETHROUGH }),
+  MarkHotkey({ key: 'u', type: MARKS.UNDERLINE }),
+]//.concat(AutoReplacePlugins);
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -208,35 +222,35 @@ class MabyEditor extends React.Component {
       position
     };
     switch (node.type) {
-      case 'code-block': return <CodeBlock {...props} />;
-      case 'code-line': return <CodeBlockLine {...props} />;
-      case 'header-one': return <h1 {...attributes}>{children}</h1>;
-      case 'header-two': return <h2 {...attributes}>{children}</h2>;
-      case 'header-three': return <h3 {...attributes}>{children}</h3>;
-      case 'header-four': return <h4 {...attributes}>{children}</h4>;
-      case 'header-five': return <h5 {...attributes}>{children}</h5>;
-      case 'header-six': return <h6 {...attributes}>{children}</h6>;
-      case 'ul_list': return <ul {...attributes}>{children}</ul>;
-      case 'ol_list': return <ol {...attributes}>{children}</ol>;
-      case 'list_item': return <ListItem plugin={editListPlugin} {...props} />;
-      case 'table': return <Table {...tableProps} />;
-      case 'table_row': return <TableRow {...props} />;
-      case 'table_cell': return <TableCell {...props} />;
-      case 'hr': return <HrBlock {...props} />;
-      case 'paragraph': return <Paragraph {...props} />;
-      case 'image': return <Image {...props} />;
-      case 'link': return <LinkInline {...props} />;
-      case 'blockquote': return <BlockquoteBlock {...props} />;
+      case BLOCKS.CODE_BLOCK : return <CodeBlock {...props} />;
+      case BLOCKS.CODE_LINE : return <CodeBlockLine {...props} />;
+      case BLOCKS.HEADING_1 : return <h1 {...attributes}>{children}</h1>;
+      case BLOCKS.HEADING_2 : return <h2 {...attributes}>{children}</h2>;
+      case BLOCKS.HEADING_3 : return <h3 {...attributes}>{children}</h3>;
+      case BLOCKS.HEADING_4 : return <h4 {...attributes}>{children}</h4>;
+      case BLOCKS.HEADING_5 : return <h5 {...attributes}>{children}</h5>;
+      case BLOCKS.HEADING_6 : return <h6 {...attributes}>{children}</h6>;
+      case BLOCKS.UL_LIST : return <ul {...attributes}>{children}</ul>;
+      case BLOCKS.OL_LIST : return <ol {...attributes}>{children}</ol>;
+      case BLOCKS.LIST_ITEM : return <ListItem plugin={editListPlugin} {...props} />;
+      case BLOCKS.TABLE : return <Table {...tableProps} />;
+      case BLOCKS.TABLE_ROW : return <TableRow {...props} />;
+      case BLOCKS.TABLE_CELL : return <TableCell {...props} />;
+      case BLOCKS.HR : return <HrBlock {...props} />;
+      case BLOCKS.PARAGRAPH : return <Paragraph {...props} />;
+      case BLOCKS.IMAGE : return <Image {...props} />;
+      case INLINES.LINK : return <LinkInline {...props} />;
+      case BLOCKS.BLOCKQUOTE : return <BlockquoteBlock {...props} />;
     }
   }
   renderMark = (props) => {
     const { children, mark } = props;
     switch (mark.type) {
-      case 'bold': return <Bold {...props} />;
-      case 'code': return <CodeInline {...props} />;
-      case 'italic': return <EmInline {...props} />;
-      case 'del': return <DelInline {...props} />;
-      case 'underline': return <Underline {...props} />;
+      case MARKS.BOLD: return <Bold {...props} />;
+      case MARKS.CODE: return <CodeInline {...props} />;
+      case MARKS.ITALIC: return <EmInline {...props} />;
+      case MARKS.STRIKETHROUGH: return <DelInline {...props} />;
+      case MARKS.UNDERLINE: return <Underline {...props} />;
       default:
         if (mark.type) { // 高亮代码
           return (
@@ -321,22 +335,22 @@ class MabyEditor extends React.Component {
   renderToolbar = () => {
     return (
       <div className="maby-editor-toolbar-menu maby-editor-menu">
-        {this.renderMarkButton('bold', '加粗')}
-        {this.renderMarkButton('italic', '倾斜')}
-        {this.renderMarkButton('underline', '下划线')}
-        {this.renderMarkButton('del', '删除线')}
-        {this.renderMarkButton('code', '标签')}
-        {this.renderBlockButton('hr', '分割线')}
-        {this.renderBlockButton('header-one', '标题一')}
-        {this.renderBlockButton('header-two', '标题二')}
-        {this.renderBlockButton('header-three', '标题三')}
-        {this.renderBlockButton('header-four', '标题四')}
-        {this.renderBlockButton('header-five', '标题五')}
-        {this.renderBlockButton('header-six', '标题六')}
-        {this.renderBlockButton('blockquote', '引用')}
-        {this.renderBlockButton('code-block', '代码块')}
-        {this.renderBlockButton('save', '本地保存')}
-        {this.renderBlockButton('table', '表格')}
+        {this.renderMarkButton(MARKS.BOLD, '加粗')}
+        {this.renderMarkButton(MARKS.ITALIC, '倾斜')}
+        {this.renderMarkButton(MARKS.UNDERLINE, '下划线')}
+        {this.renderMarkButton(MARKS.STRIKETHROUGH, '删除线')}
+        {this.renderMarkButton(MARKS.CODE, '标签')}
+        {this.renderBlockButton(BLOCKS.HR, '分割线')}
+        {this.renderBlockButton(BLOCKS.HEADING_1, '标题一')}
+        {this.renderBlockButton(BLOCKS.HEADING_2, '标题二')}
+        {this.renderBlockButton(BLOCKS.HEADING_3, '标题三')}
+        {this.renderBlockButton(BLOCKS.HEADING_4, '标题四')}
+        {this.renderBlockButton(BLOCKS.HEADING_5, '标题五')}
+        {this.renderBlockButton(BLOCKS.HEADING_6, '标题六')}
+        {this.renderBlockButton(BLOCKS.BLOCKQUOTE, '引用')}
+        {this.renderBlockButton(BLOCKS.CODE_BLOCK, '代码块')}
+        {this.renderBlockButton(HELP.LOCAL_SAVE, '本地保存')}
+        {this.renderBlockButton(BLOCKS.TABLE, '表格')}
       </div>
     )
   }

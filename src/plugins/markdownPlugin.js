@@ -3,9 +3,9 @@
 import type { Change } from "slate";
 
 // constant
-import { KEY_ENTER, KEY_SPACE } from "../static";
+import DICT from "../static";
 // import DEFAULT_LIST from "./constant/list";
-import { BLOCKS, MARKS, INLINES, LIST_OPTIONS } from '../options';
+import { CODE_BLOCK_OPTIONS, BLOCKS, MARKS, INLINES, LIST_OPTIONS } from '../options';
 
 // handler
 import onEnter from "../handlers/onMarkdownEnter";
@@ -25,12 +25,10 @@ import matchLink from "./match/link";
 import matchList from "./match/list";
 
 // plugins
-import PluginEditCode from "slate-edit-code";
+// import PluginEditCode from "slate-edit-code";
+import { isInCodeBlock } from '../utils/code';
 
-const codePlugin = PluginEditCode({
-  onlyIn: node => node.type === "code_block"
-});
-
+const { KEY_ENTER, KEY_SPACE } = DICT;
 const checkPatterns = function(options, change) {
   const { value } = change;
   const { texts } = value;
@@ -38,8 +36,8 @@ const checkPatterns = function(options, change) {
   const currentLineText = currentTextNode.text;
   let matched;
 
-  // if is in code block ignore matched patterns
-  if (codePlugin.utils.isInCodeBlock(value)) {
+  // 如果在代码块中,则不匹配下面的规则
+  if (isInCodeBlock(CODE_BLOCK_OPTIONS, value)) {
     return;
   }
 
@@ -179,7 +177,7 @@ export default (opt: { [string]: any } = {}) => {
       opt.codeOption
     ),
     blockquoteOption: Object.assign({}, opt.blockquoteOption),
-    listOption: Object.assign(DEFAULT_LIST, opt.listOption)
+    listOption: Object.assign(LIST_OPTIONS, opt.listOption)
   };
 
   return {

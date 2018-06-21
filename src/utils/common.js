@@ -75,7 +75,7 @@ export const getNodeType = (value) => {
 }
 
 /**
- * 是否
+ * 是否Block
  * @param {*Object} value state的value
  * @param {*string} value 待检测的类型
  */
@@ -84,7 +84,7 @@ export const hasBlock = (value, type) => {
 }
 
 /**
- * 是否
+ * 是否Mark
  * @param {*Object} value state的value
  * @param {*string} value 待检测的类型
  */
