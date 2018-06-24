@@ -17,6 +17,7 @@ export default (change, opt = DEFAULT) => {
   const options = Object.assign({}, DEFAULT, opt);
   const { types, ordered } = options;
   const { utils, changes } = EditList(options);
+  
   const currentType = ordered ? types[0] : types[1];
   let newChange;
 

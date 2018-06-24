@@ -15,7 +15,7 @@ import AutoReplace from './plugins/slate-auto-replace';
 import mdPlugin from "./plugins/markdownPlugin";
 // static
 import DICT from './static';
-import { CODE_BLOCK_OPTIONS, HELP, MARKS, BLOCKS, INLINES } from './options';
+import { CODE_BLOCK_OPTIONS, LIST_OPTIONS, HELP, MARKS, BLOCKS, INLINES } from './options';
 // handler
 import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
 import schemaFn from './schemas';
@@ -221,6 +221,7 @@ class MabyEditor extends React.Component {
       isInTable,
       position
     };
+    
     switch (node.type) {
       case BLOCKS.CODE_BLOCK : return <CodeBlock {...props} />;
       case BLOCKS.CODE_LINE : return <CodeBlockLine {...props} />;

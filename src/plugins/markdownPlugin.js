@@ -1,7 +1,3 @@
-// @flow
-
-import type { Change } from "slate";
-
 // constant
 import DICT from "../static";
 // import DEFAULT_LIST from "./constant/list";
@@ -165,7 +161,7 @@ const checkPatterns = function(options, change) {
   }
 };
 
-export default (opt: { [string]: any } = {}) => {
+export default (opt = {}) => {
   const options = {
     blocks: Object.assign(BLOCKS, opt.blocks),
     marks: Object.assign(MARKS, opt.marks),
@@ -181,13 +177,13 @@ export default (opt: { [string]: any } = {}) => {
   };
 
   return {
-    onKeyDown: (e: any, change: Change) => {
+    onKeyDown: (e, change) => {
       switch (e.key) {
         case KEY_ENTER:
           return onEnter(options, change);
       }
     },
-    onKeyUp: (e: any, change: Change) => {
+    onKeyUp: (e, change) => {
       switch (e.key) {
         case KEY_SPACE:
           return checkPatterns(options, change);

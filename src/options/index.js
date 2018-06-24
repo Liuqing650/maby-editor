@@ -5,15 +5,15 @@ import TABLEALIGN from "./table-align";
 
 // code 选项
 const CODE_BLOCK_OPTIONS = {
-  lineType: 'code-line',
-  containerType: 'code-block',
-  exitBlockType: 'paragraph'
+  lineType: BLOCKS.CODE_LINE,
+  containerType: BLOCKS.CODE_BLOCK,
+  exitBlockType: BLOCKS.DEFAULT
 }
 // list 选项
 const LIST_OPTIONS = {
-  types: ['ul_list', 'ol_list'],
-  typeItem: 'list_item',
-  typeDefault: 'paragraph'
+  types: [BLOCKS.OL_LIST, BLOCKS.UL_LIST],
+  typeItem: BLOCKS.LIST_ITEM,
+  typeDefault: BLOCKS.DEFAULT
 }
 // code 高亮语言配置
 const LANGUAGE_OPTIONS = {

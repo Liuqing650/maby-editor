@@ -1,15 +1,8 @@
 // @flow
 import { Range } from "slate";
-import type { Change, Node } from "slate";
 import blocklist from "../../helper/block-list";
 
-export default function(
-  listOption: any,
-  currentTextNode: Node,
-  matched: any,
-  change: Change,
-  ordered: boolean
-) {
+export default function(listOption, currentTextNode, matched, change, ordered) {
   const matchedLength = matched[0].length;
   const newChange = change.deleteAtRange(
     Range.create({

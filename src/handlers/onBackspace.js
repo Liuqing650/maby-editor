@@ -20,7 +20,6 @@ const otherOnBackspace = (event, change, option) => {
 function onBackspace(event, change, option) {
   const { value } = change;
   const nodeType = CommonUtil.getNodeType(value);
-  console.log('nodeType----->', nodeType);
   switch (nodeType.ntype) {
     case 'code':
       return codeOnBackspace(event, change, option);
