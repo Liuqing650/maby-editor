@@ -3,7 +3,7 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
 // utils
-import { CommonUtil, CodeUtil } from './utils';
+import { CommonUtil } from './utils';
 // plugins
 import PluginEditList from 'slate-edit-list';
 import EditBlockquote from 'slate-edit-blockquote';
