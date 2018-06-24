@@ -1,8 +1,11 @@
 import React from "react";
 
 class Image extends React.Component {
-  state = {
-    src: '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      src: ''
+    }
   }
   componentDidMount() {
     const { node } = this.props;
@@ -36,11 +39,19 @@ class Image extends React.Component {
     }
   }
   render() {
-    const { attributes } = this.props
-    const { src } = this.state
+    const { attributes } = this.props;
+    const { src } = this.state;
     return (
-      <div>
-        {src ? <img {...attributes} src={src} /> : <span>Loading...</span>}
+      <div 
+        className="maby-editor-image-wrap"
+        draggable={true}
+        contentEditable={false}>
+        <span 
+          className="maby-image-editor"
+          onClick={this.onActiveImage}
+          contentEditable={false}>
+          {src ? <img {...attributes} src={src} /> : <span>Loading...</span>}
+        </span>
       </div>
     );
   }

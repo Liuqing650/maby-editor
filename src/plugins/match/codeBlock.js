@@ -1,16 +1,9 @@
 // @flow
 import { Range, Data } from "slate";
-import type { Change, Node } from "slate";
 import { wrapCodeBlock } from '../../changes/code';
 import { CODE_BLOCK_OPTIONS } from '../../options';
 
-export default function(
-  codeOption: { [string]: any },
-  currentTextNode: Node,
-  matched: any,
-  change: Change,
-  lang: ?string
-) {
+export default function(codeOption, currentTextNode, matched, change, lang) {
   const matchedLength = matched[0].length;
   let newChange = change;
 

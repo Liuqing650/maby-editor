@@ -1,15 +1,9 @@
 // @flow
 import { Mark, Range } from "slate";
-import type { Change, Text } from "slate";
 import trailingSpace from "../../helper/trailingSpace";
 import removeAllMark from "../../helper/mark-removeall";
 
-export default function(
-  type: string,
-  currentTextNode: Text,
-  matched: any,
-  change: Change
-) {
+export default function(type, currentTextNode, matched, change) {
   const matchedLength = matched[0].length;
   const addText = matched[0].trim().replace(new RegExp(/~/, "g"), "");
 

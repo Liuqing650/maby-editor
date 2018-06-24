@@ -1,14 +1,8 @@
 // @flow
 import { Range } from "slate";
-import type { Change, Node } from "slate";
 import trailingSpace from "../../helper/trailingSpace";
 
-export default function(
-  type: string,
-  currentTextNode: Node,
-  matched: any,
-  change: Change
-) {
+export default function(type, currentTextNode, matched, change) {
   const matchedLength = matched[0].length;
 
   return change

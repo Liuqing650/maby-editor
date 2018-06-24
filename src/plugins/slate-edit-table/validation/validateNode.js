@@ -1,12 +1,12 @@
 // @flow
 
-import type Options from '../options';
+import Options from '../options';
 import { createCell } from '../utils';
 
 /*
  * Ensure each row has the same number of columns.
  */
-function validateNode(opts: Options) {
+function validateNode(opts= Options) {
     const isRow = node => node.type === opts.typeRow;
     const isCell = node => node.type === opts.typeCell;
     const countCells = row => row.nodes.count(isCell);

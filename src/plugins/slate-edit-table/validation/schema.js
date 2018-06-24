@@ -1,23 +1,23 @@
 // @flow
 
-import { Block, type Change } from 'slate';
+import { Block } from 'slate';
 import {
     CHILD_OBJECT_INVALID,
     CHILD_TYPE_INVALID,
     PARENT_TYPE_INVALID
 } from 'slate-schema-violations';
 import { createRow, createCell } from '../utils';
-import type Options from '../options';
+import Options from '../options';
 
 /*
  * Returns a schema definition for the plugin
  */
-function schema(opts: Options): Object {
+function schema(opts = Options) {
     return {
         blocks: {
             [opts.typeTable]: {
                 nodes: [{ types: [opts.typeRow] }],
-                normalize(change: Change, violation: string, context: Object) {
+                normalize(change, violation, context) {
                     switch (violation) {
                         case CHILD_TYPE_INVALID:
                             return onlyRowsInTable(opts, change, context);
@@ -29,7 +29,7 @@ function schema(opts: Options): Object {
             [opts.typeRow]: {
                 nodes: [{ types: [opts.typeCell] }],
                 parent: { types: [opts.typeTable] },
-                normalize(change: Change, violation: string, context: Object) {
+                normalize(change, violation, context) {
                     switch (violation) {
                         case CHILD_TYPE_INVALID:
                             return onlyCellsInRow(opts, change, context);
@@ -43,7 +43,7 @@ function schema(opts: Options): Object {
             [opts.typeCell]: {
                 nodes: [{ objects: ['block'] }],
                 parent: { types: [opts.typeRow] },
-                normalize(change: Change, violation: string, context: Object) {
+                normalize(change, violation, context) {
                     switch (violation) {
                         case CHILD_OBJECT_INVALID:
                             return onlyBlocksInCell(opts, change, context);
@@ -62,7 +62,7 @@ function schema(opts: Options): Object {
  * Non-row nodes will be removed by slate but if all of the table's
  * children are invalids then we seed it with a basic structure.
  */
-function onlyRowsInTable(opts: Options, change: Change, context: Object) {
+function onlyRowsInTable(opts = Options, change, context) {
     const invalids = context.node.nodes.filter(
         child => child.type !== opts.typeRow
     );
@@ -84,7 +84,7 @@ function onlyRowsInTable(opts: Options, change: Change, context: Object) {
  * A row's children must be cells.
  * If they're not then we wrap them within a cell.
  */
-function onlyCellsInRow(opts: Options, change: Change, context: Object) {
+function onlyCellsInRow(opts = Object, change, context) {
     const cell = createCell(opts, []);
     const index = context.node.nodes.findIndex(
         child => child.key === context.child.key
@@ -96,7 +96,7 @@ function onlyCellsInRow(opts: Options, change: Change, context: Object) {
 /*
  * Rows can't live outside a table, if one is found then we wrap it within a table.
  */
-function rowOnlyInTable(opts: Options, change: Change, context: Object) {
+function rowOnlyInTable(opts = Object, change, context) {
     return change.wrapBlockByKey(context.node.key, opts.typeTable);
 }
 
@@ -104,7 +104,7 @@ function rowOnlyInTable(opts: Options, change: Change, context: Object) {
  * A cell's children must be "block"s.
  * If they're not then we wrap them within a block with a type of opts.typeContent
  */
-function onlyBlocksInCell(opts: Options, change: Change, context: Object) {
+function onlyBlocksInCell(opts = Object, change, context) {
     const block = Block.create({
         type: opts.typeContent
     });
@@ -121,7 +121,7 @@ function onlyBlocksInCell(opts: Options, change: Change, context: Object) {
 /*
  * Cells can't live outside a row, if one is found then we wrap it within a row.
  */
-function cellOnlyInRow(opts: Options, change: Change, context: Object) {
+function cellOnlyInRow(opts = Object, change, context) {
     return change.wrapBlockByKey(context.node.key, opts.typeRow);
 }
 

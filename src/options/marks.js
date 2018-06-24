@@ -4,6 +4,7 @@ module.exports = {
   CODE: "code",
   STRIKETHROUGH: "del",
   UNDERLINE: "underline",
+  SPANLINE: "spanline",
 
   // mark styles
   FONTBGCOLOR: "FONTBGCOLOR",

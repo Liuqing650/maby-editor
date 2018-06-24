@@ -1,13 +1,7 @@
 // @flow
 import { Range } from "slate";
-import type { Change, Node } from "slate";
 
-export default (
-  options: { [string]: any },
-  currentTextNode: Node,
-  matched: any,
-  change: Change
-) => {
+export default (options, currentTextNode, matched, change) => {
   const matchedLength = matched[0].length;
   const count = (matched[0].match(/#/g) || []).length;
   let header;
