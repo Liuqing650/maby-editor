@@ -1,14 +1,11 @@
 // @flow
-
-import type { Value } from 'slate';
-
 import TablePosition from './TablePosition';
-import type Options from '../options';
+import Options from '../options';
 
 /**
  * Is the selection in a table
  */
-function isSelectionInTable(opts: Options, value: Value): boolean {
+function isSelectionInTable(opts = Options, value) {
     if (!value.selection.startKey) return false;
 
     const { startKey, endKey } = value;

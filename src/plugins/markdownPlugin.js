@@ -1,7 +1,7 @@
 // constant
 import DICT from "../static";
 // import DEFAULT_LIST from "./constant/list";
-import { CODE_BLOCK_OPTIONS, BLOCKS, MARKS, INLINES, LIST_OPTIONS } from '../options';
+import { CODE_BLOCK_OPTIONS, BLOCKS, TABLE_OPTIONS, MARKS, INLINES, LIST_OPTIONS } from '../options';
 
 // handler
 import onEnter from "../handlers/onMarkdownEnter";
@@ -173,7 +173,8 @@ export default (opt = {}) => {
       opt.codeOption
     ),
     blockquoteOption: Object.assign({}, opt.blockquoteOption),
-    listOption: Object.assign(LIST_OPTIONS, opt.listOption)
+    listOption: Object.assign(LIST_OPTIONS, opt.listOption),
+    tableOption: TABLE_OPTIONS
   };
 
   return {

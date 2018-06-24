@@ -1,15 +1,5 @@
 // @flow
-
 import { Record } from 'immutable';
-
-export type OptionsFormat = {
-    typeTable?: string,
-    typeRow?: string,
-    typeCell?: string,
-    typeContent?: string,
-    exitBlockType?: string
-};
-
 /**
  * The plugin options
  */
@@ -21,15 +11,15 @@ class Options extends Record({
     exitBlockType: 'paragraph'
 }) {
     // The type of table blocks
-    typeTable: string;
+    typeTable;
     // The type of row blocks
-    typeRow: string;
+    typeRow;
     // The type of cell blocks
-    typeCell: string;
+    typeCell;
     // The default type for blocks in cells
-    typeContent: string;
+    typeContent;
     // The type of block inserted when exiting
-    exitBlockType: string;
+    exitBlockType;
 }
 
 export default Options;

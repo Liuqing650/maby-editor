@@ -3,19 +3,18 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Prism from 'prismjs';
 // utils
-import { CommonUtil, CodeUtil, ListUtil } from './utils';
+import { CommonUtil, CodeUtil } from './utils';
 // plugins
 import PluginEditList from 'slate-edit-list';
-import EditBlockquote from "slate-edit-blockquote";
+import EditBlockquote from 'slate-edit-blockquote';
 import PluginEditTable from './plugins/slate-edit-table';
 import alignPlugin from './plugins/aligns';
 import DropOrPasteImages from './plugins/slate-drop-or-paste-images';
 import PasteLinkify from './plugins/slate-paste-linkify';
-import AutoReplace from './plugins/slate-auto-replace';
 import mdPlugin from "./plugins/markdownPlugin";
 // static
 import DICT from './static';
-import { CODE_BLOCK_OPTIONS, LIST_OPTIONS, HELP, MARKS, BLOCKS, INLINES } from './options';
+import { CODE_BLOCK_OPTIONS, HELP, MARKS, BLOCKS, INLINES } from './options';
 // handler
 import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
 import schemaFn from './schemas';
@@ -61,93 +60,6 @@ const PasteLinkifyPlugins = PasteLinkify({
   hrefProperty: 'url',
   collapseTo: 'end'
 });
-const AutoReplacePlugins = [
-  AutoReplace({
-    trigger: 'space',
-    before: /^(>)$/,
-    transform: transform => transform.setBlocks('blockquote')
-  }),
-  AutoReplace({
-    trigger: 'space',
-    before: /^(-{3})$/,
-    transform: transform => transform.setBlocks('hr')
-  }),
-  AutoReplace({
-    trigger: 'space',
-    before: /^([1-9]\.)$/,
-    transform: transform => transform.setBlocks('ol_list')
-  }),
-  AutoReplace({// 加粗
-    trigger: 'space',
-    extract: true,
-    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\*{2}|_{2})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
-    transform: transform => transform.toggleMark('bold')
-  }),
-  AutoReplace({ // 标签
-    trigger: 'space',
-    extract: true,
-    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\`{1}|_{1})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
-    transform: transform => transform.toggleMark('code')
-  }),
-  AutoReplace({ // 倾斜
-    trigger: 'space',
-    extract: true,
-    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\*{1})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
-    transform: transform => transform.toggleMark('italic')
-  }),
-  AutoReplace({ // 删除线
-    trigger: 'space',
-    extract: true,
-    before: /(?:^|\s|\n|[^A-z0-9_*~`])(\~{1})((?!\1).*?)(\1)($|\s|\n|[^A-z0-9_*~`])$/,
-    transform: transform => transform.toggleMark('del')
-  }),
-  AutoReplace({
-    trigger: 'space',
-    before: /^(\`\`\`)$/,
-    transform: transform => transform.setBlocks('code-block')
-  }),
-  AutoReplace({
-    trigger: 'space',
-    before: /^(\`\`\`\:)/,
-    transform: (transform, event, matches) => {
-      const language = CodeUtil.splitLanguage(matches);
-      if (language) {
-        return transform.setBlocks({
-          type: 'code-block',
-          data: { language },
-        })
-      }
-      return transform.setBlocks({
-        type: 'code-block'
-      })
-    }
-  }),
-  AutoReplace({
-    trigger: 'space',
-    before: /^(-)$/,
-    transform: transform => transform.setBlocks('ul_list')
-  }),
-  AutoReplace({
-    trigger: 'space',
-    before: /^(#{1,6})$/,
-    transform: (transform, event, matches) => {
-      const [ hashes ] = matches.before;
-      const level = hashes.length;
-      const headerDict = {
-        '1': 'header-one',
-        '2': 'header-two',
-        '3': 'header-three',
-        '4': 'header-four',
-        '5': 'header-five',
-        '6': 'header-six',
-      };
-      return transform.setBlocks({
-        type: headerDict[level + '']
-      })
-    }
-  }),
-];
-
 const options = {
   markdownOption: {
     blocks: BLOCKS,
@@ -170,7 +82,7 @@ const plugins = [
   MarkHotkey({ key: 'i', type: MARKS.ITALIC }),
   MarkHotkey({ key: 'd', type: MARKS.STRIKETHROUGH }),
   MarkHotkey({ key: 'u', type: MARKS.UNDERLINE }),
-]//.concat(AutoReplacePlugins);
+];
 class MabyEditor extends React.Component {
   constructor(props) {
     super(props);

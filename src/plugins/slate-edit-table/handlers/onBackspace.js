@@ -1,23 +1,19 @@
 // @flow
-import { type Change } from 'slate';
 
-import type Options from '../options';
+import Options from '../options';
 import { clearCell } from '../changes';
 
-function onBackspace(
-    event: *,
-    change: Change,
-    editor: *,
-    opts: Options
-): void | Change {
+function onBackspace(event, change, editor, opts = Options ) {
     const { value } = change;
     const { startBlock, startOffset, isCollapsed, endBlock } = value;
-
+    console.log(5555, startOffset, isCollapsed);
+    console.log('endBlock==>', startBlock === endBlock);
+    
     // If a cursor is collapsed at the start of the block, do nothing
-    if (startOffset === 0 && isCollapsed) {
-        event.preventDefault();
-        return change;
-    }
+    // if (startOffset === 0 && isCollapsed) {
+    //     event.preventDefault();
+    //     return change;
+    // }
 
     // If "normal" deletion, we continue
     if (startBlock === endBlock) {

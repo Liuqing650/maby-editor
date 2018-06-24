@@ -1,10 +1,5 @@
 // @flow
-
-import { type Change } from 'slate';
-
-import type Options from '../options';
 import { isSelectionInTable } from '../utils';
-
 import onEnter from './onEnter';
 import onModEnter from './onModEnter';
 import onTab from './onTab';
@@ -21,11 +16,11 @@ const KEY_UP = 'ArrowUp';
  * User is pressing a key in the editor
  */
 function onKeyDown(
-    opts: Options,
-    event: *,
-    change: Change,
-    editor: *
-): void | any {
+    opts,
+    event,
+    change,
+    editor
+) {
     // Only handle events in cells
     if (!isSelectionInTable(opts, change.value)) {
         return undefined;

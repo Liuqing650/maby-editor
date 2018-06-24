@@ -1,6 +1,6 @@
 /* @flow */
 
-import Options, { type OptionsFormat } from './options';
+import Options from './options';
 import core from './core';
 import { onKeyDown } from './handlers';
 
@@ -9,8 +9,8 @@ import { onKeyDown } from './handlers';
  */
 function EditTable(
     // The plugin options
-    optionsParam?: OptionsFormat
-): Object {
+    optionsParam
+) {
     const opts = new Options(optionsParam || {});
     const corePlugin = core(opts);
 

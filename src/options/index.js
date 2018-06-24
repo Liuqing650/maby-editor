@@ -21,6 +21,15 @@ const LANGUAGE_OPTIONS = {
   js: 'JavaScript',
   html: 'HTML',
 };
+// 表格
+const TABLE_OPTIONS = {
+  typeTable: BLOCKS.TABLE,
+  typeRow: BLOCKS.TABLE_ROW,
+  typeCell: BLOCKS.TABLE_CELL,
+  typeContent: BLOCKS.DEFAULT,
+  exitBlockType: BLOCKS.DEFAULT
+}
+
 // 辅助配置项
 const HELP = {
   LOCAL_SAVE: 'save',
@@ -28,6 +37,7 @@ const HELP = {
 export {
   CODE_BLOCK_OPTIONS,
   LIST_OPTIONS,
+  TABLE_OPTIONS,
   HELP,
   LANGUAGE_OPTIONS,
   BLOCKS,

@@ -23,7 +23,7 @@ import {
 } from './utils';
 import { schema, validateNode } from './validation';
 
-import Options, { type OptionsFormat } from './options';
+import Options from './options';
 
 /**
  * Returns the core of the plugin, limited to the validation and normalization
@@ -34,7 +34,7 @@ import Options, { type OptionsFormat } from './options';
  * are only manipulating `Slate.Values` without rendering them.
  * That way you do not depend on `slate-react`.
  */
-function core(optionsParam: Options | OptionsFormat): Object {
+function core(optionsParam = Options) {
     const opts = new Options(optionsParam);
 
     return {
@@ -70,7 +70,7 @@ function core(optionsParam: Options | OptionsFormat): Object {
 /**
  * Bind a change to given options, and scope it to act only inside a table
  */
-function bindAndScopeChange(opts: Options, fn: *): * {
+function bindAndScopeChange(opts = Options, fn) {
     return (change, ...args) => {
         const { value } = change;
 

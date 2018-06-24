@@ -11,7 +11,6 @@ import imageToDataUri from './image-to-data-uri';
  */
 
 function loadImageFile(url, callback) {
-  
   if (isDataUri(url)) {
     const file = dataUriToBlob(url)
     setTimeout(() => {

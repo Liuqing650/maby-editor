@@ -1,4 +1,4 @@
-import { CommonUtil, CodeUtil } from '../utils';
+import { CommonUtil } from '../utils';
 import onBackspace from './onBackspace';
 
 const codeOnEnter = (event, change, option) => {
@@ -12,7 +12,7 @@ const codeOnEnter = (event, change, option) => {
 
 const otherOnEnter = (event, change, option) => {
   const { value } = change;
-  const { startBlock, focusBlock, startOffset, endOffset } = value;
+  const { startBlock, startOffset, endOffset } = value;
   if (value.isExpanded) return;
   if (startOffset == 0 && startBlock.text.length == 0) {
     return onBackspace(event, change);
