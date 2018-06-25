@@ -40,8 +40,11 @@ function PasteLinkify(options = {}) {
       const transfer = getEventTransfer(event)
       const { value } = change
       const { text } = transfer
+      const startText = value.startText;
       if (transfer.type !== 'text' && transfer.type !== 'html') return
       if (!isUrl(text)) return
+      if (/!\[([^\]]*)\]\(([^\s)]*)\)/.test(startText.text)) return;
+      if (/\[([^\]]+)\]\(([^\s)]*)\)/.test(startText.text)) return;
 
       if (value.isCollapsed) {
         const { startOffset } = value

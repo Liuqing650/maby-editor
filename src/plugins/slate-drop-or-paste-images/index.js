@@ -75,6 +75,8 @@ function DropOrPasteImages(options = {}) {
 
   function onInsert(event, change, editor) {
     const transfer = getEventTransfer(event);
+    console.log('transfer----->', transfer);
+    
     const range = getEventRange(event, change.value);
     switch (transfer.type) {
       case 'files': return onInsertFiles(event, change, editor, transfer, range);
@@ -194,9 +196,12 @@ function DropOrPasteImages(options = {}) {
 
   function onInsertText(event, change, editor, transfer, range) {
     const { text } = transfer;
+    const { value } = change;
+    const startText = value.startText;
     if (!isUrl(text)) return;
     if (!isImage(text)) return;
-
+    if (/!\[([^\]]*)\]\(([^\s)]*)\)/.test(startText.text)) return;
+    if (/\[([^\]]+)\]\(([^\s)]*)\)/.test(startText.text)) return;
     loadImageFile(text, (err, file) => {
       if (err) return;
       const c = editor.value.change();

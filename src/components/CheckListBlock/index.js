@@ -1,7 +1,7 @@
 import React from "react";
 
 const CheckListBlock = (props) => {
-  const { attributes, children, node } = this.props;
+  const { attributes, children, node } = props;
   const checked = node.data.get('checked');
   return (
     <div

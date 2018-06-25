@@ -5,6 +5,7 @@ import trailingSpace from "../../helper/trailingSpace";
 export default function(type, currentTextNode, matched, change) {
   const matchedLength = matched[0].length;
 
+  console.log('matched---->', matched);
   return change
     .deleteAtRange(
       Range.create({
@@ -19,7 +20,7 @@ export default function(type, currentTextNode, matched, change) {
     .extend(0 - matched[1].length)
     .wrapInline({
       type,
-      data: { href: matched[2] }
+      data: { url: matched[2] }
     })
     .collapseToEnd()
     .call(trailingSpace, currentTextNode, matched.index);

@@ -29,6 +29,7 @@ module.exports = {
   OL_LIST: "ol_list",
   UL_LIST: "ul_list",
   LIST_ITEM: "list_item",
+  CHECK_LIST_ITEM: "check-list-item",
 
   // Default block
   DEFAULT: "paragraph",

@@ -3,7 +3,7 @@ import { Range } from "slate";
 
 export default function(type, currentTextNode, matched, change) {
   const matchedLength = matched[0].length;
-
+  
   return change
     .deleteAtRange(
       Range.create({
@@ -13,10 +13,11 @@ export default function(type, currentTextNode, matched, change) {
         focusOffset: matched.index + matchedLength
       })
     )
-    .insertInline({
+    .insertBlock({
       type,
       isVoid: true,
       data: {
+        title: matched[1] || '',
         src: matched[2]
       }
     })

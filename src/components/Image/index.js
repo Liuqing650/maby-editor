@@ -4,7 +4,8 @@ class Image extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      src: ''
+      src: '',
+      title: ''
     }
   }
   componentDidMount() {
@@ -18,9 +19,10 @@ class Image extends React.Component {
     }
   }
   setBaseFileToSrc = (data) => {
-    const base64 = data.get('base64') || null;
-    if (base64) {
-      this.setState({ src: base64 });
+    const src = data.get('base64') || data.get('src') ||null;
+    if (src) {
+      const title = data.get('title') || '';
+      this.setState({ src, title });
     }
   }; 
   modifyNode = (base64) => {
@@ -40,17 +42,14 @@ class Image extends React.Component {
   }
   render() {
     const { attributes } = this.props;
-    const { src } = this.state;
+    const { src, title } = this.state;
     return (
       <div 
         className="maby-editor-image-wrap"
         draggable={true}
         contentEditable={false}>
-        <span 
-          className="maby-image-editor"
-          onClick={this.onActiveImage}
-          contentEditable={false}>
-          {src ? <img {...attributes} src={src} /> : <span>Loading...</span>}
+        <span>
+          {src ? <img {...attributes} title={title} src={src} /> : <span>Loading...</span>}
         </span>
       </div>
     );

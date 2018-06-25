@@ -101,6 +101,7 @@ const checkPatterns = function(options, change) {
   const lastChar = currentLineText.charAt(offsetBeforeSpace);
   const prevTextFromSpace = currentLineText.substr(0, offsetBeforeSpace + 1);
 
+  console.log(555555, currentLineText);
   // inline patterns
   if (
     (matched =
@@ -110,10 +111,11 @@ const checkPatterns = function(options, change) {
     return matchCode(options.marks.CODE, currentTextNode, matched, change);
   } else if (
     (matched = currentLineText.match(
-      /!\[([^\]]+)\]\(([^\s)]+(?:[\t ]+"(?:\\.|[^"\\])*")?)\)/
+      /!\[([^\]]*)\]\(([^\s)]+(?:[\t ]+"(?:\\.|[^"\\])*")?)\)/
     ))
   ) {
     // ![example](http://example.com "Optional title")
+    
     return matchImage(options.inlines.IMAGE, currentTextNode, matched, change);
   } else if (
     (matched = currentLineText.match(
