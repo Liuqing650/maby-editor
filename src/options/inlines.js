@@ -7,6 +7,7 @@ module.exports = {
   HTML: "html",
   LINK: "link",
   IMAGE: "image",
+  TEXT: "text",
   FOOTNOTE_REF: "footnote-ref",
   MATH: "math",
   TEMPLATE: "template",

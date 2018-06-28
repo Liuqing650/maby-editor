@@ -29,6 +29,12 @@ const TABLE_OPTIONS = {
   typeContent: BLOCKS.DEFAULT,
   exitBlockType: BLOCKS.DEFAULT
 }
+// 图片
+const IMAGE_OPTIONS = {
+  typeWrap: BLOCKS.IMAGEWRAP,
+  typeImage: INLINES.IMAGE,
+  typeText: INLINES.TEXT
+}
 
 // 辅助配置项
 const HELP = {
@@ -38,6 +44,7 @@ export {
   CODE_BLOCK_OPTIONS,
   LIST_OPTIONS,
   TABLE_OPTIONS,
+  IMAGE_OPTIONS,
   HELP,
   LANGUAGE_OPTIONS,
   BLOCKS,

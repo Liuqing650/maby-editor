@@ -1,7 +1,7 @@
 /**
  * Unwrap a code block into a normal block.
  */
-function unwrapCodeBlockByKey( opts, change, key, type ): Change {
+function unwrapCodeBlockByKey( opts, change, key, type ) {
     const { value } = change;
     const { document } = value;
 

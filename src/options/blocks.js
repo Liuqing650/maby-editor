@@ -36,5 +36,6 @@ module.exports = {
 
   // Special
   IMAGE: "image",
+  IMAGEWRAP: "image_wrap",
   VIDEO: "video"
 };

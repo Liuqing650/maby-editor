@@ -5,6 +5,7 @@ import isUrl from 'is-url';
 import logger from 'slate-dev-logger';
 import loadImageFile from './load-image-file';
 import { extname } from 'path';
+// import schema from '../slate-image/schema';
 import { findNode, getEventRange, getEventTransfer, setEventTransfer } from 'slate-react';
 
 // From: https://github.com/ianstormtaylor/slate-plugins/
@@ -75,8 +76,6 @@ function DropOrPasteImages(options = {}) {
 
   function onInsert(event, change, editor) {
     const transfer = getEventTransfer(event);
-    console.log('transfer----->', transfer);
-    
     const range = getEventRange(event, change.value);
     switch (transfer.type) {
       case 'files': return onInsertFiles(event, change, editor, transfer, range);
@@ -219,6 +218,7 @@ function DropOrPasteImages(options = {}) {
    */
 
   return {
+    // schema: schema(options),
     onDrop: onInsert,
     onPaste: onInsert,
   }

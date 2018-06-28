@@ -133,7 +133,6 @@ class MabyEditor extends React.Component {
       isInTable,
       position
     };
-    
     switch (node.type) {
       case BLOCKS.CODE_BLOCK : return <CodeBlock {...props} />;
       case BLOCKS.CODE_LINE : return <CodeBlockLine {...props} />;

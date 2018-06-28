@@ -3,7 +3,7 @@ import { Block, Text } from 'slate';
 import DICT from '../../static';
 
 /**
- * 复制代码块
+ * 反序列化代码块
  * @param {*} opts 
  * @param {*} text 
  */
