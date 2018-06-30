@@ -41,8 +41,11 @@ class Image extends React.Component {
     }
   }
   render() {
-    const { attributes } = this.props;
+    const { attributes, isSelected } = this.props;
     const { src, title } = this.state;
+    if (isSelected) {
+      console.log('isSelected---->', isSelected);
+    }
     return (
       <div 
         className="maby-editor-image-wrap"

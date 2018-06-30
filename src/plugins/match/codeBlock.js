@@ -1,4 +1,3 @@
-// @flow
 import { Range, Data } from "slate";
 import { wrapCodeBlock } from '../../changes/code';
 import { CODE_BLOCK_OPTIONS } from '../../options';

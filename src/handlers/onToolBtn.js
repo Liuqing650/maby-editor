@@ -1,9 +1,5 @@
 import createCodeBlock from './createCodeBlock';
-import onEnter from './onEnter';
-import onTab from './onTab';
 import onHeader from './onHeader';
-import onBackspace from './onBackspace';
-import onExitModel from './onExitModel';
 import onSave from './onSave';
 import DICT from '../static';
 import { CommonUtil } from '../utils';
@@ -25,9 +21,6 @@ const onToolBtn = (event, change, type, tag, callback) => {
     }
     const isExist = CommonUtil.hasBlock(value, type);
     switch (type) {
-      case 'code-block':
-        createCodeBlock(event, change);
-        return callback ? callback(change) : null;
       case 'code-block':
         createCodeBlock(event, change);
         return callback ? callback(change) : null;

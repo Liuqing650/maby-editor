@@ -4,8 +4,8 @@ import unwrapCodeBlockByKey from './unwrapCodeBlockByKey';
 function unwrapCodeBlock(opts, change, type) {
     const { value } = change;
 
-    const codeBlock = getCurrentCode(opts, value);
-
+    const codeBlock = getCurrentCode(value, opts);
+    
     if (!codeBlock) {
         return change;
     }

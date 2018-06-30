@@ -17,7 +17,7 @@ import DICT from './static';
 import { CODE_BLOCK_OPTIONS, HELP, MARKS, BLOCKS, INLINES } from './options';
 // handler
 import { onKeyDown, onPaste, MarkHotkey, onToolBtn } from './handlers';
-import schemaFn from './schemas';
+import { codeBlockSchemas, documentSchemas} from './schemas';
 // components
 import { 
   CodeBlock, CodeBlockLine, HrBlock, ListItem, Bold, CodeInline, EmInline, DelInline, Underline,
@@ -36,7 +36,7 @@ const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.g
 // 构建初始状态…
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
 
-const schema = schemaFn(CODE_BLOCK_OPTIONS);
+const codeBlockSchemasPlugin = codeBlockSchemas(CODE_BLOCK_OPTIONS);
 const tablePlugin = PluginEditTable({
   typeTable: 'table',
   typeRow: 'table_row',
@@ -72,6 +72,7 @@ const options = {
 const plugins = [
   MarkdownPlugin(options.markdownOption),
   EditBlockquote(options.blockquoteOption),
+  codeBlockSchemasPlugin,
   tablePlugin,
   editListPlugin,
   alignPlugin,
@@ -133,6 +134,8 @@ class MabyEditor extends React.Component {
       isInTable,
       position
     };
+    console.log('node.type---->', node.type);
+    
     switch (node.type) {
       case BLOCKS.CODE_BLOCK : return <CodeBlock {...props} />;
       case BLOCKS.CODE_LINE : return <CodeBlockLine {...props} />;
@@ -286,7 +289,7 @@ class MabyEditor extends React.Component {
     
     const onMouseDown = event => {
       switch (type) {
-        case 'table':
+        case BLOCKS.TABLE:
           event.preventDefault();
           const isInTable = tablePlugin.utils.isSelectionInTable(value);
           if (!isInTable) {
@@ -301,8 +304,12 @@ class MabyEditor extends React.Component {
       }
     }
     switch (type) {
-      case 'table':
+      case BLOCKS.TABLE:
         isActive = tablePlugin.utils.isSelectionInTable(value);
+        break;
+      case BLOCKS.CODE_BLOCK:
+        const nodeTypeInfo = CommonUtil.checkNodeType(value, [BLOCKS.CODE_LINE, BLOCKS.CODE_BLOCK]);
+        isActive = nodeTypeInfo.isValid;
         break;
       default:
         break;
@@ -323,7 +330,7 @@ class MabyEditor extends React.Component {
           placeholder={placeholder || ''}
           value={this.state.value}
           onChange={this.onChange}
-          schema={schema}
+          schema={documentSchemas}
           onKeyDown={this.handleKeyDown}
           onPaste={this.onPaste}
           autoFocus
@@ -336,7 +343,6 @@ class MabyEditor extends React.Component {
       </div>
     );
   };
-
   decorateNode = (node) => {
     if (node.type != 'code-block') return;
     const language = node.data.get('language') || 'js';
