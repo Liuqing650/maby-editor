@@ -24,7 +24,7 @@ class Image extends React.Component {
       const title = data.get('title') || '';
       this.setState({ src, title });
     }
-  }; 
+  };
   modifyNode = (base64) => {
     const { editor, node } = this.props;
     editor.change(c => c.setNodeByKey(node.key, { data: {base64} }));

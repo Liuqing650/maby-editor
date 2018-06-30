@@ -8,6 +8,7 @@ import {
 import DICT from '../static';
 
 const DEFAULT_NEWLINE = DICT.DEFAULT_NEWLINE;
+const DEFAULT_NODE = DICT.DEFAULT_NODE;
 // copy: https://github.com/GitbookIO/slate-edit-code
 function schema(opts) {
   const baseSchema = {
