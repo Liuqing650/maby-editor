@@ -24,7 +24,6 @@ pre {
 
 img {
   max-width: 100%;
-  /* max-height: 20em; */
 }
 
 img.active {
@@ -385,20 +384,53 @@ input:focus {
 .maby-editor-image-wrap {
   position: relative;
 }
+.maby-image-block {
+  max-width: 100%;
+}
+.maby-image-content {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #f4f4f4;
+  border-radius: 3px;
+  background: #f4f4f4;
+}
+.maby-image-detail {
+
+}
 .maby-image-editor {
   position: relative;
   display: inline-block;
 }
 .maby-image-holder {
-  position: relative;
-  width: 100px;
-  height: 30px;
+  position: absolute;
+  width: 9px;
+  height: 9px;
   border: 1px solid #fff;
   border-radius: 3px;
   background: #06aecc;
   display: inline-block;
   -webkit-transition: background .3s ease-in-out;
   transition: background .3s ease-in-out;
+}
+.maby-image-lt {
+  left: -4px;
+  top: -4px;
+  cursor: nwse-resize;
+}
+.maby-image-rt {
+  top: -4px;
+  right: -4px;
+  cursor: nesw-resize;
+}
+.maby-image-rb {
+  bottom: -4px;
+  right: -4px;
+  cursor: nwse-resize;
+}
+.maby-image-lb {
+  bottom: -4px;
+  left: -4px;
+  cursor: nesw-resize;
 }
 /* 超链接 */
 .link {

@@ -101,7 +101,6 @@ const checkPatterns = function(options, change) {
   const lastChar = currentLineText.charAt(offsetBeforeSpace);
   const prevTextFromSpace = currentLineText.substr(0, offsetBeforeSpace + 1);
 
-  console.log(555555, currentLineText);
   // inline patterns
   if (
     (matched =

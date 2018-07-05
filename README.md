@@ -90,3 +90,4 @@
 3. 修复图片无法保存的bug
   图片保存数据中新增了`base64`参数,用于存储 `base64` 位图片
 
+> Maby God wants you to meet many wrong people before you meet the right one,so when this happens ,you'll be thankful.

@@ -28,7 +28,7 @@ import * as initState from './initValue/initState';
 // style
 import './styles/index.css';
 
-const DEFAULT_NODE = DICT.DEFAULT_NODE;
+// const DEFAULT_NODE = DICT.DEFAULT_NODE;
 const SAVE_KEY = DICT.SAVE_KEY;
 
 // 获取本地缓存数据
@@ -134,8 +134,6 @@ class MabyEditor extends React.Component {
       isInTable,
       position
     };
-    console.log('node.type---->', node.type);
-    
     switch (node.type) {
       case BLOCKS.CODE_BLOCK : return <CodeBlock {...props} />;
       case BLOCKS.CODE_LINE : return <CodeBlockLine {...props} />;
@@ -340,6 +338,9 @@ class MabyEditor extends React.Component {
           shouldNodeComponentUpdate={props => props.node.type === 'list_item'}
           ref={(element) => { this.editor = element; }}
         />
+        <div className="maby-tool-bar">
+          test
+        </div>
       </div>
     );
   };

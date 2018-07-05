@@ -10,7 +10,7 @@ const schema = {
       switch (reason) {
         case LAST_CHILD_TYPE_INVALID: {
           const paragraph = Block.create('paragraph')
-          return createPargraph(change, node, paragraph, 2);
+          return createPargraph(change, node, paragraph, 3);
         }
       }
     },
