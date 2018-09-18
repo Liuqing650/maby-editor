@@ -7,21 +7,19 @@ SOURCE=./src
 LIB=./lib
 
 dev:
-	@mkdir -p $(LIB)
-	@cp -Rfv $(SOURCE)/* $(LIB)
-	@$(WEBPACK_DEV_SERVER) --config webpack.dev.js --open
+	@$(WEBPACK_DEV_SERVER) --config webpack.config.js --open
 
 build:
-	@$(WEBPACK) --config webpack.build.js
+	@$(WEBPACK) --config webpack.config.js --define process.env.NODE_ENV="'production'"
 
 publish:
-	@$(WEBPACK) --config webpack.prod.js
+	@$(WEBPACK) --config webpack.config.js --define process.env.NODE_ENV="'production'"
 	@mkdir -p $(LIB)
 	@cp -Rfv $(SOURCE)/index.less $(LIB)
 	@$(BABEL) src --out-dir lib
 
 watch:
-	@$(WEBPACK_DEV_SERVER) --config webpack.dev.js --open
+	@$(WEBPACK_DEV_SERVER) --config webpack.config.js --open
 
 clean:
 	@if [ -d dist ]; then rm -r dist; fi

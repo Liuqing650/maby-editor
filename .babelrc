@@ -1,6 +1,13 @@
 {
-  "presets": [ "react", "stage-0", "es2015" ],
+  "presets": [
+    "es2015",
+    "react",
+    "flow",
+    "stage-0"
+  ],
+  "comments": true,
   "plugins": [
+    "react-hot-loader/babel",
     "transform-runtime",
     "transform-decorators-legacy",
     [

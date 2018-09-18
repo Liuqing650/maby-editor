@@ -1,9 +1,7 @@
-import * as CommonUtil from './common';
-import * as CodeUtil from './code';
-import * as Blockquote from './Blockquote';
+import removeMark from './removeMark';
+import trailingSpace from './trailingSpace';
 
 export {
-  CommonUtil,
-  CodeUtil,
-  Blockquote,
-}
+  trailingSpace,
+  removeMark,
+};
