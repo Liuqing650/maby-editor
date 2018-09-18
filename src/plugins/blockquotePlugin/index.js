@@ -1,5 +1,5 @@
-import renderBlock from '../components/renderBlock';
-import opts from '../options';
+import renderBlock from '../../components/renderBlock';
+import opts from '../../options';
 
 const { BLOCKS } = opts;
 export default (opt) => {

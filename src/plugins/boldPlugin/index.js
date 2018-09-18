@@ -1,5 +1,5 @@
-import renderMark from '../components/renderMark';
-import opts from '../options';
+import renderMark from '../../components/renderMark';
+import opts from '../../options';
 
 const { MARKS } = opts;
 export default (opt) => {
