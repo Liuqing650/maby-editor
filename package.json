@@ -73,5 +73,10 @@
     "slate": "^0.33.6",
     "slate-react": "^0.12.4",
     "slate-soft-break": "^0.6.0"
+  },
+  "mabycli": {
+    "stylelint": true,
+    "eslint": true,
+    "port": 10056
   }
 }
