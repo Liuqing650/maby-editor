@@ -64,6 +64,8 @@
     "maby-lib-cli": "^0.0.2"
   },
   "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "babel-runtime": "^6.26.0",
     "detect-indent": "^5.0.0",
     "immutable": "^3.8.2",
