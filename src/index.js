@@ -1,7 +1,7 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
-import { BoldPlugin, BlockquotePlugin } from './plugins';
+import { BoldPlugin, BlockquotePlugin, ImagesPlugin, } from './plugins';
 // initSate
 import * as initState from './initValue/initState';
 // style
@@ -17,6 +17,15 @@ const initialState = existingValue ? Value.fromJSON(existingValue) : initState.v
 const plugins = [
   BoldPlugin(),
   BlockquotePlugin(),
+  ImagesPlugin({
+    insertImage: (transform, file) => {
+      return transform.insertBlock({
+        type: 'image',
+        isVoid: true,
+        data: { file },
+      });
+    }
+  }),
 ];
 
 class MaybeEditor extends React.Component {

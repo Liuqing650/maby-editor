@@ -2,6 +2,7 @@ import React from 'react';
 import isHotkey from 'is-hotkey';
 import Blockquote from './Blockquote';
 import Paragraph from './Paragraph';
+import Image from './Image';
 import opts from '../options';
 
 const { BLOCKS } = opts;
@@ -13,6 +14,8 @@ export default (options, hotkey) => {
       switch (props.node.type) {
         case BLOCKS.BLOCKQUOTE:
           return <Blockquote {...props} />;
+        case BLOCKS.IMAGE:
+          return <Image {...props} />;
         default:
           return <Paragraph {...props} />;
       }
