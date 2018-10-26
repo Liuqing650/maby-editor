@@ -1,4 +1,4 @@
-
+// @flow
 import { Mark, Range } from 'slate';
 import type { Change, Text } from 'slate';
 import {trailingSpace, removeAllMark} from '../utils';
