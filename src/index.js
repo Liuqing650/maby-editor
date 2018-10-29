@@ -18,6 +18,9 @@ const plugins = [
   BoldPlugin(),
   BlockquotePlugin(),
   ImagesPlugin({
+    lastInsert: {
+      line: 5,
+    },
     insertImage: (transform, file) => {
       return transform.insertBlock({
         type: 'image',

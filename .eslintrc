@@ -50,6 +50,7 @@
     "no-mixed-operators": [
       0
     ],
+    "no-restricted-globals": [0],
     "no-console": [
       0
     ],

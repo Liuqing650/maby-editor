@@ -1,7 +1,14 @@
 import { getEventRange, getEventTransfer } from 'slate-react';
+import opts from '../../options';
+import core from './core';
 
+const { BLOCKS } = opts;
 function ImagesPlugin(options) {
-  const { extensions = ['png', 'jpeg'], insertImage } = options;
+  const { extensions = ['png', 'jpeg'], insertImage, lastInsert = {} } = options;
+  const coreOptions = Object.assign({
+    type: BLOCKS.IMAGE,
+  }, lastInsert);
+  const corePlugin = core(coreOptions);
 
   if (!insertImage) {
     throw new Error('You must supply an `insertImage` function.');
@@ -47,6 +54,7 @@ function ImagesPlugin(options) {
     });
   }
   return {
+    ...corePlugin,
     onDrop: onInsert,
     onPaste: onInsert,
   };
