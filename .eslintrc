@@ -57,6 +57,7 @@
     "generator-star-spacing": [
       0
     ],
+    "react/no-unused-state": [0],
     "consistent-return": [
       0
     ],

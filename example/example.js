@@ -22,8 +22,15 @@ export default class Example extends Component {
       placeholder: '输入一些文本吧',
       className: 'myEditor'
     };
+    const style = {
+      width: 1200,
+      margin: '30px auto',
+      borderLeft: '1px solid #ccc',
+      borderRight: '1px solid #ccc',
+      minHeight: 800,
+    };
     return (
-      <div>
+      <div style={style}>
         <MabyEditor {...mabyEditorProps} />
       </div>
     );

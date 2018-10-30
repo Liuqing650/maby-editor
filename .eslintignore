@@ -8,3 +8,4 @@ src/assets/
 script/getPackage.js
 script/handleLibaryName.js
 webpack.config.js
+../image-drag/
