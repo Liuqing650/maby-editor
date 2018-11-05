@@ -1,82 +1,99 @@
 import React from 'react';
 
 class ToolBar extends React.Component {
-  state = {
-    width: 0,
-    height: 0,
-    // isFocus: false,
-  };
-  componentWillMount() {
-    this.updateState(this.props);
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: props.width,
+      height: props.height
+    };
+    this.timeIndex = 0;
   }
-  onInputWidthChange = (event, toolInfo) => {
-    const { toolBar } = this.state;
-    if (!isNaN(Number(event.target.value))) {
-      toolBar.width = Number(event.target.value);
+  componentWillReceiveProps(newProps) {
+    if (newProps !== this.props) {
       this.setState({
-        toolBar
+        width: newProps.width,
+        height: newProps.height
       });
     }
   }
-  onInputHeightChange = (event, toolInfo) => {
-    const { toolBar } = this.state;
+  componentWillUnmount = () => {
+    clearTimeout(this.timeIndex);
+  }
+  onInputWidthChange = (event) => {
     if (!isNaN(Number(event.target.value))) {
-      toolBar.height = Number(event.target.value);
       this.setState({
-        toolBar
+        width: Number(event.target.value)
       });
     }
   }
-  updateState = (props) => {
-    const { width, height } = props;
-    this.setState({
-      width,
-      height
-    });
-  };
+  onInputHeightChange = (event) => {
+    if (!isNaN(Number(event.target.value))) {
+      this.setState({
+        height: Number(event.target.value)
+      });
+    }
+  }
   handleEvent = (event) => {
     event.stopPropagation();
   }
-  handleFocus = (event, toolInfo) => {
-    this.isFocus = true;
-  }
-  handleBlur = (event, toolInfo) => {
-    this.isFocus = false;
-    if (toolInfo.sizeChange) {
-      toolInfo.sizeChange();
+  handleUpdate = () => {
+    const {width, height} = this.state;
+    if (this.props.onChangeSize) {
+      this.props.onChangeSize(width, height);
     }
-    this.setState({
-      toolBar: {}
-    });
   }
-  handleKeyPress = (event, toolInfo) => {
+  handleFocus = (event) => {
+    this.isFocus = true;
+    this.timeIndex = setTimeout(() => {
+      this.isFocus = false;
+    }, 0);
+    if (this.props.onFocus) {
+      this.props.onFocus();
+    }
+  }
+  handleBlur = (event) => {
+    this.handleUpdate();
+    if (!this.isFocus) {
+      if (this.props.onBlur) {
+        this.props.onBlur();
+      }
+    }
+  }
+  handleKeyPress = (event) => {
     this.handleEvent(event);
     if (event.key === 'Enter') {
-      if (toolInfo.sizeChange) {
-        toolInfo.sizeChange();
-      }
+      this.handleUpdate();
     }
   }
   render() {
     const { width, height } = this.state;
+    const { visible } = this.props;
     const eventProps = {
-      onBlur: (event) => this.handleBlur(event, toolInfo),
+      onBlur: this.handleBlur,
       onMouseDown: this.handleFocus,
       onClick: this.handleEvent,
-      onKeyPress: (event) => this.handleKeyPress(event, toolInfo),
+      onKeyPress: this.handleKeyPress,
     };
     const widthProps = {
       ...eventProps,
-      onChange: (event) => this.onInputWidthChange(event, toolInfo),
+      onChange: this.onInputWidthChange,
       value: width,
     };
     const heightProps = {
       ...eventProps,
-      onChange: (event) => this.onInputHeightChange(event, toolInfo),
+      onChange: this.onInputHeightChange,
       value: height,
     };
+    const toolBarStyle = {
+      position: 'absolute',
+      opacity: visible ? 1 : 0
+    };
     return (
-      <div contentEditable={false} style={{position: 'absolute'}}>
+      <div
+        contentEditable={false}
+        style={toolBarStyle}
+      >
         width: <span><input {...widthProps} type="text" /></span>
         height: <span><input {...heightProps} /></span>
       </div>

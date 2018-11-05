@@ -34,6 +34,7 @@ function ImagesPlugin(options) {
     console.log('transfer---->', transfer);
     switch (transfer.type) {
       case 'files': return onInsertFiles(event, change, editor, transfer, range);
+      case 'html': return onInsertHtml(event, change, editor, transfer, range);
     }
   }
 
@@ -52,6 +53,19 @@ function ImagesPlugin(options) {
       }
       asyncApplyChange(change, editor, file);
     });
+  }
+
+  function onInsertHtml(event, change, editor, transfer, range) {
+    const { html } = transfer;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const body = doc.body;
+    const firstChild = body.firstChild;
+    if (firstChild.nodeName.toLowerCase() !== 'img') {
+      return;
+    }
+    const src = firstChild.src;
+    console.log('src------>', src);
   }
   return {
     ...corePlugin,

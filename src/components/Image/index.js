@@ -1,5 +1,6 @@
 import React from 'react';
 import ImageDrag from 'image-drag';
+import ToolBar from './toolBar';
 
 class Image extends React.Component {
   state = {
@@ -19,20 +20,6 @@ class Image extends React.Component {
       this.setBaseFileToSrc(data);
     }
   }
-  onInputWidthChange = (event) => {
-    if (!isNaN(Number(event.target.value))) {
-      this.setState({
-        width: Number(event.target.value)
-      });
-    }
-  }
-  onInputHeightChange = (event) => {
-    if (!isNaN(Number(event.target.value))) {
-      this.setState({
-        height: Number(event.target.value)
-      });
-    }
-  }
   setBaseFileToSrc = (data) => {
     const src = data.get('base64') || data.get('src') || null;
     if (src) {
@@ -40,6 +27,16 @@ class Image extends React.Component {
       this.setState({ src, title });
     }
   };
+  isValid = () => {
+    const node = this.props.node;
+    const src = node.get('base64') || node.get('src');
+    return !!src;
+  }
+  isSelected = () => {
+    const {isSelected, editor} = this.props;
+    const isFocus = this.state.isFocus;
+    return isSelected && editor.value.isCollapsed || isFocus;
+  }
   modifyNode = (base64) => {
     const { editor, node } = this.props;
     editor.change(c => c.setNodeByKey(node.key, { data: {base64} }));
@@ -58,61 +55,53 @@ class Image extends React.Component {
   handleEvent = (event) => {
     event.stopPropagation();
   }
-  handleFocus = (isFocus) => {
-    this.setState({isFocus});
+  handleFocus = () => {
+    this.setState({isFocus: true});
   }
-  handleBlur = (event, toolInfo) => {
-    this.updateSize(toolInfo);
-  }
-  handleKeyPress = (event, toolInfo) => {
-    this.handleEvent(event);
-    if (event.key === 'Enter') {
-      this.updateSize(toolInfo);
-    }
+  handleBlur = () => {
+    this.setState({isFocus: false});
   }
   updateState = (toolInfo) => {
-    console.log('width------->', toolInfo.width);
     this.setState({
       width: Number(toolInfo.width),
       height: Number(toolInfo.height),
     });
   }
-  updateSize = (toolInfo) => {
-    const { width, height } = this.state;
+  updateSize = (width, height, toolInfo) => {
     toolInfo.changeSize(width, height);
+    this.setState({
+      width,
+      height,
+    });
   }
-  render() {
-    const { isSelected } = this.props;
-    const { src, title, isFocus } = this.state;
-    const renderToolBar = (toolInfo) => {
-      if (!toolInfo.isUse || !toolInfo.isShow) {
-        return;
-      }
-      const { width, height } = this.state;
-      const eventProps = {
-        onBlur: (event) => this.handleBlur(event, toolInfo),
-        onMouseDown: () => this.handleFocus(true),
-        onClick: this.handleEvent,
-        onKeyPress: (event) => this.handleKeyPress(event, toolInfo),
-      };
-      const widthProps = {
-        ...eventProps,
-        onChange: (event) => this.onInputWidthChange(event, toolInfo),
-        value: width,
-      };
-      const heightProps = {
-        ...eventProps,
-        onChange: (event) => this.onInputHeightChange(event, toolInfo),
-        value: height,
-      };
-      return (
-        <div contentEditable={false} style={{position: 'absolute'}}>
-          width: <span><input {...widthProps} /></span>
-          height: <span><input {...heightProps} /></span>
-        </div>
-      );
+  handleClickImage = (toolInfo) => {
+    const { width, height } = this.state;
+    if (width === 0 && height === 0) {
+      this.setState({
+        width: Number(toolInfo.width),
+        height: Number(toolInfo.height),
+      });
+    }
+  }
+  renderToolBar = (toolInfo) => {
+    const { width, height } = this.state;
+    const isValid = this.isValid();
+    if (isValid) {
+      return;
+    }
+    const toolBarProps = {
+      width,
+      height,
+      visible: this.isSelected(),
+      onFocus: this.handleFocus,
+      onBlur: this.handleBlur,
+      onChangeSize: (width, height) => this.updateSize(width, height, toolInfo),
     };
-    // console.log(isSelected || isFocus);
+    return (<ToolBar {...toolBarProps} />);
+  };
+  render() {
+    const { src, title } = this.state;
+    const isShow = this.isSelected();
     const dragProps = {
       width: 600,
       image: src,
@@ -120,11 +109,11 @@ class Image extends React.Component {
       tabIndex: 'false',
       toolBar: {
         isUse: true,
-        isShow: isSelected || isFocus
+        isShow
       },
       onDragEnd: this.updateState,
-      onClickImage: this.updateState,
-      renderTool: renderToolBar,
+      onClickImage: this.handleClickImage,
+      renderTool: this.renderToolBar,
     };
     const style = { display: 'block' };
     return (
