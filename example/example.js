@@ -23,7 +23,7 @@ export default class Example extends Component {
       className: 'myEditor'
     };
     const style = {
-      width: 1200,
+      width: 800,
       margin: '30px auto',
       borderLeft: '1px solid #ccc',
       borderRight: '1px solid #ccc',

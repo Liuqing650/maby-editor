@@ -1,8 +1,8 @@
-import { lastParagraph } from '../../common/schema';
+import schema from './validation/schema';
 
 const core = (option) => {
   return {
-    schema: lastParagraph(option),
+    schema: schema(option),
   };
 };
 

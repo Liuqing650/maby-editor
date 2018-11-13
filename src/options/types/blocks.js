@@ -58,7 +58,6 @@ export default {
 
   // Default block
   DEFAULT: 'paragraph',
-
   // Special
   IMAGE: 'image',
   VIDEO: 'video',

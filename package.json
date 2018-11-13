@@ -67,6 +67,7 @@
     "maby-lib-cli": "^2.0.0",
     "react-click-outside": "^3.0.1",
     "react-transform-catch-errors": "^1.0.2",
+    "slate-html-serializer": "^0.7.22",
     "styled-components": "^4.0.2"
   },
   "dependencies": {

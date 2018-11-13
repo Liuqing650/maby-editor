@@ -1,7 +1,7 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
-import { BoldPlugin, BlockquotePlugin, ImagesPlugin, } from './plugins';
+import { BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin } from './plugins';
 // initSate
 import * as initState from './initValue/initState';
 // style
@@ -17,6 +17,7 @@ const initialState = existingValue ? Value.fromJSON(existingValue) : initState.v
 const plugins = [
   BoldPlugin(),
   BlockquotePlugin(),
+  PasteHtmlPlugin(),
   ImagesPlugin({
     lastInsert: {
       line: 5,

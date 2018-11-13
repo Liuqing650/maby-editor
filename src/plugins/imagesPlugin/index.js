@@ -1,8 +1,12 @@
 import { getEventRange, getEventTransfer } from 'slate-react';
+import Html from 'slate-html-serializer';
 import opts from '../../options';
+import { DEFAULT_RULES } from '../../common/rules';
 import core from './core';
 
 const { BLOCKS } = opts;
+const serializer = new Html({ rules: DEFAULT_RULES });
+
 function ImagesPlugin(options) {
   const { extensions = ['png', 'jpeg'], insertImage, lastInsert = {} } = options;
   const coreOptions = Object.assign({
@@ -30,8 +34,8 @@ function ImagesPlugin(options) {
   function onInsert(event, change, editor) {
     const transfer = getEventTransfer(event);
     const range = getEventRange(event, change.value);
-    console.log('range---->', range);
-    console.log('transfer---->', transfer);
+    // console.log('range---->', range);
+    // console.log('transfer---->', transfer);
     switch (transfer.type) {
       case 'files': return onInsertFiles(event, change, editor, transfer, range);
       case 'html': return onInsertHtml(event, change, editor, transfer, range);
@@ -57,20 +61,15 @@ function ImagesPlugin(options) {
 
   function onInsertHtml(event, change, editor, transfer, range) {
     const { html } = transfer;
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const body = doc.body;
-    const firstChild = body.firstChild;
-    if (firstChild.nodeName.toLowerCase() !== 'img') {
-      return;
-    }
-    const src = firstChild.src;
-    console.log('src------>', src);
+    const { document } = serializer.deserialize(html);
+    change.insertFragment(document);
+    console.log('imageNode------>', imageNode);
+    // asyncApplyChange(change, editor, file);
   }
   return {
     ...corePlugin,
     onDrop: onInsert,
-    onPaste: onInsert,
+    // onPaste: onInsert,
   };
 }
 
