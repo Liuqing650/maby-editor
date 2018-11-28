@@ -1,7 +1,10 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
-import { BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin } from './plugins';
+import {
+  BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin,
+  HeaderOnePlugin, HeaderTwoPlugin, HeaderThreePlugin, HeaderFourPlugin, HeaderFivePlugin, HeaderSixPlugin,
+} from './plugins';
 // initSate
 import * as initState from './initValue/initState';
 // style
@@ -15,6 +18,12 @@ const initialState = existingValue ? Value.fromJSON(existingValue) : initState.v
 
 // 插件
 const plugins = [
+  HeaderOnePlugin(),
+  HeaderTwoPlugin(),
+  HeaderThreePlugin(),
+  HeaderFourPlugin(),
+  HeaderFivePlugin(),
+  HeaderSixPlugin(),
   BoldPlugin(),
   BlockquotePlugin(),
   PasteHtmlPlugin(),

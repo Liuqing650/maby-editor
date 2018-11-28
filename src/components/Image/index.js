@@ -6,19 +6,15 @@ class Image extends React.Component {
   state = {
     width: 0,
     height: 0,
+    style: {},
     src: '',
     title: '',
     isFocus: false,
   };
-  componentDidMount() {
+  componentWillMount() {
     const { node } = this.props;
     const { data } = node;
-    const file = data.get('file');
-    if (file) {
-      this.loadImage(file);
-    } else {
-      this.setBaseFileToSrc(data);
-    }
+    this.initImage(data);
   }
   setBaseFileToSrc = (data) => {
     const src = data.get('base64') || data.get('src') || null;
@@ -27,6 +23,16 @@ class Image extends React.Component {
       this.setState({ src, title });
     }
   };
+  initImage = (data) => {
+    const style = data.get('style');
+    const file = data.get('file');
+    if (file) {
+      this.loadImage(file);
+    } else {
+      this.setBaseFileToSrc(data);
+    }
+    this.setState({style});
+  }
   isValid = () => {
     const node = this.props.node;
     const src = node.get('base64') || node.get('src');
@@ -100,10 +106,11 @@ class Image extends React.Component {
     return (<ToolBar {...toolBarProps} />);
   };
   render() {
-    const { src, title } = this.state;
+    const { src, title, style } = this.state;
     const isShow = this.isSelected();
     const dragProps = {
-      width: 600,
+      width: style && style.width ? style.width : 600,
+      height: style && style.height ? style.height : 400,
       image: src,
       title,
       tabIndex: 'false',
@@ -115,9 +122,9 @@ class Image extends React.Component {
       onClickImage: this.handleClickImage,
       renderTool: this.renderToolBar,
     };
-    const style = { display: 'block' };
+    const imgStyle = { display: 'block' };
     return (
-      <span style={style} {...this.props.attribute}>
+      <span style={imgStyle} {...this.props.attribute}>
         <ImageDrag {...dragProps} />
       </span>
     );

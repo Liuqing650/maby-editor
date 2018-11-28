@@ -1,20 +1,8 @@
-// import styled from 'styled-components';
-
-// export const ImageContainer = styled.img`
-//   src: ${props => props.src};
-//   width: ${props => props.width};
-//   height: ${props => props.height};
-//   margin-left: ${props => props.indent};
-//   display: flex;
-//   justify-content: ${props => {
-//     if (props.align === 'center') {
-//       return 'center';
-//     } else if (props.align === 'right') {
-//       return 'flex-end';
-//     }
-//     return 'flex-start';
-//   }};
-// `;
+const getStyleByAttr = (element, attr) => {
+  const isAttr = element.style[attr] && typeof element.style[attr] === 'number' && element.style[attr] > 0;
+  const imgAttr = element.getAttribute(`img_${attr}`) || null;
+  return isAttr ? element.style.width : imgAttr;
+};
 
 const defaultAttrs = {
   src: node => node.data.get('src')
@@ -22,36 +10,32 @@ const defaultAttrs = {
 
 export default function(inlineType, stylesAttr = defaultAttrs) {
   return {
-    deserialize(el, next) {
-      if (inlineType && el.tagName && el.tagName.toLowerCase() === 'img') {
+    deserialize(element, next) {
+      if (inlineType && element.tagName && element.tagName.toLowerCase() === 'img') {
         const data = {};
-        if (el.src) {
-          data.src = el.getAttribute('src');
+        const width = getStyleByAttr(element, 'width');
+        const height = getStyleByAttr(element, 'height');
+        const style = {};
+        if (element.src) {
+          data.src = element.getAttribute('src');
         }
 
-        if (el.style.marginLeft) {
-          data.indent = el.style.marginLeft;
+        if (element.style.marginLeft) {
+          data.indent = element.style.marginLeft;
         }
 
-        if (
-          el.style.width &&
-          typeof el.style.width === 'number' &&
-          el.style.width > 0
-        ) {
-          data.width = el.style.width;
+        if (width && !isNaN(Number(width))) {
+          style.width = Number(width);
         }
 
-        if (
-          el.style.height &&
-          typeof el.style.height === 'number' &&
-          el.style.height > 0
-        ) {
-          data.height = el.style.height;
+        if (height && !isNaN(Number(height))) {
+          style.height = Number(height);
         }
+        data.style = style;
         return {
           object: 'block',
           type: inlineType,
-          nodes: next(el.childNodes),
+          nodes: next(element.childNodes),
           data,
           isVoid: true
         };

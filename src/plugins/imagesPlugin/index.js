@@ -34,8 +34,6 @@ function ImagesPlugin(options) {
   function onInsert(event, change, editor) {
     const transfer = getEventTransfer(event);
     const range = getEventRange(event, change.value);
-    // console.log('range---->', range);
-    // console.log('transfer---->', transfer);
     switch (transfer.type) {
       case 'files': return onInsertFiles(event, change, editor, transfer, range);
       case 'html': return onInsertHtml(event, change, editor, transfer, range);
@@ -63,13 +61,11 @@ function ImagesPlugin(options) {
     const { html } = transfer;
     const { document } = serializer.deserialize(html);
     change.insertFragment(document);
-    console.log('imageNode------>', imageNode);
     // asyncApplyChange(change, editor, file);
   }
   return {
     ...corePlugin,
     onDrop: onInsert,
-    // onPaste: onInsert,
   };
 }
 
