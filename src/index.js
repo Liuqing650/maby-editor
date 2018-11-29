@@ -3,6 +3,7 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import {
   BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin,
+  ItalicPlugin, Underlinelugin, DeletelinePlugin, CodePlugin, CodeBlockPlugin,
   HeaderOnePlugin, HeaderTwoPlugin, HeaderThreePlugin, HeaderFourPlugin, HeaderFivePlugin, HeaderSixPlugin,
 } from './plugins';
 // initSate
@@ -18,6 +19,11 @@ const initialState = existingValue ? Value.fromJSON(existingValue) : initState.v
 
 // 插件
 const plugins = [
+  CodePlugin(),
+  CodeBlockPlugin(),
+  ItalicPlugin(),
+  Underlinelugin(),
+  DeletelinePlugin(),
   HeaderOnePlugin(),
   HeaderTwoPlugin(),
   HeaderThreePlugin(),

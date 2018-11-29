@@ -13,8 +13,5 @@ export default {
   EMOJI: 'emoji',
 
   // mark styles
-  FONTBGCOLOR: 'FONTBGCOLOR',
-  FONTCOLOR: 'FONTCOLOR',
-  FONTSIZE: 'FONTSIZE',
-  LETTERSPACING: 'LETTERSPACING'
+  SPAN: 'span',
 };

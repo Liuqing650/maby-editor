@@ -1,7 +1,6 @@
 export default function(Tag, markType) {
   return {
     deserialize(element, next) {
-      console.log('element--------->', element);
       if (markType && element.tagName && element.tagName.toLowerCase() === Tag) {
         const data = {};
         const style = {};

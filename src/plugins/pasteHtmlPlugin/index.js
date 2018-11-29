@@ -13,10 +13,10 @@ export default () => {
      * @param {Change} change
      */
 
-    onPaste: (event, change, next) => {
+    onPaste: (event, change) => {
       const transfer = getEventTransfer(event);
       if (transfer.type !== 'html') {
-        return next();
+        return;
       }
       const { document } = serializer.deserialize(transfer.html);
       change.insertFragment(document);

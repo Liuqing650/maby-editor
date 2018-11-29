@@ -1,4 +1,5 @@
 import * as TYPES from './types';
+import LANGUAGE_OPTIONS from './language';
 
 export const getOption = (type, option) => {
   return {
@@ -6,4 +7,4 @@ export const getOption = (type, option) => {
   };
 };
 
-export default { ...TYPES };
+export default { ...TYPES, LANGUAGE_OPTIONS };

@@ -3,17 +3,42 @@ import isHotkey from 'is-hotkey';
 import Blockquote from './Blockquote';
 import Paragraph from './Paragraph';
 import Image from './Image';
+import CodeBlock from './CodeBlock';
+import CodeLine from './CodeLine';
 import { Header1, Header2, Header3, Header4, Header5, Header6 } from './Header';
 import opts from '../options';
 
 const { BLOCKS } = opts;
 
+const codeBlockNode = (options, props) => {
+  const { data } = props.node;
+  if (data.get && typeof data.get === 'function') {
+    const style = data.get('style');
+    props.attributes = { ...props.attributes, style };
+  }
+  return <CodeBlock {...props} options={options} />;
+};
+const codeLineNode = (props) => {
+  return <CodeLine {...props} />;
+};
+export {
+  codeBlockNode,
+  codeLineNode
+};
+
 export default (options, hotkey) => {
   return {
     renderNode(props) {
+      const { data } = props.node;
+      if (data.get && typeof data.get === 'function') {
+        const style = data.get('style');
+        props.attributes = { ...props.attributes, style};
+      }
       switch (props.node.type) {
         case BLOCKS.BLOCKQUOTE:
           return <Blockquote {...props} />;
+        case BLOCKS.CODE_BLOCK:
+          return <CodeBlock {...props} />;
         case BLOCKS.IMAGE:
           return <Image {...props} />;
         case BLOCKS.HEADING_1:

@@ -19,7 +19,7 @@ export default class Example extends Component {
       console.log('value----->', value);
     }
     const mabyEditorProps = {
-      placeholder: '输入一些文本吧',
+      placeholder: 'Enter some text...',
       className: 'myEditor'
     };
     const style = {
