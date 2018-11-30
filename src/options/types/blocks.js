@@ -38,6 +38,7 @@ export default {
   CODE_LINE: 'code-line',
   BLOCKQUOTE: 'blockquote',
   PARAGRAPH: 'paragraph',
+  BLOCKDEFAULT: 'default',
   FOOTNOTE: 'footnote',
   HR: 'hr',
   // Headings

@@ -4,6 +4,16 @@ import { DEFAULT_RULES } from '../../common/rules';
 
 const serializer = new Html({ rules: DEFAULT_RULES });
 
+const handlePasteHtml = (html, change) => {
+  const { document } = serializer.deserialize(html);
+  change.insertFragment(document);
+  return true;
+};
+
+const handleFragment = (fragment, change) => {
+  return change.insertFragment(fragment);
+};
+
 export default () => {
   return {
     /**
@@ -12,15 +22,21 @@ export default () => {
      * @param {Event} event
      * @param {Change} change
      */
-
     onPaste: (event, change) => {
+      const parser = new DOMParser();
       const transfer = getEventTransfer(event);
-      if (transfer.type !== 'html') {
-        return;
+      const stringHtml = parser.parseFromString(transfer.html, 'text/html');
+      console.log('stringHtml-------->', stringHtml);
+      console.log('transfer-------->', transfer);
+      switch (transfer.type) {
+        case 'html':
+          return handlePasteHtml(transfer.html, change);
+        case 'fragment':
+          return handleFragment(transfer.fragment, change);
+        default:
+          break;
       }
-      const { document } = serializer.deserialize(transfer.html);
-      change.insertFragment(document);
-      return true;
+      return false;
     }
   };
 };

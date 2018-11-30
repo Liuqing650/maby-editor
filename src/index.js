@@ -1,11 +1,14 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
+import EditPrism from 'slate-prism';
+import EditCode from 'slate-edit-code';
 import {
-  BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin,
+  BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin, LinkPlugin,
   ItalicPlugin, Underlinelugin, DeletelinePlugin, CodePlugin, CodeBlockPlugin,
   HeaderOnePlugin, HeaderTwoPlugin, HeaderThreePlugin, HeaderFourPlugin, HeaderFivePlugin, HeaderSixPlugin,
 } from './plugins';
+import options from './options';
 // initSate
 import * as initState from './initValue/initState';
 // style
@@ -17,10 +20,23 @@ const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.g
 // 构建初始状态…
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
 
+const { BLOCKS } = options;
+
+const editCodePlugin = EditCode({
+  containerType: BLOCKS.CODE_BLOCK,
+  lineType: BLOCKS.CODE_LINE,
+  onlyIn: node => node.type === BLOCKS.CODE_BLOCK
+});
 // 插件
 const plugins = [
+  editCodePlugin,
+  LinkPlugin(),
   CodePlugin(),
   CodeBlockPlugin(),
+  EditPrism({
+    onlyIn: node => node.type === BLOCKS.CODE_BLOCK,
+    getSyntax: node => node.data.get('syntax')
+  }),
   ItalicPlugin(),
   Underlinelugin(),
   DeletelinePlugin(),
@@ -64,7 +80,6 @@ class MaybeEditor extends React.Component {
   onChange = ({ value }) => {
     this.setState({ value });
   }
-
   render() {
     const { placeholder, className } = this.props;
     return (

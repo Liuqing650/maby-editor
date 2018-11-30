@@ -1,3 +1,5 @@
+import { analysisStyle } from './utils';
+
 const getStyleByAttr = (element, attr) => {
   const isAttr = element.style[attr] && typeof element.style[attr] === 'number' && element.style[attr] > 0;
   const imgAttr = element.getAttribute(`img_${attr}`) || null;
@@ -15,7 +17,7 @@ export default function(inlineType, stylesAttr = defaultAttrs) {
         const data = {};
         const width = getStyleByAttr(element, 'width');
         const height = getStyleByAttr(element, 'height');
-        const style = {};
+        const style = analysisStyle(element.getAttribute('style'));
         if (element.src) {
           data.src = element.getAttribute('src');
         }
