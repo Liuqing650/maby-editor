@@ -1,7 +1,6 @@
 import React from 'react';
 import isHotkey from 'is-hotkey';
 import Bold from './Bold';
-import Paragraph from './Paragraph';
 import PrismSpan from './PrismSpan';
 import SpanMark from './SpanMark';
 import Underline from './Underline';
@@ -41,7 +40,6 @@ export default (options, hotkey) => {
           if (type) { // 高亮代码
             return <PrismSpan {...props} />;
           }
-          return <Paragraph {...props} />;
       }
     },
     onKeyDown(event, change) {

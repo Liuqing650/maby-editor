@@ -2,7 +2,7 @@ import EditPrism from 'slate-prism';
 import EditCode from 'slate-edit-code';
 import options from '../options';
 import {
-  BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin, LinkPlugin,
+  BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin, LinkPlugin, HrPlugin,
   ItalicPlugin, Underlinelugin, DeletelinePlugin, CodePlugin, CodeBlockPlugin,
   HeaderOnePlugin, HeaderTwoPlugin, HeaderThreePlugin, HeaderFourPlugin, HeaderFivePlugin, HeaderSixPlugin,
 } from './index';
@@ -20,6 +20,7 @@ const plugins = [
   LinkPlugin(),
   CodePlugin(),
   CodeBlockPlugin(),
+  HrPlugin(),
   EditPrism({
     onlyIn: node => node.type === BLOCKS.CODE_BLOCK,
     getSyntax: node => node.data.get('syntax')

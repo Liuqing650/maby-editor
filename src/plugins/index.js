@@ -2,6 +2,7 @@ import BlockquotePlugin from './blockquotePlugin';
 import ImagesPlugin from './imagesPlugin';
 import PasteHtmlPlugin from './pasteHtmlPlugin';
 import CodeBlockPlugin from './codeBlockPlugin';
+import HrPlugin from './hrPlugin';
 import { HeaderOnePlugin, HeaderTwoPlugin, HeaderThreePlugin, HeaderFourPlugin, HeaderFivePlugin, HeaderSixPlugin } from './headerPlugin';
 // mark
 import BoldPlugin from './boldPlugin';
@@ -18,6 +19,7 @@ export {
   CodeBlockPlugin,
   ImagesPlugin,
   PasteHtmlPlugin,
+  HrPlugin,
   HeaderOnePlugin,
   HeaderTwoPlugin,
   HeaderThreePlugin,
