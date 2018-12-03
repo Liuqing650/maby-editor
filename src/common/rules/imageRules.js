@@ -10,13 +10,13 @@ const defaultAttrs = {
   src: node => node.data.get('src')
 };
 
-export default function(inlineType, stylesAttr = defaultAttrs) {
+export default function(blockType, stylesAttr = defaultAttrs) {
   return {
     deserialize(element, next) {
-      if (inlineType && element.tagName && element.tagName.toLowerCase() === 'img') {
+      if (blockType && element.tagName && element.tagName.toLowerCase() === 'img') {
         const data = {};
-        const width = getStyleByAttr(element, 'width');
-        const height = getStyleByAttr(element, 'height');
+        const width = getStyleByAttr(element, 'width') || element.width;
+        const height = getStyleByAttr(element, 'height') || element.height;
         const style = analysisStyle(element.getAttribute('style'));
         if (element.src) {
           data.src = element.getAttribute('src');
@@ -36,7 +36,7 @@ export default function(inlineType, stylesAttr = defaultAttrs) {
         data.style = style;
         return {
           object: 'block',
-          type: inlineType,
+          type: blockType,
           nodes: next(element.childNodes),
           data,
           isVoid: true

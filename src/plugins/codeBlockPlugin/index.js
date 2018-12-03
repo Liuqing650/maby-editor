@@ -18,12 +18,5 @@ export default (opt) => {
         return codeLineNode(props);
       }
     },
-    // onKeyDown(event, change) {
-    //   if (hotkey && isHotkey(hotkey, event)) {
-    //     event.preventDefault();
-    //     const isThisType = change.value.blocks.some(block => block.type === options.type);
-    //     change.call(change => change.setBlocks(!isThisType ? options.codeType : BLOCKS.PARAGRAPH));
-    //   }
-    // }
   };
 };

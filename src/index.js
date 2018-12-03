@@ -1,14 +1,7 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
-import EditPrism from 'slate-prism';
-import EditCode from 'slate-edit-code';
-import {
-  BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin, LinkPlugin,
-  ItalicPlugin, Underlinelugin, DeletelinePlugin, CodePlugin, CodeBlockPlugin,
-  HeaderOnePlugin, HeaderTwoPlugin, HeaderThreePlugin, HeaderFourPlugin, HeaderFivePlugin, HeaderSixPlugin,
-} from './plugins';
-import options from './options';
+import plugins, { editCodePlugin } from './plugins/import';
 // initSate
 import * as initState from './initValue/initState';
 // style
@@ -19,49 +12,6 @@ const SAVE_KEY = 'maybe-slate-save';
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
 // 构建初始状态…
 const initialState = existingValue ? Value.fromJSON(existingValue) : initState.valueModel('A line of text in a paragraph.');
-
-const { BLOCKS } = options;
-
-const editCodePlugin = EditCode({
-  containerType: BLOCKS.CODE_BLOCK,
-  lineType: BLOCKS.CODE_LINE,
-  onlyIn: node => node.type === BLOCKS.CODE_BLOCK
-});
-// 插件
-const plugins = [
-  editCodePlugin,
-  LinkPlugin(),
-  CodePlugin(),
-  CodeBlockPlugin(),
-  EditPrism({
-    onlyIn: node => node.type === BLOCKS.CODE_BLOCK,
-    getSyntax: node => node.data.get('syntax')
-  }),
-  ItalicPlugin(),
-  Underlinelugin(),
-  DeletelinePlugin(),
-  HeaderOnePlugin(),
-  HeaderTwoPlugin(),
-  HeaderThreePlugin(),
-  HeaderFourPlugin(),
-  HeaderFivePlugin(),
-  HeaderSixPlugin(),
-  BoldPlugin(),
-  BlockquotePlugin(),
-  PasteHtmlPlugin(),
-  ImagesPlugin({
-    lastInsert: {
-      line: 5,
-    },
-    insertImage: (transform, file) => {
-      return transform.insertBlock({
-        type: 'image',
-        isVoid: true,
-        data: { file },
-      });
-    }
-  }),
-];
 
 class MaybeEditor extends React.Component {
   constructor(props) {
@@ -80,14 +30,24 @@ class MaybeEditor extends React.Component {
   onChange = ({ value }) => {
     this.setState({ value });
   }
+  onToggleCode = () => {
+    const { value } = this.state;
+    this.onChange(editCodePlugin.changes.toggleCodeBlock(value.change(), 'paragraph').focus());
+  };
   render() {
     const { placeholder, className } = this.props;
+    const { value } = this.state;
     return (
-      <div className={className}>
+      <div className={`maby ${className}`}>
+        <button onClick={this.onToggleCode}>
+          {editCodePlugin.utils.isInCodeBlock(value)
+            ? 'Paragraph'
+            : 'Code Block'}
+        </button>
         <Editor
           plugins={plugins}
           placeholder={placeholder || ''}
-          value={this.state.value}
+          value={value}
           onChange={this.onChange}
           ref={(element) => { this.editor = element; }}
         />

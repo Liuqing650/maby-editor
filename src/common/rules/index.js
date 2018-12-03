@@ -1,6 +1,7 @@
 import { BLOCKS, MARKS } from '../../options/types';
 import image from './imageRules';
 import blockRules from './blockRules';
+import voidBlock from './voidBlockRules';
 import codeRules from './codeBlockRules';
 import markRules from './markRules';
 
@@ -20,7 +21,13 @@ export const DEFAULT_RULES = [
   blockRules('h4', BLOCKS.HEADING_4),
   blockRules('h5', BLOCKS.HEADING_5),
   blockRules('h6', BLOCKS.HEADING_6),
+  voidBlock('hr', BLOCKS.HR),
   markRules('a', MARKS.LINK),
+  markRules('i', MARKS.ITALIC),
+  markRules('s', MARKS.STRIKETHROUGH),
+  markRules('del', MARKS.STRIKETHROUGH),
+  markRules('u', MARKS.UNDERLINE),
+  markRules('code', MARKS.CODE),
   markRules('strong', MARKS.BOLD),
   markRules('span', MARKS.SPAN),
 ];
