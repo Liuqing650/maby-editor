@@ -1,3 +1,4 @@
+// import isHotkey from 'is-hotkey';
 import { codeBlockNode, codeLineNode } from '../../components/renderBlock';
 import opts from '../../options';
 
@@ -16,6 +17,13 @@ export default (opt) => {
       } else if (props.node.type === options.codeLineType) {
         return codeLineNode(props);
       }
-    }
+    },
+    // onKeyDown(event, change) {
+    //   if (hotkey && isHotkey(hotkey, event)) {
+    //     event.preventDefault();
+    //     const isThisType = change.value.blocks.some(block => block.type === options.type);
+    //     change.call(change => change.setBlocks(!isThisType ? options.codeType : BLOCKS.PARAGRAPH));
+    //   }
+    // }
   };
 };

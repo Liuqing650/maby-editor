@@ -2,6 +2,7 @@ import React from 'react';
 import isHotkey from 'is-hotkey';
 import Blockquote from './Blockquote';
 import Paragraph from './Paragraph';
+import DefaultBlock from './DefaultBlock';
 import Image from './Image';
 import CodeBlock from './CodeBlock';
 import CodeLine from './CodeLine';
@@ -37,8 +38,6 @@ export default (options, hotkey) => {
       switch (props.node.type) {
         case BLOCKS.BLOCKQUOTE:
           return <Blockquote {...props} />;
-        case BLOCKS.CODE_BLOCK:
-          return <CodeBlock {...props} />;
         case BLOCKS.IMAGE:
           return <Image {...props} />;
         case BLOCKS.HEADING_1:
@@ -53,8 +52,10 @@ export default (options, hotkey) => {
           return <Header5 {...props} />;
         case BLOCKS.HEADING_6:
           return <Header6 {...props} />;
-        default:
+        case BLOCKS.PARAGRAPH:
           return <Paragraph {...props} />;
+        default:
+          return <DefaultBlock {...props} />;
       }
     },
     onKeyDown(event, change) {

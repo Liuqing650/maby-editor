@@ -1,8 +1,8 @@
 import React from 'react';
 import { LANGUAGE_OPTIONS } from '../../options';
 
-const CodeBlock = (props, options) => {
-  const { editor, node } = props;
+const CodeBlock = (props) => {
+  const { editor, node, options } = props;
   const syntax = options.getSyntax(node);
   const onChange = (event) => {
     editor.change(c =>

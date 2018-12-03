@@ -124,7 +124,7 @@ class Image extends React.Component {
     };
     const imgStyle = { display: 'block' };
     return (
-      <span style={imgStyle} {...this.props.attribute}>
+      <span style={imgStyle} {...this.props.attributes}>
         <ImageDrag {...dragProps} />
       </span>
     );

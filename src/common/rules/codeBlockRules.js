@@ -6,10 +6,10 @@ export default function(options) {
   });
   return {
     deserialize(element, next) {
-      if (el.tagName && el.tagName.toLowerCase() === 'pre') {
-        const cls = el.childNodes[0].className;
+      if (element.tagName && element.tagName.toLowerCase() === 'pre') {
+        const cls = element.childNodes[0].className;
         const matched = cls && cls.match(/(?:lang|language)-(\w+)/);
-        const codeBlockNode = codePlugin.utils.deserializeCode(el.textContent);
+        const codeBlockNode = codePlugin.utils.deserializeCode(element.textContent);
         if (matched) {
           const codeBlock = codeBlockNode.toJSON();
           codeBlock.data = { syntax: matched[1] };

@@ -24,6 +24,6 @@ const createParagraphLine = (change, node, paragraph, line = 1) => {
     change.insertNodeByKey(node.key, node.nodes.size, paragraph);
     line--;
   }
-  return true;
+  return change;
 };
 export default schema;

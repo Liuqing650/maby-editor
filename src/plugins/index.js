@@ -9,6 +9,7 @@ import ItalicPlugin from './italicPlugin';
 import Underlinelugin from './underlinelugin';
 import DeletelinePlugin from './deletelinePlugin';
 import CodePlugin from './codePlugin';
+import LinkPlugin from './linkPlugin';
 
 export {
   BoldPlugin,
@@ -24,6 +25,7 @@ export {
   HeaderFivePlugin,
   HeaderSixPlugin,
   ItalicPlugin,
+  LinkPlugin,
   Underlinelugin,
   DeletelinePlugin,
 };
