@@ -2,6 +2,7 @@ import React from 'react';
 import isHotkey from 'is-hotkey';
 import Bold from './Bold';
 import Paragraph from './Paragraph';
+import PrismSpan from './PrismSpan';
 import SpanMark from './SpanMark';
 import Underline from './Underline';
 import Italic from './Italic';
@@ -16,12 +17,12 @@ const { MARKS } = opts;
 export default (options, hotkey) => {
   return {
     renderMark(props) {
-      const { data } = props.mark;
+      const { data, type } = props.mark;
       if (data.get && typeof data.get === 'function') {
         const style = data.get('style');
         props.attributes = { ...props.attributes, style };
       }
-      switch (props.mark.type) {
+      switch (type) {
         case MARKS.BOLD:
           return <Bold {...props} />;
         case MARKS.LINK:
@@ -37,6 +38,9 @@ export default (options, hotkey) => {
         case MARKS.CODE:
           return <Code {...props} />;
         default:
+          if (type) { // 高亮代码
+            return <PrismSpan {...props} />;
+          }
           return <Paragraph {...props} />;
       }
     },

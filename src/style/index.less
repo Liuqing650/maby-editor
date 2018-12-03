@@ -12,16 +12,24 @@ html, body, :global(#root) {
   padding: 0;
 }
 :global {
-  blockquote {
+  .maby blockquote {
     display: block;
     border-left: 6px solid #222222;
     background: #eee;
   }
-  .code-mark {
+  .maby .code-mark {
     padding: 0.2em 0.4em;
     margin: 0;
     font-size: 85%;
     background-color: rgba(27,31,35,0.05);
+    border-radius: 3px;
+  }
+  .maby pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f6f8fa;
     border-radius: 3px;
   }
 }

@@ -12,12 +12,6 @@ const LIST_OPTIONS = {
   typeItem: 'list_item',
   typeDefault: 'paragraph'
 };
-// code 高亮语言配置
-const LANGUAGE_OPTIONS = {
-  css: 'CSS',
-  js: 'JavaScript',
-  html: 'HTML',
-};
 // 辅助配置项
 const HELP = {
   LOCAL_SAVE: 'save',
@@ -66,7 +60,6 @@ export default {
   // 组合类型
   CODE_BLOCK_OPTIONS,
   LIST_OPTIONS,
-  LANGUAGE_OPTIONS,
   TABLE_ALIGN,
   HELP
 };

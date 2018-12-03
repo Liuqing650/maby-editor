@@ -7,4 +7,7 @@ export const getOption = (type, option) => {
   };
 };
 
-export default { ...TYPES, LANGUAGE_OPTIONS };
+export {
+  LANGUAGE_OPTIONS
+};
+export default { ...TYPES };
