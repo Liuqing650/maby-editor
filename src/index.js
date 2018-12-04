@@ -1,6 +1,7 @@
 import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
+import { Button } from 'antd';
 import plugins, { editCodePlugin } from './plugins/import';
 // initSate
 import * as initState from './initValue/initState';
@@ -39,11 +40,11 @@ class MaybeEditor extends React.Component {
     const { value } = this.state;
     return (
       <div className={`maby ${className}`}>
-        <button onClick={this.onToggleCode}>
+        <Button type="primary" onClick={this.onToggleCode}>
           {editCodePlugin.utils.isInCodeBlock(value)
             ? 'Paragraph'
             : 'Code Block'}
-        </button>
+        </Button>
         <Editor
           plugins={plugins}
           placeholder={placeholder || ''}

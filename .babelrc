@@ -11,6 +11,14 @@
     "transform-runtime",
     "transform-decorators-legacy",
     [
+      "import",
+      {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": true
+      }
+    ],
+    [
       "transform-class-properties",
       {
         "spec": true

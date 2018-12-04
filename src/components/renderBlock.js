@@ -66,6 +66,7 @@ export default (options, hotkey) => {
         event.preventDefault();
         const isThisType = change.value.blocks.some(block => block.type === options.type);
         change.call(change => change.setBlocks(!isThisType ? options.type : BLOCKS.PARAGRAPH));
+        return change;
       }
     }
   };
