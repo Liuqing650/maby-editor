@@ -61,7 +61,6 @@ function ImagesPlugin(options) {
     const { html } = transfer;
     const { document } = serializer.deserialize(html);
     change.insertFragment(document);
-    // asyncApplyChange(change, editor, file);
   }
   return {
     ...corePlugin,

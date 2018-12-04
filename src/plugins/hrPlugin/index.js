@@ -4,25 +4,55 @@ import opts from '../../options';
 import core from './core';
 
 const { BLOCKS } = opts;
+
 export default (opt) => {
   const options = Object.assign({
     type: BLOCKS.HR
   }, opt);
   const corePlugin = core(options);
+  const hotkey = 'mod+y';
+  /**
+   * 插入hr
+   * @param {event} event 默认事件
+   * @param {Change} change Slate
+   */
+  const onInsertHr = (event, change) => {
+    const { value } = change;
+    const focusBlock = value.focusBlock;
+    event.preventDefault();
+    change.insertBlock({
+      type: options.type,
+      isVoid: true
+    });
+    change.collapseToStartOfNextBlock().focus();
+    if (focusBlock.isEmpty) {
+      change.removeNodeByKey(focusBlock.key);
+    }
+    return change;
+  };
+  /**
+   * 删除hr
+   * @param {event} event 默认事件
+   * @param {Change} change Slate
+   */
+  const onBackspace = (event, change) => {
+    const { value } = change;
+    const { previousBlock } = value;
+    event.preventDefault();
+    if (previousBlock.type === options.type) {
+      change.removeNodeByKey(previousBlock.key);
+    }
+    return change;
+  };
   return {
     ...corePlugin,
     ...renderBlock(options),
     onKeyDown: (event, change) => {
-      const { value } = change;
-      const { texts } = value;
-      const currentTextNode = texts.get(0);
-      const hotkey = 'mod+y';
       if (hotkey && isHotkey(hotkey, event)) {
-        event.preventDefault();
-        change.removeNodeByKey(currentTextNode.key).insertBlock({
-          type: options.type,
-          isVoid: true
-        }).collapseToStartOfNextBlock();
+        onInsertHr(event, change);
+      }
+      if (event.key === 'Backspace') {
+        onBackspace(event, change);
       }
     },
   };

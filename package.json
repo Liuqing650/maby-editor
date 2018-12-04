@@ -35,7 +35,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.2",
-    "babel-plugin-import": "^1.6.3",
+    "babel-plugin-import": "^1.11.0",
     "babel-plugin-react-hot-loader": "^3.0.0-beta.6",
     "babel-plugin-react-transform": "^3.0.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -63,8 +63,11 @@
     "immutable": "^3.8.2",
     "is-hotkey": "^0.1.3",
     "is-image": "^2.0.0",
+    "less": "2.7.2",
+    "less-loader": "^4.0.5",
+    "less-plugin-npm-import": "^2.1.0",
     "lodash": "^4.17.4",
-    "maby-lib-cli": "^2.0.0",
+    "maby-lib-cli": "^2.0.1",
     "react-click-outside": "^3.0.1",
     "react-codemirror": "^1.0.0",
     "react-transform-catch-errors": "^1.0.2",
@@ -75,6 +78,7 @@
     "to-pascal-case": "^1.0.0"
   },
   "dependencies": {
+    "antd": "^3.11.0",
     "babel-runtime": "^6.26.0",
     "detect-indent": "^5.0.0",
     "immutable": "^3.8.2",
@@ -86,9 +90,8 @@
     "slate-react": "^0.12.4",
     "slate-soft-break": "^0.6.0"
   },
-  "mabycli": {
-    "stylelint": true,
-    "eslint": true,
-    "port": 10056
+  "mabycli": "./mabycli.js",
+  "theme": {
+    "primary-color": "#fa541c"
   }
 }

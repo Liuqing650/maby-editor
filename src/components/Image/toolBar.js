@@ -1,4 +1,5 @@
 import React from 'react';
+import { Input } from 'antd';
 
 class ToolBar extends React.Component {
   constructor(props) {
@@ -77,13 +78,19 @@ class ToolBar extends React.Component {
     };
     const widthProps = {
       ...eventProps,
-      onChange: this.onInputWidthChange,
+      style: { width: 50 },
+      size: 'small',
+      defaultValue: width,
       value: width,
+      onChange: this.onInputWidthChange,
     };
     const heightProps = {
       ...eventProps,
-      onChange: this.onInputHeightChange,
+      style: { width: 50 },
+      size: 'small',
+      defaultValue: height,
       value: height,
+      onChange: this.onInputHeightChange,
     };
     const toolBarStyle = {
       position: 'absolute',
@@ -94,8 +101,8 @@ class ToolBar extends React.Component {
         contentEditable={false}
         style={toolBarStyle}
       >
-        width: <span><input {...widthProps} type="text" /></span>
-        height: <span><input {...heightProps} /></span>
+        width: <span><Input {...widthProps} type="text" /></span>
+        height: <span><Input {...heightProps} /></span>
       </div>
     );
   }

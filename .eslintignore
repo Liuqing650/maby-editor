@@ -8,4 +8,5 @@ src/assets/
 script/getPackage.js
 script/handleLibaryName.js
 webpack.config.js
+mabycli.js
 ../image-drag/

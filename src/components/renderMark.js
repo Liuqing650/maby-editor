@@ -46,6 +46,7 @@ export default (options, hotkey) => {
       if (hotkey && isHotkey(hotkey, event)) {
         event.preventDefault();
         change.call(change => change.toggleMark(options.type));
+        return change;
       }
     }
   };
