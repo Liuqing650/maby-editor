@@ -6,6 +6,7 @@ import DefaultBlock from './DefaultBlock';
 import Image from './Image';
 import CodeBlock from './CodeBlock';
 import CodeLine from './CodeLine';
+import CheckList from './CheckList';
 import Hr from './Hr';
 import { Header1, Header2, Header3, Header4, Header5, Header6 } from './Header';
 import opts from '../options';
@@ -43,6 +44,8 @@ export default (options, hotkey) => {
           return <Image {...props} />;
         case BLOCKS.HR:
           return <Hr {...props} />;
+        case BLOCKS.LIST_ITEM:
+          return <CheckList {...props} />;
         case BLOCKS.HEADING_1:
           return <Header1 {...props} />;
         case BLOCKS.HEADING_2:

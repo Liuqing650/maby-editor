@@ -1,6 +1,9 @@
 import React from 'react';
-import { Select } from 'antd';
-import { LANGUAGE_OPTIONS } from '../../options';
+import { Select, Icon } from 'antd';
+import options, { LANGUAGE_OPTIONS } from '../../options';
+import { editCodePlugin } from '../../plugins/import';
+
+const { BLOCKS } = options;
 
 const Option = Select.Option;
 class CodeBlock extends React.Component {
@@ -14,6 +17,27 @@ class CodeBlock extends React.Component {
         data: { syntax }
       }));
   };
+  onHandleDelete = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    const { editor } = this.props;
+    editor.change(change => {
+      editCodePlugin.changes.unwrapCodeBlock(change, BLOCKS.PARAGRAPH);
+      return change;
+    });
+  };
+  renderDeleteIcon = () => {
+    const deleteProps = {
+      className: 'code-delete',
+      onClick: this.onHandleDelete
+    };
+    return (
+      <span {...deleteProps}>
+        <Icon type="delete" />
+      </span>
+    );
+  };
   render() {
     const { node, options, attributes, children } = this.props;
     const syntax = options.getSyntax(node);
@@ -21,11 +45,12 @@ class CodeBlock extends React.Component {
       return LANGUAGE_OPTIONS.map((item, idx) => (<Option key={`${item.value}-${idx}`} value={item.value} title={item.title}>{item.title}</Option>));
     };
     return (
-      <div className="code-block code-linenumber">
+      <div className="code-block code-linenumber" {...attributes}>
         <div
           contentEditable={false}
           className="code-select-box clearfix"
         >
+          {this.renderDeleteIcon()}
           <div className="code-select">
             <Select
               showSearch
@@ -39,7 +64,7 @@ class CodeBlock extends React.Component {
           </div>
         </div>
         <pre>
-          <code {...attributes}>{children}</code>
+          <code>{children}</code>
         </pre>
       </div>
     );

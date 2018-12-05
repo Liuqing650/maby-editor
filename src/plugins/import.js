@@ -12,6 +12,7 @@ const { BLOCKS } = options;
 const editCodePlugin = EditCode({
   containerType: BLOCKS.CODE_BLOCK,
   lineType: BLOCKS.CODE_LINE,
+  getIndent: () => ('  '),
   onlyIn: node => node.type === BLOCKS.CODE_BLOCK
 });
 // 插件
@@ -20,6 +21,7 @@ const plugins = [
   LinkPlugin(),
   CodePlugin(),
   CodeBlockPlugin(),
+  // CheckListPlugin(),
   HrPlugin(),
   EditPrism({
     onlyIn: node => node.type === BLOCKS.CODE_BLOCK,

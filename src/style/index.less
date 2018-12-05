@@ -18,8 +18,10 @@ html, body, :global(#root) {
     }
     blockquote {
       display: block;
-      border-left: 6px solid #222222;
-      background: #eee;
+      border-left: 6px solid #dfe2e5;
+      padding-left: 6px;
+      margin-bottom: 0;
+      margin-top: 0;
     }
     .code-mark {
       padding: 0.2em 0.4em;
@@ -39,6 +41,17 @@ html, body, :global(#root) {
         width: 100%;
         background: #fff;
         padding: 5px;
+        .code-delete {
+          float: left;
+          width: 30px;
+          line-height: 32px;
+          font-size: 16px;
+          text-align: center;
+          cursor: pointer;
+          &:hover {
+            background: #f4f4f4;
+          }
+        }
         .code-select {
           float: right;
         }
