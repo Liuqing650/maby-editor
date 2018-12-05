@@ -21,24 +21,26 @@ class CodeBlock extends React.Component {
       return LANGUAGE_OPTIONS.map((item, idx) => (<Option key={`${item.value}-${idx}`} value={item.value} title={item.title}>{item.title}</Option>));
     };
     return (
-      <div style={{ position: 'relative' }}>
+      <div className="code-block code-linenumber">
+        <div
+          contentEditable={false}
+          className="code-select-box clearfix"
+        >
+          <div className="code-select">
+            <Select
+              showSearch
+              value={syntax}
+              style={{ width: 180 }}
+              onChange={this.onChange}
+              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+              {createOption()}
+            </Select>
+          </div>
+        </div>
         <pre>
           <code {...attributes}>{children}</code>
         </pre>
-        <div
-          contentEditable={false}
-          style={{ position: 'absolute', top: '5px', right: '5px' }}
-        >
-          <Select
-            showSearch
-            value={syntax}
-            style={{ width: 180 }}
-            onChange={this.onChange}
-            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-          >
-            {createOption()}
-          </Select>
-        </div>
       </div>
     );
   }

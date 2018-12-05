@@ -39,7 +39,7 @@ export default (opt) => {
     const { value } = change;
     const { previousBlock } = value;
     event.preventDefault();
-    if (previousBlock.type === options.type) {
+    if (previousBlock && previousBlock.type === options.type) {
       change.removeNodeByKey(previousBlock.key);
     }
     return change;

@@ -61,6 +61,12 @@ const getExtractTextPlugin = (ExtractText) => {
 module.exports = () => ({
   stylelint: true,
   port: 10056,
+  vendors: [
+    'react',
+    'react-dom',
+    'redbox-react',
+    'antd',
+  ],
   loaders: getLoaders,
   extractTextPlugin: getExtractTextPlugin
 });

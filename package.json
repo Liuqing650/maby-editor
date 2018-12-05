@@ -55,7 +55,7 @@
     "less-loader": "^4.0.5",
     "less-plugin-npm-import": "^2.1.0",
     "lodash": "^4.17.4",
-    "maby-lib-cli": "^2.0.1",
+    "maby-lib-cli": "^2.0.2",
     "react-transform-catch-errors": "^1.0.2",
     "redbox-react": "^1.6.0",
     "slate-edit-code": "^0.15.5",

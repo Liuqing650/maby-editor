@@ -5740,10 +5740,10 @@ lru-cache@^4.1.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-maby-lib-cli@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/maby-lib-cli/-/maby-lib-cli-2.0.1.tgz#186ce16c19a6dc30f3e2f064bd6ac1cd3ece38f1"
-  integrity sha512-LavAZjximUIi6k4iMZUMCdKYTjwScVJqQel45MFGEFqby1d/ZvsE0sC9LI7PlDU21D7/Ph+Hp+tPjQTAwtIzWw==
+maby-lib-cli@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/maby-lib-cli/-/maby-lib-cli-2.0.2.tgz#1b51c54e6ee808a1bc9b1cf4760aa6d5b9b85a1a"
+  integrity sha512-uAlThXRVYimiHORiyIR1dD/khMkYE8jYuwautmP5FMNKR4i4ojbHQkRWwzh7/vpF1ms4z+nHuXLlWvYUBWpt+A==
   dependencies:
     "@babel/polyfill" "^7.0.0-beta.51"
     ajv "^6.1.0"
