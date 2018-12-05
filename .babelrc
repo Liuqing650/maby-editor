@@ -7,7 +7,6 @@
   ],
   "comments": true,
   "plugins": [
-    "react-hot-loader/babel",
     "transform-runtime",
     "transform-decorators-legacy",
     [
