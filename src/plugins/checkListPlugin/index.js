@@ -1,32 +1,42 @@
 import isHotkey from 'is-hotkey';
 import renderBlock from '../../components/renderBlock';
 import opts from '../../options';
-import core from './core';
 
 const { BLOCKS } = opts;
 
 export default (opt) => {
   const options = Object.assign({
-    type: BLOCKS.HR
+    type: BLOCKS.LIST_ITEM
   }, opt);
-  const corePlugin = core(options);
-  const hotkey = 'mod+y';
+  const hotkey = 'mod+h';
+  /**
+   * 插入CheckList
+   * @param {event} event 默认事件
+   * @param {Change} change Slate
+   */
+  const onInsert = (event, change) => {
+    const { value } = change;
+    const focusBlock = value.focusBlock;
+    event.preventDefault();
+    change.insertBlock({
+      type: options.type
+    });
+    change.collapseToStartOfNextBlock().focus();
+    if (focusBlock.isEmpty) {
+      change.removeNodeByKey(focusBlock.key);
+    }
+    return change;
+  };
   /**
    * 插入hr
    * @param {event} event 默认事件
    * @param {Change} change Slate
    */
-  const onInsertHr = (event, change) => {
+  const onEnter = (event, change) => {
     const { value } = change;
-    const focusBlock = value.focusBlock;
-    event.preventDefault();
-    change.insertBlock({
-      type: options.type,
-      isVoid: true
-    });
-    change.collapseToStartOfNextBlock().focus();
-    if (focusBlock.isEmpty) {
-      change.removeNodeByKey(focusBlock.key);
+    if (value.startBlock.type === options.type) {
+      change.splitBlock().setBlocks({ data: { checked: false } });
+      return true;
     }
     return change;
   };
@@ -37,22 +47,26 @@ export default (opt) => {
    */
   const onBackspace = (event, change) => {
     const { value } = change;
-    const { previousBlock } = value;
-    event.preventDefault();
-    if (previousBlock && previousBlock.type === options.type) {
-      change.removeNodeByKey(previousBlock.key);
+    if (
+      value.isCollapsed &&
+      value.startBlock.type === options.type &&
+      value.selection.startOffset === 0
+    ) {
+      change.setBlocks(BLOCKS.PARAGRAPH);
+      return true;
     }
-    return change;
   };
   return {
-    ...corePlugin,
     ...renderBlock(options),
     onKeyDown: (event, change) => {
       if (hotkey && isHotkey(hotkey, event)) {
-        onInsertHr(event, change);
+        onInsert(event, change);
       }
       if (event.key === 'Backspace') {
         onBackspace(event, change);
+      }
+      if (event.key === 'Enter') {
+        onEnter(event, change);
       }
     },
   };
