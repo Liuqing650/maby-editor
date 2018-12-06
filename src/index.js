@@ -2,12 +2,14 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import { Button } from 'antd';
-import plugins, { editCodePlugin } from './plugins/import';
+import plugins, { editCodePlugin, editListPlugin } from './plugins/import';
+import options from './options';
 // initSate
 import * as initState from './initValue/initState';
 // style
 import './style';
 
+const { BLOCKS } = options;
 const SAVE_KEY = 'maybe-slate-save';
 // 获取本地缓存数据
 const existingValue = localStorage.getItem(SAVE_KEY) ? JSON.parse(localStorage.getItem(SAVE_KEY)) : null;
@@ -35,6 +37,26 @@ class MaybeEditor extends React.Component {
     const { value } = this.state;
     this.onChange(editCodePlugin.changes.toggleCodeBlock(value.change(), 'paragraph').focus());
   };
+  onUlClick = () => {
+    const {
+      wrapInList,
+      // unwrapList,
+      // increaseItemDepth,
+      // decreaseItemDepth
+    } = editListPlugin.changes;
+    const { value } = this.state;
+    wrapInList(BLOCKS.LIST_OPTIONS, value.change);
+  };
+  onOlClick = () => {
+    const {
+      // wrapInList,
+      unwrapList,
+      // increaseItemDepth,
+      // decreaseItemDepth
+    } = editListPlugin.changes;
+    const { value } = this.state;
+    unwrapList(BLOCKS.LIST_OPTIONS, value.change);
+  };
   render() {
     const { placeholder, className } = this.props;
     const { value } = this.state;
@@ -44,6 +66,12 @@ class MaybeEditor extends React.Component {
           {editCodePlugin.utils.isInCodeBlock(value)
             ? 'Paragraph'
             : 'Code Block'}
+        </Button>
+        <Button type="primary" onClick={this.onOlClick}>
+          有序
+        </Button>
+        <Button type="primary" onClick={this.onUlClick}>
+          无序
         </Button>
         <Editor
           plugins={plugins}

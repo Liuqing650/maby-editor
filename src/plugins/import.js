@@ -1,5 +1,6 @@
 import EditPrism from 'slate-prism';
 import EditCode from 'slate-edit-code';
+import EditList from 'slate-edit-list';
 import options from '../options';
 import {
   BoldPlugin, BlockquotePlugin, ImagesPlugin, PasteHtmlPlugin, LinkPlugin, HrPlugin,
@@ -15,13 +16,16 @@ const editCodePlugin = EditCode({
   getIndent: () => ('  '),
   onlyIn: node => node.type === BLOCKS.CODE_BLOCK
 });
+
+const editListPlugin = EditList(BLOCKS.LIST_OPTIONS);
+
 // 插件
 const plugins = [
   editCodePlugin,
+  editListPlugin,
   LinkPlugin(),
   CodePlugin(),
   CodeBlockPlugin(),
-  // CheckListPlugin(),
   HrPlugin(),
   EditPrism({
     onlyIn: node => node.type === BLOCKS.CODE_BLOCK,
@@ -54,6 +58,7 @@ const plugins = [
 ];
 
 export {
-  editCodePlugin
+  editCodePlugin,
+  editListPlugin,
 };
 export default plugins;
