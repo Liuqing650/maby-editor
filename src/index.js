@@ -2,8 +2,9 @@ import React from 'react';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import { Button } from 'antd';
-import plugins, { editCodePlugin, editListPlugin } from './plugins/import';
+import plugins, { editCodePlugin, editListPlugin, taskListPlugin } from './plugins/import';
 import options from './options';
+import ToolBar from './toolBar';
 // initSate
 import * as initState from './initValue/initState';
 // style
@@ -29,6 +30,12 @@ class MaybeEditor extends React.Component {
       setTimeout(editor.focus.bind(editor), 1000);
     }
   }
+  // eslint-disable-next-line react/sort-comp
+  call(change, type) {
+    this.setState({
+      value: this.state.value.change().call(change, type).value
+    });
+  }
   // 发生变更时，使用新的编辑器状态更新应用的 React 状态。
   onChange = ({ value }) => {
     this.setState({ value });
@@ -37,29 +44,48 @@ class MaybeEditor extends React.Component {
     const { value } = this.state;
     this.onChange(editCodePlugin.changes.toggleCodeBlock(value.change(), 'paragraph').focus());
   };
-  onUlClick = () => {
+  onUlClick = (module, type) => {
     const {
       wrapInList,
-      // unwrapList,
-      // increaseItemDepth,
-      // decreaseItemDepth
-    } = editListPlugin.changes;
-    const { value } = this.state;
-    wrapInList(BLOCKS.LIST_OPTIONS, value.change);
-  };
-  onOlClick = () => {
-    const {
-      // wrapInList,
       unwrapList,
-      // increaseItemDepth,
-      // decreaseItemDepth
+      increaseItemDepth,
+      decreaseItemDepth
     } = editListPlugin.changes;
-    const { value } = this.state;
-    unwrapList(BLOCKS.LIST_OPTIONS, value.change);
+    const dict = {
+      wrapInList,
+      unwrapList,
+      increaseItemDepth,
+      decreaseItemDepth
+    };
+    this.call(dict[module], type);
+  };
+  onTaskClick = (module, type) => {
+    const {
+      wrapInList,
+      unwrapList,
+      increaseItemDepth,
+      decreaseItemDepth
+    } = taskListPlugin.changes;
+    const dict = {
+      wrapInList,
+      unwrapList,
+      increaseItemDepth,
+      decreaseItemDepth
+    };
+    this.call(dict[module], type);
   };
   render() {
     const { placeholder, className } = this.props;
     const { value } = this.state;
+    const toolBarProps = {
+      value,
+      plugin: {
+        editCodePlugin,
+        editListPlugin,
+        taskListPlugin
+      },
+      onChange: this.onChange
+    };
     return (
       <div className={`maby ${className}`}>
         <Button type="primary" onClick={this.onToggleCode}>
@@ -67,12 +93,28 @@ class MaybeEditor extends React.Component {
             ? 'Paragraph'
             : 'Code Block'}
         </Button>
-        <Button type="primary" onClick={this.onOlClick}>
-          有序
-        </Button>
-        <Button type="primary" onClick={this.onUlClick}>
+        <Button type="primary" onClick={() => this.onUlClick('wrapInList')}>
           无序
         </Button>
+        <Button type="primary" onClick={() => this.onUlClick('wrapInList', BLOCKS.OL_LIST)}>
+          有序
+        </Button>
+        <Button type="primary" onClick={() => this.onUlClick('decreaseItemDepth')}>
+          减少缩进
+        </Button>
+        <Button type="primary" onClick={() => this.onUlClick('increaseItemDepth')}>
+          增加缩进
+        </Button>
+        <Button type="primary" onClick={() => this.onUlClick('unwrapList')}>
+          解除无序
+        </Button>
+        <Button type="dashed" onClick={() => this.onTaskClick('wrapInList')}>
+          任务列表
+        </Button>
+        <Button type="dashed" onClick={() => this.onTaskClick('unwrapList')}>
+          解除任务列表
+        </Button>
+        <ToolBar {...toolBarProps} />
         <Editor
           plugins={plugins}
           placeholder={placeholder || ''}

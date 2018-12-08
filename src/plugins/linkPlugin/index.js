@@ -1,10 +1,10 @@
 import isUrl from 'is-url';
 import toPascal from 'to-pascal-case';
 import { getEventTransfer } from 'slate-react';
-import renderMark from '../../components/renderMark';
+import renderBlock from '../../components/renderBlock';
 import opts from '../../options';
 
-const { MARKS } = opts;
+const { INLINE } = opts;
 
 const hasLinks = (value) => {
   return value.inlines.some(inline => inline.type === type);
@@ -12,26 +12,28 @@ const hasLinks = (value) => {
 
 const unwrapLink = (change) => {
   change.unwrapInline(type);
+  return change;
 };
 
 const wrapLink = (change, href) => {
   change.wrapInline({
-    type,
+    type: INLINE.LINK,
     data: { href },
-  });
+  }).collapseToEnd();
+  return change;
 };
 export default (opt) => {
   const pasteOpt = Object.assign({
-    type: MARKS.LINK,
+    type: INLINE.LINK,
     hrefProperty: 'href',
     collapseTo: 'end'
   }, opt);
   const options = Object.assign({
-    type: MARKS.LINK,
-    getHref: mark => mark.data.get('href')
+    type: INLINE.LINK,
+    getHref: node => node.data.get('href')
   }, opt);
   return {
-    ...renderMark(options),
+    ...renderBlock(options),
     onPaste(event, change) {
       const transfer = getEventTransfer(event);
       const { value } = change;
@@ -49,16 +51,13 @@ export default (opt) => {
       if (/\[([^\]]+)\]\(([^\s)]*)\)/.test(startText.text)) {
         return;
       }
-
       if (value.isCollapsed) {
         const { startOffset } = value;
         change.insertText(text).moveOffsetsTo(startOffset, startOffset + text.length);
       } else if (hasLinks(value)) {
         change.call(unwrapLink);
       }
-
       change.call(wrapLink, text);
-
       if (pasteOpt.collapseTo) {
         change[`collapseTo${toPascal(pasteOpt.collapseTo)}`]();
       }

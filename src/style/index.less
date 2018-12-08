@@ -113,5 +113,76 @@ html, body, :global(#root) {
         border: 1px solid rgba(0,0,0,0);
       }
     }
+    ol,ul {
+      margin-bottom: 0;
+      padding: 0 0 0 2em;
+    }
+    ol {
+      list-style-type: decimal;
+    }
+    .task-ul-active {
+      background: #f4f4f4;
+      border-radius: 3px 3px;
+    }
+    .task-ul {
+      margin-bottom: 0;
+      padding: 0 0 0 2em;
+      .task-li-checkbox {
+        flex: 0 1;
+        padding-right: 6px;
+        position: relative;
+      }
+      .task-li-selected {
+        text-decoration: line-through;
+      }
+      .task-li {
+        flex: 1 1;
+        position: relative;
+        list-style: none;
+        display: -ms-flexbox;
+        display: flex;
+        padding: 0 10px;
+        margin-left: -2em;
+      }
+    }
+    .toolBar {
+      border-radius: 2px 2px 0 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 1px 1px rgba(0,0,0,0.16);
+      line-height: 0px !important;
+      background-color: #fff;
+      .icon-box {
+        display: inline-block;
+        background: transparent;
+        color: #222;
+        cursor: pointer;
+        border-bottom: 0.5px solid #ebebeb;
+        &:hover {
+          background: #ebebeb;
+        }
+        .icon-item {
+          display: block;
+          width: 25px;
+          margin: 10px;
+          text-align: center;
+          float: none;
+        }
+        .icon-active {
+          .icon-item;
+        }
+        .icon-fill {
+          fill: #444;
+        }
+        .icon-fill-active {
+          fill: #4f748e;
+        }
+        .icon-stroke {
+          stroke: #444;
+          fill: transparent;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-width: 2;
+        }
+      }
+    }
   }
 }

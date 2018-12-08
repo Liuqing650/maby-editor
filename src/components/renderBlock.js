@@ -2,13 +2,16 @@ import React from 'react';
 import isHotkey from 'is-hotkey';
 import Blockquote from './Blockquote';
 import Paragraph from './Paragraph';
-import DefaultBlock from './DefaultBlock';
+// import DefaultBlock from './DefaultBlock';
 import Image from './Image';
 import CodeBlock from './CodeBlock';
 import CodeLine from './CodeLine';
 import UlBlock from './UlBlock';
 import OlBlock from './OlBlock';
 import LiBlock from './LiBlock';
+import TodoUlList from './TodoUlList';
+import TodoLiList from './TodoLiList';
+import Link from './Link';
 import Hr from './Hr';
 import { Header1, Header2, Header3, Header4, Header5, Header6 } from './Header';
 import opts from '../options';
@@ -52,6 +55,12 @@ export default (options, hotkey) => {
           return <UlBlock {...props} />;
         case BLOCKS.LIST_ITEM:
           return <LiBlock {...props} />;
+        case BLOCKS.LINK:
+          return <Link {...props} options={options} />;
+        case BLOCKS.TODO_UL_LIST:
+          return <TodoUlList {...props} />;
+        case BLOCKS.TODO_LI_ITEM:
+          return <TodoLiList {...props} />;
         case BLOCKS.HEADING_1:
           return <Header1 {...props} />;
         case BLOCKS.HEADING_2:
@@ -67,7 +76,8 @@ export default (options, hotkey) => {
         case BLOCKS.PARAGRAPH:
           return <Paragraph {...props} />;
         default:
-          return <DefaultBlock {...props} />;
+          // return <DefaultBlock {...props} />;
+          break;
       }
     },
     onKeyDown(event, change) {

@@ -18,11 +18,13 @@ const editCodePlugin = EditCode({
 });
 
 const editListPlugin = EditList(BLOCKS.LIST_OPTIONS);
+const taskListPlugin = EditList(BLOCKS.TODO_LIST);
 
 // 插件
 const plugins = [
   editCodePlugin,
   editListPlugin,
+  taskListPlugin,
   LinkPlugin(),
   CodePlugin(),
   CodeBlockPlugin(),
@@ -60,5 +62,6 @@ const plugins = [
 export {
   editCodePlugin,
   editListPlugin,
+  taskListPlugin,
 };
 export default plugins;

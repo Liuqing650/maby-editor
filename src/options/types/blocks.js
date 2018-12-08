@@ -1,17 +1,5 @@
+import inline from './inline';
 
-
-// code 选项
-const CODE_BLOCK_OPTIONS = {
-  lineType: 'code-line',
-  containerType: 'code-block',
-  exitBlockType: 'paragraph'
-};
-// list 选项
-const LIST_OPTIONS = {
-  types: ['ul_list', 'ol_list'],
-  typeItem: 'list_item',
-  typeDefault: 'paragraph'
-};
 // 辅助配置项
 const HELP = {
   LOCAL_SAVE: 'save',
@@ -46,20 +34,11 @@ export default {
   TABLE: 'table',
   TABLE_ROW: 'table_row',
   TABLE_CELL: 'table_cell',
-  // Lists
-  OL_LIST: 'ol_list',
-  UL_LIST: 'ul_list',
-  LIST_ITEM: 'list_item',
 
   // Default block
   DEFAULT: 'paragraph',
-  // Special
-  IMAGE: 'image',
-  VIDEO: 'video',
 
-  // 组合类型
-  CODE_BLOCK_OPTIONS,
-  LIST_OPTIONS,
   TABLE_ALIGN,
-  HELP
+  HELP,
+  ...inline
 };

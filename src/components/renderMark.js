@@ -7,7 +7,6 @@ import Underline from './Underline';
 import Italic from './Italic';
 import Deleteline from './Deleteline';
 import Code from './Code';
-import Link from './Link';
 
 import opts from '../options';
 
@@ -24,8 +23,6 @@ export default (options, hotkey) => {
       switch (type) {
         case MARKS.BOLD:
           return <Bold {...props} />;
-        case MARKS.LINK:
-          return <Link {...props} options={options} />;
         case MARKS.SPAN:
           return <SpanMark {...props} />;
         case MARKS.UNDERLINE:
