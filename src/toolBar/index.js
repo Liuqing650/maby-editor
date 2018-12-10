@@ -1,12 +1,11 @@
 import React from 'react';
-import QuillIcons from 'quill-icons';
 import Header from './icons/header';
 import BlockIcon from './icons/blockIcon';
 import MarkIcon from './icons/markIcon';
 import HrIcon from './icons/hrIcon';
+import CodeBlockIcon from './icons/codeBlockIcon';
 import options from '../options';
 
-console.log('QuillIcons---->', QuillIcons);
 const {
   BLOCKS,
   MARKS,
@@ -22,8 +21,10 @@ class ToolBar extends React.Component {
     options.map((item, index) => {
       const type = item.type;
       const iconProps = {
+        value,
         key: index,
         change: value.change(),
+        plugin: item.plugin,
         onChange,
         item
       };
@@ -42,6 +43,9 @@ class ToolBar extends React.Component {
         case BLOCKS.HR:
           output.push(<HrIcon {...iconProps} />);
           break;
+        case BLOCKS.CODE_BLOCK:
+          output.push(<CodeBlockIcon {...iconProps} />);
+          break;
         case MARKS.BOLD:
         case MARKS.ITALIC:
         case MARKS.CODE:
@@ -55,8 +59,9 @@ class ToolBar extends React.Component {
     return output;
   };
   render() {
+    const { plugin } = this.props;
     const options = [
-      { type: BLOCKS.HEADING_1, icon: 'Header', title: 'Header One', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_1, icon: 'Header1', title: 'Header One', unlock: BLOCKS.PARAGRAPH },
       { type: BLOCKS.HEADING_2, icon: 'Header2', title: 'Header Two', unlock: BLOCKS.PARAGRAPH },
       { type: BLOCKS.HEADING_3, icon: 'Header3', title: 'Header Three', unlock: BLOCKS.PARAGRAPH },
       { type: BLOCKS.HEADING_4, icon: 'Header4', title: 'Header Four', unlock: BLOCKS.PARAGRAPH },
@@ -76,7 +81,7 @@ class ToolBar extends React.Component {
       // { type: 'Link', icon: 'Link', title: 'Link' },
       // { type: 'Image', icon: 'Image', title: 'Image' },
       // { type: 'Video', icon: 'Video', title: 'Video' },
-      // { type: 'CodeBlock', icon: 'CodeBlock', title: 'Code Bloack' }
+      { type: BLOCKS.CODE_BLOCK, icon: 'CodeBlock', title: 'Code Bloack', plugin: plugin.editCodePlugin }
     ];
     return (
       <div className="toolBar">

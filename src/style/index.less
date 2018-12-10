@@ -12,7 +12,7 @@ html, body, :global(#root) {
 }
 :global {
   .maby {
-    p {
+    p,h1,h2,h3,h4,h5,h6 {
       margin-bottom: 0;
       margin-top: 0;
     }
@@ -164,28 +164,11 @@ html, body, :global(#root) {
           width: 25px;
           margin: 10px;
           text-align: center;
-          float: none;
+          font-size: initial;
         }
         .icon-active {
           .icon-item;
-        }
-        .icon-fill {
-          fill: #444;
-        }
-        .icon-fill-active {
-          fill: #ca0b8b;
-        }
-        .icon-stroke {
-          stroke: #444;
-          fill: transparent;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          stroke-width: 2;
-        }
-        .icon-stroke-active {
-          stroke: #ca0b8b;
-          stroke-width: 2;
-          fill: transparent;
+          color: #fa541c;
         }
       }
     }
