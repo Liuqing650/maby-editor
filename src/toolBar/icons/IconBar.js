@@ -9,17 +9,19 @@ class IconBar extends React.Component {
       isActive,
       className = 'icon-item',
       activeClassName = 'icon-active',
+      activeStrokeClassName = 'icon-stroke-active',
       strokeClassName = 'icon-stroke',
       activeFillClassName = 'icon-fill-active',
       fillClassName = 'icon-fill',
     } = this.props;
     const iconClassName = isActive ? activeClassName : className;
     const iconFillClassName = isActive ? activeFillClassName : fillClassName;
+    const iconStrokeClassName = isActive ? activeStrokeClassName : strokeClassName;
     const fontElement = React.createElement(
       QuillIcons[icon],
       Object.assign({
         className: iconClassName,
-        strokeClassName,
+        strokeClassName: iconStrokeClassName,
         fillClassName: iconFillClassName,
       })
     );
