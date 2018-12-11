@@ -1,33 +1,50 @@
 import React from 'react';
-import IconBar from '../IconBar';
-import { haveBlocks } from '../../../utils';
+import Select from 'components/Select';
+import { haveBlocks } from 'utils';
 
+const Option = Select.Option;
 class Header extends React.Component {
-  onMouseDown = (event) => {
-    event.preventDefault();
-    const { change, item, onChange } = this.props;
-    const isActive = haveBlocks(change, item.type);
-    change.setBlocks(isActive ? item.unlock : item.type);
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.item.defaultSelected || '',
+    };
+  }
+  onChangeType = (value, itemData) => {
+    const { change, onChange } = this.props;
+    const isActive = haveBlocks(change, itemData.type);
+    change.setBlocks(isActive ? itemData.unlock : itemData.type);
     if (onChange && typeof onChange === 'function') {
       onChange(change);
     }
+    this.setState({
+      value
+    });
+  }
+  renderOptions = () => {
+    const { item } = this.props;
+    const options = item.options;
+    const output = [];
+    if (!options || options.length === 0) {
+      return null;
+    }
+    options.map((opt, index) => {
+      output.push(<Option value={opt.title} key={`opt-${index}`} itemData={opt}>{opt.title}</Option>);
+    });
+    return output;
   }
   render() {
-    const { change, item } = this.props;
-    const isActive = haveBlocks(change, item.type);
+    const { item } = this.props;
+    const { value } = this.state;
     const iconProps = {
-      className: 'icon-box',
+      className: 'icon-select-box',
       title: item.title,
-      onMouseDown: this.onMouseDown
-    };
-    const iconBarProps = {
-      type: item.type,
-      icon: item.icon,
-      isActive
     };
     return (
       <div {...iconProps}>
-        <IconBar {...iconBarProps} />
+        <Select value={value} onChange={this.onChangeType}>
+          {this.renderOptions()}
+        </Select>
       </div>
     );
   }

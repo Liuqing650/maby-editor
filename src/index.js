@@ -88,40 +88,42 @@ class MaybeEditor extends React.Component {
     };
     return (
       <div className={`maby ${className}`}>
-        <Button type="primary" onClick={this.onToggleCode}>
-          {editCodePlugin.utils.isInCodeBlock(value)
-            ? 'Paragraph'
-            : 'Code Block'}
-        </Button>
-        <Button type="primary" onClick={() => this.onUlClick('wrapInList')}>
-          无序
-        </Button>
-        <Button type="primary" onClick={() => this.onUlClick('wrapInList', BLOCKS.OL_LIST)}>
-          有序
-        </Button>
-        <Button type="primary" onClick={() => this.onUlClick('decreaseItemDepth')}>
-          减少缩进
-        </Button>
-        <Button type="primary" onClick={() => this.onUlClick('increaseItemDepth')}>
-          增加缩进
-        </Button>
-        <Button type="primary" onClick={() => this.onUlClick('unwrapList')}>
-          解除无序
-        </Button>
-        <Button type="dashed" onClick={() => this.onTaskClick('wrapInList')}>
-          任务列表
-        </Button>
-        <Button type="dashed" onClick={() => this.onTaskClick('unwrapList')}>
-          解除任务列表
-        </Button>
-        <ToolBar {...toolBarProps} />
-        <Editor
-          plugins={plugins}
-          placeholder={placeholder || ''}
-          value={value}
-          onChange={this.onChange}
-          ref={(element) => { this.editor = element; }}
-        />
+        <div>
+          <Button type="primary" onClick={this.onToggleCode}>
+            {editCodePlugin.utils.isInCodeBlock(value)
+              ? 'Paragraph'
+              : 'Code Block'}
+          </Button>
+          <Button type="primary" onClick={() => this.onUlClick('wrapInList')}>
+            无序
+          </Button>
+          <Button type="primary" onClick={() => this.onUlClick('wrapInList', BLOCKS.OL_LIST)}>
+            有序
+          </Button>
+          <Button type="primary" onClick={() => this.onUlClick('decreaseItemDepth')}>
+            减少缩进
+          </Button>
+          <Button type="primary" onClick={() => this.onUlClick('increaseItemDepth')}>
+            增加缩进
+          </Button>
+          <Button type="primary" onClick={() => this.onUlClick('unwrapList')}>
+            解除无序
+          </Button>
+          <Button type="dashed" onClick={() => this.onTaskClick('wrapInList')}>
+            任务列表
+          </Button>
+          <Button type="dashed" onClick={() => this.onTaskClick('unwrapList')}>
+            解除任务列表
+          </Button>
+          <ToolBar {...toolBarProps} />
+          <Editor
+            plugins={plugins}
+            placeholder={placeholder || ''}
+            value={value}
+            onChange={this.onChange}
+            ref={(element) => { this.editor = element; }}
+          />
+        </div>
       </div>
     );
   }

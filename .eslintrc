@@ -17,6 +17,7 @@
     "jsx-a11y/click-events-have-key-events": [
       0
     ],
+    "jsx-a11y/no-noninteractive-tabindex": [0],
     "react/jsx-no-target-blank": [
       0
     ],
@@ -59,6 +60,7 @@
     "react/react-in-jsx-scope": [
       0
     ],
+    "react/no-unused-prop-types": [0],
     "no-mixed-operators": [
       0
     ],

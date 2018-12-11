@@ -24,6 +24,7 @@ export default {
   FOOTNOTE: 'footnote',
   HR: 'hr',
   // Headings
+  HEADING: 'header',
   HEADING_1: 'header-one',
   HEADING_2: 'header-two',
   HEADING_3: 'header-three',

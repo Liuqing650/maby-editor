@@ -24,17 +24,12 @@ class ToolBar extends React.Component {
         value,
         key: index,
         change: value.change(),
-        plugin: item.plugin,
+        plugin: item.plugin || null,
         onChange,
         item
       };
       switch (type) {
-        case BLOCKS.HEADING_1:
-        case BLOCKS.HEADING_2:
-        case BLOCKS.HEADING_3:
-        case BLOCKS.HEADING_4:
-        case BLOCKS.HEADING_5:
-        case BLOCKS.HEADING_6:
+        case BLOCKS.HEADING:
           output.push(<Header {...iconProps} />);
           break;
         case BLOCKS.BLOCKQUOTE:
@@ -49,6 +44,7 @@ class ToolBar extends React.Component {
         case MARKS.BOLD:
         case MARKS.ITALIC:
         case MARKS.CODE:
+        case MARKS.UNDERLINE:
         case MARKS.STRIKETHROUGH:
           output.push(<MarkIcon {...iconProps} />);
           break;
@@ -60,17 +56,22 @@ class ToolBar extends React.Component {
   };
   render() {
     const { plugin } = this.props;
+    const headerOpt = [
+      { type: BLOCKS.PARAGRAPH, value: BLOCKS.PARAGRAPH, title: '正文', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_1, value: BLOCKS.HEADING_1, title: '一号标题', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_2, value: BLOCKS.HEADING_2, title: '二号标题', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_3, value: BLOCKS.HEADING_3, title: '三号标题', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_4, value: BLOCKS.HEADING_4, title: '四号标题', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_5, value: BLOCKS.HEADING_5, title: '五号标题', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING_6, value: BLOCKS.HEADING_6, title: '六号标题', unlock: BLOCKS.PARAGRAPH },
+    ];
     const options = [
-      { type: BLOCKS.HEADING_1, icon: 'Header1', title: 'Header One', unlock: BLOCKS.PARAGRAPH },
-      { type: BLOCKS.HEADING_2, icon: 'Header2', title: 'Header Two', unlock: BLOCKS.PARAGRAPH },
-      { type: BLOCKS.HEADING_3, icon: 'Header3', title: 'Header Three', unlock: BLOCKS.PARAGRAPH },
-      { type: BLOCKS.HEADING_4, icon: 'Header4', title: 'Header Four', unlock: BLOCKS.PARAGRAPH },
-      { type: BLOCKS.HEADING_5, icon: 'Header5', title: 'Header Five', unlock: BLOCKS.PARAGRAPH },
-      { type: BLOCKS.HEADING_6, icon: 'Header6', title: 'Header Six', unlock: BLOCKS.PARAGRAPH },
+      { type: BLOCKS.HEADING, options: headerOpt, title: '正文与标题', defaultSelected: '正文' },
       { type: BLOCKS.BLOCKQUOTE, icon: 'Blockquote', title: 'Blockquote', unlock: BLOCKS.PARAGRAPH },
       { type: BLOCKS.HR, icon: 'HorizontalRule', title: 'HorizontalRule', unlock: BLOCKS.PARAGRAPH },
       { type: MARKS.BOLD, icon: 'Bold', title: 'Bold' },
       { type: MARKS.ITALIC, icon: 'Italic', title: 'Italic' },
+      { type: MARKS.UNDERLINE, icon: 'Underline', title: 'Underline' },
       { type: MARKS.CODE, icon: 'Code', title: 'Code' },
       { type: MARKS.STRIKETHROUGH, icon: 'Strike', title: 'Strike' },
       // { type: 'AlignLeft', icon: 'AlignLeft', title: 'Align Left' },
