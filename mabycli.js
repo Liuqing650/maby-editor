@@ -22,6 +22,7 @@ const getTheme = () => {
 };
 
 const getLoaders = (loaders) => {
+  const newLoaders = [];
   const theme = getTheme();
   const themeLoaders = {
     test: /\.less$/,
@@ -40,17 +41,44 @@ const getLoaders = (loaders) => {
       ]
     })
   };
+  const svgLoader = {
+    test: /\.svg$/,
+    exclude: /node_modules/,
+    use: [
+      {
+        loader: '@svgr/webpack',
+        options: {
+          icon: true,
+        },
+      }
+    ]
+  }
   if (!theme) {
     return loaders;
   }
   loaders.forEach(loader => {
     const isLess = RegExp(loader.test).test('.less');
-    if (isLess) {
-      loader.exclude = /node_modules/;
+    const isSVG = RegExp(loader.test).test('.svg');
+    if (!isSVG) {
+      if (isLess) {
+        loader.exclude = /node_modules/;
+      }
+      newLoaders.push(loader);
+    } else {
+      newLoaders.push({
+        test: /\.(png|jpg|gif)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10240
+          }
+        }]
+      })
     }
   });
-  loaders.push(themeLoaders);
-  return loaders;
+  newLoaders.push(themeLoaders);
+  newLoaders.push(svgLoader);
+  return newLoaders;
 };
 const getExtractTextPlugin = (ExtractText) => {
   return {

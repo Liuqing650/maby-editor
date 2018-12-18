@@ -53,7 +53,8 @@ export default (options, hotkey) => {
           return <OlBlock {...props} />;
         case BLOCKS.UL_LIST:
           return <UlBlock {...props} />;
-        case BLOCKS.LIST_ITEM:
+        case BLOCKS.LIST_UL_ITEM:
+        case BLOCKS.LIST_OL_ITEM:
           return <LiBlock {...props} />;
         case BLOCKS.LINK:
           return <Link {...props} options={options} />;

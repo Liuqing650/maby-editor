@@ -17,13 +17,15 @@ const editCodePlugin = EditCode({
   onlyIn: node => node.type === BLOCKS.CODE_BLOCK
 });
 
-const editListPlugin = EditList(BLOCKS.LIST_OPTIONS);
+const olListPlugin = EditList(BLOCKS.LIST_OL_OPTIONS);
+const ulListPlugin = EditList(BLOCKS.LIST_UL_OPTIONS);
 const taskListPlugin = EditList(BLOCKS.TODO_LIST);
 
 // 插件
 const plugins = [
   editCodePlugin,
-  editListPlugin,
+  olListPlugin,
+  ulListPlugin,
   taskListPlugin,
   LinkPlugin(),
   CodePlugin(),
@@ -61,7 +63,8 @@ const plugins = [
 
 export {
   editCodePlugin,
-  editListPlugin,
+  olListPlugin,
+  ulListPlugin,
   taskListPlugin,
 };
 export default plugins;
