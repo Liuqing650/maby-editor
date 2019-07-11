@@ -1,47 +1,14 @@
 {
   "presets": [
-    "es2015",
-    "react",
-    "flow",
-    "stage-0"
+    "@babel/preset-env",
+    "@babel/preset-typescript",
+    "@babel/preset-react"
   ],
-  "comments": true,
   "plugins": [
-    "transform-runtime",
-    "transform-decorators-legacy",
-    [
-      "import",
-      {
-        "libraryName": "antd",
-        "libraryDirectory": "es",
-        "style": true
-      }
-    ],
-    [
-      "transform-class-properties",
-      {
-        "spec": true
-      }
-    ]
-  ],
-  "env": {
-    "development": {
-      "plugins": [
-        [
-          "react-transform",
-          {
-            "transforms": [
-              {
-                "transform": "react-transform-catch-errors",
-                "imports": [
-                  "react",
-                  "redbox-react"
-                ]
-              }
-            ]
-          }
-        ]
-      ]
-    }
-  }
+    ["import", { "libraryName": "antd", "libraryDirectory": "lib", "style": true }],
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-proposal-object-rest-spread",
+  ]
 }

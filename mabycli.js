@@ -92,9 +92,8 @@ module.exports = () => ({
   vendors: [
     'react',
     'react-dom',
-    'redbox-react',
     'antd',
   ],
   loaders: getLoaders,
-  extractTextPlugin: getExtractTextPlugin
+  extractTextPlugin: getExtractTextPlugin,
 });
