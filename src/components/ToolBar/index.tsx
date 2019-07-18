@@ -3,9 +3,7 @@ import * as React from 'react';
 import { Icon } from 'antd';
 import { ToolBarProps } from '../../interface/editor';
 
-import './style/index';
-
-const MeIcon = Icon.createFromIconfontCN({
+const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1289235_ajd0xaseh6k.js',
 });
 class ToolBar extends React.Component<ToolBarProps> {
@@ -15,9 +13,12 @@ class ToolBar extends React.Component<ToolBarProps> {
       return null;
     }
     return (
-      <div className='me-toolbar-wrap'>
-        ToolBar
-        <MeIcon type='heart' />
+      <div className='me-toolbar'>
+        <button>
+          <span>
+            <IconFont type='icon-yinyongkuai-copy-copy' style={{color: '#0f0'}} />
+          </span>
+        </button>
       </div>
     );
   }

@@ -62,6 +62,36 @@ const getLoaders = (loaders) => {
     if (!isSVG) {
       if (isLess) {
         loader.exclude = /node_modules/;
+        loader.use = ExtractTextPlugin.extract(
+          {
+            fallback: 'style-loader',
+            use:[
+              {
+                loader: 'typings-for-css-modules-loader',
+                options: {
+                  modules: true,
+                  // namedExport: true
+                  // 支持 import * as styles from './index.less'; 的写法
+                  // https://medium.com/@sapegin/css-modules-with-typescript-and-webpack-6b221ebe5f10
+                  namedExport: true,
+                  // 支持驼峰
+                  camelCase: true,
+                  localIdentName: '[path]__[name]__[local]__[hash:base64:5]',
+                  sourceMap: true
+                }
+              },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
+              {
+                loader: 'less-loader',
+                options: {
+                  sourceMap: true,
+                  namedExport: true,
+                  javascriptEnabled: true,
+                }
+              }
+            ]
+          }
+        )
       }
       newLoaders.push(loader);
     } else {

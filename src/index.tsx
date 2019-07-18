@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
+import './style/index';
+
 import { Button } from 'antd';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
@@ -9,8 +11,6 @@ import { MaybeEditorProps, SlateValue, ToolBarProps } from './interface/editor';
 import { formatValueByText } from './utils/formatValue';
 
 import ToolBar from './components/ToolBar';
-
-import './style/index';
 
 class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   public static defaultProps = {
