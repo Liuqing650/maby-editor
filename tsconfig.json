@@ -4,7 +4,7 @@
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
     "removeComments": false,
-    "outDir": "./dist/",
+    "outDir": "./lib/",
     "rootDirs": ["./src"],
     "baseUrl": "./src",
     "strict": true,

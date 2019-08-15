@@ -76,7 +76,7 @@ const getLoaders = (loaders) => {
                   namedExport: true,
                   // 支持驼峰
                   camelCase: true,
-                  localIdentName: '[path]__[name]__[local]__[hash:base64:5]',
+                  localIdentName: '[local]',
                   sourceMap: true
                 }
               },

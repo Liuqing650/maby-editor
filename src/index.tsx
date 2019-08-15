@@ -1,9 +1,7 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 
 import './style/index';
 
-import { Button } from 'antd';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
 
@@ -42,7 +40,8 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
 
   public render() {
     const { value } = this.state;
-    const { placeholder, className, toolBar } = this.props;
+    const {
+      placeholder, className, toolBar } = this.props;
     const toolBarProps: ToolBarProps = toolBar;
     return (
       <div className={`me ${className}`}>
