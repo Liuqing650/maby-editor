@@ -32,8 +32,10 @@
   "homepage": "https://github.com/Liuqing650/maby-editor#readme",
   "devDependencies": {
     "@svgr/webpack": "^4.1.0",
+    "@types/classnames": "^2.2.9",
     "@types/slate": "^0.44.12",
     "@types/slate-react": "^0.22.2",
+    "classnames": "^2.2.6",
     "css-loader": "^0.28.7",
     "es6-promise": "^4.2.4",
     "file-loader": "^1.1.6",

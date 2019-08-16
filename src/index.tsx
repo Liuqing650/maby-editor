@@ -36,6 +36,9 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   // 发生变更时，使用新的编辑器状态更新应用的 React 状态。
   public onChange = (slateValue: SlateValue) => {
     this.setState({ value: slateValue.value });
+    if (this.props.onChange) {
+      this.props.onChange(slateValue);
+    }
   }
 
   public render() {

@@ -211,130 +211,39 @@ html, body, :global(#root) {
       }
     }
   }
-  .mb-select {
-    .select-trigger {
-      .trigger-button {
-        &:hover {
-          border: 1px solid #d9d9d9;
-          background-color: rgba(0, 0, 0, 0);
-        }
-
-        .trigger-text {
-          margin-left: 2px;
-          margin-right: 2px;
-        }
-
-        .trigger-icon-arrow {
-          position: absolute;
-          right: 12px;
-          top: 50%;
-          width: 0;
-          height: 0;
-          border-left: 4px solid rgba(0, 0, 0, 0);
-          border-right: 4px solid rgba(0, 0, 0, 0);
-          border-top: 5px solid #bfbfbf;
-          margin-top: -3px;
-          -webkit-transition: all 0.25s cubic-bezier(0.3, 1.2, 0.2, 1);
-          transition: all 0.25s cubic-bezier(0.3, 1.2, 0.2, 1);
-        }
-
-        padding-top: 0;
-        padding-bottom: 0;
-        padding-left: 6px;
-        padding-right: 20px;
-        display: inline-block;
-        height: 30px;
-        width: auto;
-        min-width: 30px;
-        text-align: left;
-        background-color: rgba(0, 0, 0, 0);
-        border: 1px solid rgba(0, 0, 0, 0);
-        border-radius: 3px 3px;
-        margin: 0 3px 0 0;
-        cursor: pointer;
-        color: #595959;
-        outline: none;
-        line-height: 28px;
-        -webkit-transition: all 0.3s ease-in;
-        transition: all 0.3s ease-in;
-      }
-
-      .trigger-button-active {
-        &:hover {
-          background-color: #e8e8e8;
-          border: 1px solid rgba(0, 0, 0, 0);
-        }
-
-        .trigger-icon-arrow {
-          -webkit-transform: rotate(-180deg);
-          -ms-transform: rotate(-180deg);
-          transform: rotate(-180deg);
-        }
-
-        background-color: #e8e8e8;
-        border: 1px solid rgba(0, 0, 0, 0);
-      }
-
-      display: inline-block;
-    }
-
-    .select-list-active {
-      opacity: 1;
-      visibility: visible;
-      -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-      transform: translateY(0);
-    }
-
-    .select-list {
-      .select-item {
-        &:hover {
-          color: #262626;
-          background-color: #f4f4f4;
-        }
-
-        white-space: nowrap;
-        position: relative;
-        display: block;
-        padding: 2px 16px 2px 16px;
-        color: #595959;
-        text-align: left;
-        line-height: 28px;
-      }
-
-      .select-item-active {
-        white-space: nowrap;
-        position: relative;
-        display: block;
-        padding: 2px 16px 2px 16px;
-        text-align: left;
-        color: #262626;
-        line-height: 28px;
-        background-color: #f4f4f4;
-      }
-
-      position: absolute;
-      top: 32px;
-      left: 0;
-      background: #fff;
-      border: 1px solid #e8e8e8;
-      border-radius: 3px 3px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
-      // min-width: 168px;
-      padding: 5px 0;
-      height: auto;
-      opacity: 0;
-      visibility: hidden;
-      -webkit-transition: all 0.25s cubic-bezier(0.3, 1.2, 0.2, 1);
-      transition: all 0.25s cubic-bezier(0.3, 1.2, 0.2, 1);
-      z-index: 999;
-      -webkit-transform: translateY(-10px);
-      -ms-transform: translateY(-10px);
-      transform: translateY(-10px);
-    }
-
-    position: relative;
+  .mb-select-btn {
     display: inline-block;
-    z-index: 1;
+    height: 32px;
+    width: auto;
+    min-width: 32px;
+    text-align: center;
+    padding: 0 8px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px 3px;
+    font-size: 16px;
+    margin: 0 4px 0 0;
+    cursor: pointer;
+    color: #595959;
+    outline: none;
+    line-height: 32px;
+    transition: all 0.3s ease-in;
+    &:hover {
+      border: 1px solid transparent;
+      background-color: #f5f5f5;
+    }
+    .select-text {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+  .mb-btn-disabled {
+    color: rgba(0,0,0,0.25);
+    background-color: #f5f5f5;
+    border-color: #d9d9d9;
+    text-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 }

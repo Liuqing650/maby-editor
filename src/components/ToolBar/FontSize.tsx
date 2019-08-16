@@ -1,18 +1,22 @@
 import * as React from 'react';
 
 import { Dropdown, Icon, Menu, Tag } from 'antd';
+import { SelectProps } from '../../interface/common';
 import * as styles from '../../style/index.less';
+import Select from '../common/Select';
 
 class FontSize extends React.Component {
   public state = {
     font: 'p',
-    fontSize: 14,
+    fontSize: '14px',
+    fontSizeConfig: {
+      related: ['p'],
+      options: [ '9px', '10px', '11px', '12px', '13px', '14px', '16px', '18px', '20px', '22px', '24px', '30px', '36px'],
+    },
     config: [
       {
         name: '正文',
         key: 'p',
-        options: [ 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 30, 36],
-        optionTitle: '字号',
       },
       {
         name: '标题一',
@@ -46,41 +50,43 @@ class FontSize extends React.Component {
       },
     ],
   };
-  public onMenuChange = (config: any) => {
-    console.log('config------>', config);
-    this.setState({font: config.key});
+  public onFontChange = (value: string) => {
+    this.setState({font: value});
   }
-  public renderIconBtns = (font: string) => {
+  public onFontSizeChange = (value: string) => {
+    console.log('value---->', value);
+    this.setState({fontSize: value});
+  }
+  public renderFont = (font: string) => {
     const { config } = this.state;
-    const output: any = [];
-    const activeConfig = config.find((cfg) => (cfg.key === font));
-    config.map((item) => {
-      output.push(
-        <Menu.Item key={item.key}>
-          <div className={styles.meIconBtn}>
-            <span>{item.name} </span>
-            <span>{item.prefix ? <Tag>{item.prefix}</Tag> : null}</span>
-          </div>
-        </Menu.Item>
-      );
-    });
-    const menu = (<Menu onClick={this.onMenuChange}>{output}</Menu>);
-    return (
-      <Dropdown overlay={menu} trigger={['click']}>
-        <button className={styles.meIconBtn}>
-          <span className={styles.selectText}>
-            {activeConfig ? activeConfig.name : '正文'}
-          </span>
-          <Icon type='caret-down' />
-        </button>
-      </Dropdown>
-    );
+    const selectProps: SelectProps = {
+      value: font,
+      defaultValue: 'p',
+      options: config,
+      onChange: this.onFontChange,
+    };
+    return (<Select {...selectProps} />);
+  }
+  public renderFontSize = (fontSize: string) => {
+    const { fontSizeConfig, font } = this.state;
+    const { options, related } = fontSizeConfig;
+    const selectProps: SelectProps = {
+      value: fontSize,
+      defaultValue: '14px',
+      options,
+      placeholder: '字号',
+      selectedWidth: 36,
+      disabled: !related.includes(font),
+      onChange: this.onFontSizeChange,
+    };
+    return (<Select {...selectProps} />);
   }
   public render() {
-    const { font } = this.state;
+    const { font, fontSize } = this.state;
     return (
       <div className={styles.meToolbarArea}>
-        {this.renderIconBtns(font)}
+        {this.renderFont(font)}
+        {this.renderFontSize(fontSize)}
       </div>
     );
   }

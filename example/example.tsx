@@ -6,9 +6,9 @@ export default class Example extends React.Component {
   public state = {
     value: null,
   };
-  public onChange = ({ value }) => {
-    // console.log('value---->', value);
-    this.setState({ value });
+  public onChange = (slateValue) => {
+    console.log('value---->', slateValue.value);
+    // this.setState({ value });
   }
   public handleSubmit = (value) => {
     console.log(value);
@@ -25,6 +25,7 @@ export default class Example extends React.Component {
       toolBar: {
         visible: true,
       },
+      onChange: this.onChange
     };
     const style = {
       borderLeft: '1px solid #ccc',
