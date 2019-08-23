@@ -24,7 +24,7 @@ class Select extends React.Component<SelectProps, {}> {
       if (typeof cfg !== 'object') {
         return cfg === selectValue;
       }
-      return cfg.key === selectValue;
+      return cfg.value === selectValue;
     });
     options.map((item) => {
       if (typeof item !== 'object') {
@@ -37,9 +37,9 @@ class Select extends React.Component<SelectProps, {}> {
         );
       } else {
         output.push(
-          <Menu.Item key={item.key}>
+          <Menu.Item key={item.value}>
             <div className={styles.mbSelectBtn}>
-              <span>{item.name} </span>
+              <span>{item.label} </span>
               <span>{item.prefix ? <Tag>{item.prefix}</Tag> : null}</span>
             </div>
           </Menu.Item>
@@ -50,7 +50,7 @@ class Select extends React.Component<SelectProps, {}> {
     const btnCssName = classnames(styles.mbSelectBtn, { [styles.mbBtnDisabled]: disabled });
     let activeText = placeholder;
     if (activeOptions) {
-      activeText = typeof activeOptions !== 'object' ? activeOptions : activeOptions.name;
+      activeText = typeof activeOptions !== 'object' ? activeOptions : activeOptions.label;
     }
     return (
       <Dropdown overlay={menu} trigger={['click']} disabled={disabled}>

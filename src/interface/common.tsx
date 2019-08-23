@@ -9,3 +9,11 @@ export interface SelectProps {
   selectedWidth?: number;
   onChange?: (value: string, config?: any) => void;
 }
+
+export interface IconBtnProps {
+  options: any[];
+  disabled?: boolean;
+  active?: [string];
+  defaultActive?: [string];
+  onClick?: (value: string, item?: any) => void;
+}

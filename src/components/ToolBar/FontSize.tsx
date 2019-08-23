@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { Dropdown, Icon, Menu, Tag } from 'antd';
 import { SelectProps } from '../../interface/common';
 import * as styles from '../../style/index.less';
 import Select from '../common/Select';
@@ -15,37 +14,37 @@ class FontSize extends React.Component {
     },
     config: [
       {
-        name: '正文',
-        key: 'p',
+        label: '正文',
+        value: 'p',
       },
       {
-        name: '标题一',
-        key: 'h1',
+        label: '标题一',
+        value: 'h1',
         prefix: 'H1'
       },
       {
-        name: '标题二',
-        key: 'h2',
+        label: '标题二',
+        value: 'h2',
         prefix: 'H2'
       },
       {
-        name: '标题三',
-        key: 'h3',
+        label: '标题三',
+        value: 'h3',
         prefix: 'H3'
       },
       {
-        name: '标题四',
-        key: 'h4',
+        label: '标题四',
+        value: 'h4',
         prefix: 'H4'
       },
       {
-        name: '标题五',
-        key: 'h5',
+        label: '标题五',
+        value: 'h5',
         prefix: 'H5'
       },
       {
-        name: '标题六',
-        key: 'h6',
+        label: '标题六',
+        value: 'h6',
         prefix: 'H6'
       },
     ],
