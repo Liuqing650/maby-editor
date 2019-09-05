@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { Dropdown, Icon, Menu, Tag } from 'antd';
 import { SelectProps } from '../../interface/common';
 import * as styles from '../../style/index.less';
 import Select from '../common/Select';

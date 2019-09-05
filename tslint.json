@@ -13,7 +13,7 @@
     "trailing-comma": false,
     "max-classes-per-file": false,
     "object-literal-sort-keys": false,
-    "quotemark": [true, "single"],
+    "quotemark": [true, "single", "jsx-double"],
     "indent":[true, "spaces", 2],
     "no-consecutive-blank-lines": [ true, 1 ],
     "align": [true, "parameters", "statements"]

@@ -1,78 +1,78 @@
 import * as React from 'react';
 
-import { Icon, Tooltip } from 'antd';
 import { ToolBarProps } from '../../interface/editor';
 import * as styles from '../../style/index.less';
 
+import ColorPicker from '../common/ColorPicker';
+import IconButtonGroup from '../common/IconButtonGroup';
+import IconGroup from '../common/IconGroup';
 import FontSize from './FontSize';
 
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1289235_ajd0xaseh6k.js',
-});
 class ToolBar extends React.Component<ToolBarProps> {
   public state = {
     options: [
       {
         icon: 'icon-yinyongkuai-copy-copy',
-        name: '插入引用',
+        title: '插入引用',
+        type: 'blockquote'
       },
       {
         icon: 'icon-codeblock-copy-copy-copy',
-        name: '插入代码块',
+        title: '插入代码块',
+        type: 'code-block',
       },
       {
         icon: 'icon-code',
-        name: '行内代码',
+        title: '行内代码',
+        type: 'code-line',
       },
       {
         icon: 'icon-line',
-        name: '插入分割线',
+        title: '插入分割线',
+        type: 'hr',
       },
       {
         icon: 'icon-bold',
-        name: '加粗',
+        title: '加粗',
         hotKey: 'Ctrl+B',
+        type: 'bold',
       },
       {
         icon: 'icon-italic',
-        name: '斜体',
+        title: '斜体',
         hotKey: 'Ctrl+I',
+        type: 'italic',
       },
       {
         icon: 'icon-strikethrough',
-        name: '删除线',
+        title: '删除线',
         hotKey: 'Ctrl+Shift+X',
+        type: 'del',
       },
       {
         icon: 'icon-underline',
-        name: '下划线',
+        title: '下划线',
         hotKey: 'Ctrl+U',
+        type: 'underline',
       },
     ],
+    fontStyle: {
+      fontColorConfig: {
+        icon: 'icon-font-color',
+        type: 'FONT_COLOR',
+        defaultColor: '#222222',
+        title: '前景色',
+      },
+      bgColorConfig: {
+        icon: 'icon-highlight',
+        type: 'FONT_COLOR_BG',
+        defaultColor: 'transparent',
+        title: '背景色',
+      }
+    }
   };
-  public renderIconBtns = () => {
-    const { options } = this.state;
-    const output: any = [];
-    options.map((item, index) => {
-      const titleDom = (
-        <div style={{textAlign: 'center', fontSize: 12}}>
-          <div>{item.name}</div>
-          {item.hotKey ? <div>{item.hotKey}</div> : null}
-        </div>
-      );
-      output.push(
-        <Tooltip key={`icon-${index}`} placement='bottom' title={titleDom}>
-          <button className={styles.meIconBtn}>
-            <span>
-              <IconFont type={item.icon} />
-            </span>
-          </button>
-        </Tooltip>
-      );
-    });
-    return output;
-  }
   public render() {
+    const { options, fontStyle } = this.state;
     const { visible } = this.props;
     if (!visible) {
       return null;
@@ -81,10 +81,12 @@ class ToolBar extends React.Component<ToolBarProps> {
       <div className={styles.meToolbar}>
         <div className={styles.meToolbarContent}>
           <div>
-            <div className={styles.meToolbarArea}>
-              {this.renderIconBtns()}
-            </div>
+            <IconButtonGroup options={options} />
             <FontSize />
+            <IconGroup>
+              <ColorPicker {...fontStyle.fontColorConfig} />
+              <ColorPicker {...fontStyle.bgColorConfig} />
+            </IconGroup>
           </div>
         </div>
       </div>

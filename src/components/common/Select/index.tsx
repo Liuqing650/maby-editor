@@ -58,7 +58,7 @@ class Select extends React.Component<SelectProps, {}> {
           <span className={styles.selectText} style={{width: selectedWidth}}>
             {activeText}
           </span>
-          <Icon type='caret-down' />
+          <Icon type="caret-down" />
         </button>
       </Dropdown>
     );
