@@ -14,8 +14,8 @@ class FontSize extends React.Component {
     },
     config: [
       {
-        label: '正文',
-        value: 'p',
+        name: '正文',
+        key: 'p',
       },
       {
         name: '标题一',
@@ -71,6 +71,7 @@ class FontSize extends React.Component {
       selectedWidth: 46,
       onChange: this.onFontChange,
     };
+    console.log('selectProps------>', selectProps);
     return (<Select {...selectProps} />);
   }
   public renderFontSize = (fontSize: string) => {
