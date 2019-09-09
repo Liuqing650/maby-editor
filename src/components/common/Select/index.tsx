@@ -48,7 +48,7 @@ class Select extends React.Component<SelectProps, {}> {
       if (typeof cfg !== 'object') {
         return cfg === selectValue;
       }
-      return cfg.key === selectValue;
+      return cfg.value === selectValue;
     });
     let activeText = placeholder;
     if (activeOptions) {

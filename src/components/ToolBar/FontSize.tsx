@@ -14,8 +14,8 @@ class FontSize extends React.Component {
     },
     config: [
       {
-        name: '正文',
-        key: 'p',
+        label: '正文',
+        value: 'p',
       },
       {
         name: '标题一',
