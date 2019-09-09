@@ -20,32 +20,38 @@ class FontSize extends React.Component {
       {
         name: '标题一',
         key: 'h1',
-        prefix: 'H1'
+        prefix: 'H1',
+        title: 'Ctrl+1',
       },
       {
         name: '标题二',
         key: 'h2',
-        prefix: 'H2'
+        prefix: 'H2',
+        title: 'Ctrl+2',
       },
       {
         name: '标题三',
         key: 'h3',
-        prefix: 'H3'
+        prefix: 'H3',
+        title: 'Ctrl+3',
       },
       {
         name: '标题四',
         key: 'h4',
-        prefix: 'H4'
+        prefix: 'H4',
+        title: 'Ctrl+4',
       },
       {
         name: '标题五',
         key: 'h5',
-        prefix: 'H5'
+        prefix: 'H5',
+        title: 'Ctrl+5',
       },
       {
         name: '标题六',
         key: 'h6',
-        prefix: 'H6'
+        prefix: 'H6',
+        title: 'Ctrl+6',
       },
     ],
   };
@@ -62,6 +68,7 @@ class FontSize extends React.Component {
       value: font,
       defaultValue: 'p',
       options: config,
+      selectedWidth: 46,
       onChange: this.onFontChange,
     };
     return (<Select {...selectProps} />);
@@ -74,7 +81,7 @@ class FontSize extends React.Component {
       defaultValue: '14px',
       options,
       placeholder: '字号',
-      selectedWidth: 36,
+      selectedWidth: 32,
       disabled: !related.includes(font),
       onChange: this.onFontSizeChange,
     };

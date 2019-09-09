@@ -14,5 +14,6 @@ export interface MaybeEditorProps {
   className?: string;
   placeholder?: string;
   toolBar: ToolBarProps;
+  editorContainerStyle?: any;
   onChange?: (slateValue: SlateValue) => void;
 }

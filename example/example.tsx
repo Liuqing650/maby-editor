@@ -25,7 +25,10 @@ export default class Example extends React.Component {
       toolBar: {
         visible: true,
       },
-      onChange: this.onChange
+      onChange: this.onChange,
+      editorContainerStyle: {
+        padding: '10px',
+      }
     };
     const style = {
       borderLeft: '1px solid #ccc',

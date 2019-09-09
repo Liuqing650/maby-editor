@@ -1,7 +1,5 @@
 import * as React from 'react';
-
 import { IconButtonProps } from '../../../interface/common';
-import IconGroup from '../IconGroup';
 import IconButton from './Button';
 
 class IconButtonGroup extends React.Component<IconButtonProps, {}> {
@@ -23,9 +21,9 @@ class IconButtonGroup extends React.Component<IconButtonProps, {}> {
   public render() {
     const { options } = this.props;
     return (
-      <IconGroup>
+      <React.Fragment>
         {this.renderIconBtns(options)}
-      </IconGroup>
+      </React.Fragment>
     );
   }
 }

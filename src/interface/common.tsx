@@ -6,7 +6,9 @@ export interface SelectProps {
   options: any[];
   disabled?: boolean;
   placeholder?: string;
+  title?: string;
   selectedWidth?: number;
+  selectedValue?: any | HTMLElement;
   onChange?: (value: string, config?: any) => void;
 }
 

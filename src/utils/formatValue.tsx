@@ -1,6 +1,6 @@
-type TextType = string;
+import { Text } from 'slate';
 
-export const formatValueByText = (text: TextType): object => ({
+export const formatValueByText = (text: string): object => ({
   document: {
     nodes: [
       {
@@ -9,11 +9,7 @@ export const formatValueByText = (text: TextType): object => ({
         nodes: [
           {
             object: 'text',
-            leaves: [
-              {
-                text: text || '',
-              },
-            ],
+            text: text || '',
           },
         ],
       },

@@ -1,12 +1,11 @@
 import * as React from 'react';
 
-import { Icon, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import classnames from 'classnames';
 import * as styles from '../../../style/index.less';
 
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1289235_zpv7w23lj7c.js',
-});
+import IconFont from '../EditorIcon';
+
 class IconButton extends React.Component<any, {}> {
   public state = {
     visible: false,

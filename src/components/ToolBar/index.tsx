@@ -6,31 +6,33 @@ import * as styles from '../../style/index.less';
 import ColorPicker from '../common/ColorPicker';
 import IconButtonGroup from '../common/IconButtonGroup';
 import IconGroup from '../common/IconGroup';
+import AliginBlock from './AliginBlock';
+import CodeBlock from './CodeBlock';
 import FontSize from './FontSize';
 
 class ToolBar extends React.Component<ToolBarProps> {
   public state = {
-    options: [
+    actionOptions: [
       {
-        icon: 'icon-yinyongkuai-copy-copy',
-        title: '插入引用',
-        type: 'blockquote'
+        icon: 'icon-save',
+        title: '保存',
+        hotKey: 'Ctrl+S',
+        type: 'save',
       },
       {
-        icon: 'icon-codeblock-copy-copy-copy',
-        title: '插入代码块',
-        type: 'code-block',
+        icon: 'icon-redo',
+        title: '撤销',
+        hotKey: 'Ctrl+Z',
+        type: 'redo',
       },
       {
-        icon: 'icon-code',
-        title: '行内代码',
-        type: 'code-line',
+        icon: 'icon-undo',
+        title: '重做',
+        hotKey: 'Ctrl+Shift+Z',
+        type: 'undo',
       },
-      {
-        icon: 'icon-line',
-        title: '插入分割线',
-        type: 'hr',
-      },
+    ],
+    baseOptions: [
       {
         icon: 'icon-bold',
         title: '加粗',
@@ -56,6 +58,29 @@ class ToolBar extends React.Component<ToolBarProps> {
         type: 'underline',
       },
     ],
+    listOptions: [
+      {
+        icon: 'icon-unorderedlist',
+        title: '无序列表',
+        type: 'unlist',
+      },
+      {
+        icon: 'icon-orderedlist',
+        title: '有序列表',
+        type: 'list',
+      },
+      {
+        icon: 'icon-check-square',
+        title: '任务列表',
+        type: 'task-list',
+      },
+      {
+        icon: 'icon-link',
+        title: '插入链接',
+        hotKey: 'Ctrl+K',
+        type: 'link',
+      },
+    ],
     fontStyle: {
       fontColorConfig: {
         icon: 'icon-font-color',
@@ -72,7 +97,7 @@ class ToolBar extends React.Component<ToolBarProps> {
     }
   };
   public render() {
-    const { options, fontStyle } = this.state;
+    const { baseOptions, actionOptions, fontStyle, listOptions } = this.state;
     const { visible } = this.props;
     if (!visible) {
       return null;
@@ -80,14 +105,20 @@ class ToolBar extends React.Component<ToolBarProps> {
     return (
       <div className={styles.meToolbar}>
         <div className={styles.meToolbarContent}>
-          <div>
-            <IconButtonGroup options={options} />
-            <FontSize />
-            <IconGroup>
-              <ColorPicker {...fontStyle.fontColorConfig} />
-              <ColorPicker {...fontStyle.bgColorConfig} />
-            </IconGroup>
-          </div>
+          <IconGroup>
+            <IconButtonGroup options={actionOptions} />
+          </IconGroup>
+          <IconGroup>
+            <IconButtonGroup options={baseOptions} />
+            <CodeBlock />
+          </IconGroup>
+          <FontSize />
+          <IconGroup>
+            <ColorPicker {...fontStyle.fontColorConfig} />
+            <ColorPicker {...fontStyle.bgColorConfig} />
+            <AliginBlock />
+            <IconButtonGroup options={listOptions} />
+          </IconGroup>
         </div>
       </div>
     );

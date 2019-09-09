@@ -6,9 +6,13 @@ import { Value } from 'slate';
 import { Editor } from 'slate-react';
 
 import { MaybeEditorProps, SlateValue, ToolBarProps } from './interface/editor';
+import plugins from './plugins/import';
+
 import { formatValueByText } from './utils/formatValue';
 
 import ToolBar from './components/ToolBar';
+
+console.log('plugins-------->', plugins);
 
 class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   public static defaultProps = {
@@ -30,7 +34,7 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   public call(change: any, type: string) {
     const { value } = this.state;
     this.setState({
-      value: value.change().call(change, type).value,
+      value: value.change().command(change, type).value,
     });
   }
   // 发生变更时，使用新的编辑器状态更新应用的 React 状态。
@@ -44,15 +48,17 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   public render() {
     const { value } = this.state;
     const {
+      editorContainerStyle,
       placeholder, className, toolBar } = this.props;
     const toolBarProps: ToolBarProps = toolBar;
     return (
       <div className={`me ${className}`}>
         <ToolBar {...toolBarProps} />
-        <div>
+        <div id="me-editor" style={editorContainerStyle}>
           <Editor
             placeholder={placeholder || ''}
             value={value}
+            plugins={plugins}
             onChange={this.onChange}
             ref={(element: any) => { this.editor = element; }}
           />
