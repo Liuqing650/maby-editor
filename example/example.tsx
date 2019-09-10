@@ -7,8 +7,7 @@ export default class Example extends React.Component {
     value: null,
   };
   public onChange = (slateValue) => {
-    console.log('value---->', slateValue.value);
-    // this.setState({ value });
+    this.setState({ value: slateValue.value });
   }
   public handleSubmit = (value) => {
     console.log(value);

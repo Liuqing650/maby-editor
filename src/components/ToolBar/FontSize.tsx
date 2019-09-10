@@ -71,7 +71,6 @@ class FontSize extends React.Component {
       selectedWidth: 46,
       onChange: this.onFontChange,
     };
-    console.log('selectProps------>', selectProps);
     return (<Select {...selectProps} />);
   }
   public renderFontSize = (fontSize: string) => {

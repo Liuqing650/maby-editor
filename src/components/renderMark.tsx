@@ -20,6 +20,7 @@ export default (types?: any, hotkey?: string): any => {
         const style = data.get('style');
         props.attributes = { ...props.attributes, style };
       }
+      console.log('type----->', type);
       switch (type) {
         case MARK.BOLD:
           return <Bold {...props} />;
@@ -29,17 +30,17 @@ export default (types?: any, hotkey?: string): any => {
           if (type) { // 高亮代码
             return <PrismSpan {...props} />;
           }
-          next();
-          break;
+          return next();
       }
     },
     onKeyDown(event: Event, editor: Editor, next: any): any {
       if (hotkey && isHotkey(hotkey, event)) {
         event.preventDefault();
+        console.log('types=====>', types);
         editor.command((change: Editor): Editor => change.toggleMark(types.type));
-        return editor;
+      } else {
+        return next();
       }
-      next();
     }
   };
 };

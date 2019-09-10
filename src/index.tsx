@@ -12,8 +12,6 @@ import { formatValueByText } from './utils/formatValue';
 
 import ToolBar from './components/ToolBar';
 
-console.log('plugins-------->', plugins);
-
 class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   public static defaultProps = {
     toolBar: {
@@ -21,15 +19,16 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
     },
   };
   public state: SlateValue = {
-    value: Value.fromJSON(formatValueByText('')),
+    value: Value.fromJSON(formatValueByText('Some Text')),
   };
   private editor: any;
 
   public componentDidMount = () => {
-    const { editor } = this;
-    if (editor) {
-      setTimeout(editor.focus.bind(editor), 1000);
-    }
+    // TODO..
+  }
+
+  public ref = (editor: any) => {
+    this.editor = editor;
   }
   public call(change: any, type: string) {
     const { value } = this.state;
@@ -46,7 +45,6 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
   }
 
   public render() {
-    const { value } = this.state;
     const {
       editorContainerStyle,
       placeholder, className, toolBar } = this.props;
@@ -56,11 +54,13 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
         <ToolBar {...toolBarProps} />
         <div id="me-editor" style={editorContainerStyle}>
           <Editor
-            placeholder={placeholder || ''}
-            value={value}
+            spellCheck={true}
+            autoFocus={true}
+            placeholder={placeholder || 'Enter some text ...'}
+            value={this.state.value}
             plugins={plugins}
             onChange={this.onChange}
-            ref={(element: any) => { this.editor = element; }}
+            ref={this.ref}
           />
         </div>
       </div>
