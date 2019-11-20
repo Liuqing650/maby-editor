@@ -29,10 +29,11 @@ export default (types?: any, hotkey?: string): any => {
       if (hotkey && isHotkey(hotkey, event)) {
         event.preventDefault();
         const isThisType: boolean = editor.value.blocks.some((block: any) => (block.type === types.type));
-        editor.command((change: Editor): Editor => change.setBlocks(!isThisType ? types.type : BLOCK.PARAGRAPH));
-        return editor;
+        editor.setBlocks(!isThisType ? types.type : BLOCK.PARAGRAPH);
+        // editor.command((change: Editor): Editor => change.setBlocks(!isThisType ? types.type : BLOCK.PARAGRAPH));
+      } else {
+        return next();
       }
-      next();
     }
   };
 };

@@ -54,9 +54,10 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
         <ToolBar {...toolBarProps} />
         <div id="me-editor" style={editorContainerStyle}>
           <Editor
-            spellCheck={true}
+            spellCheck={false}
             autoFocus={true}
-            placeholder={placeholder || 'Enter some text ...'}
+            autoCorrect={false}
+            // placeholder={placeholder || ''}
             value={this.state.value}
             plugins={plugins}
             onChange={this.onChange}

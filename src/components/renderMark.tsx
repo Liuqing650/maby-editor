@@ -7,7 +7,7 @@ import { RenderMarkProps } from 'slate-react';
 import typesConfig from '../config';
 
 import Bold from './MarkCom/Blod';
-import PrismSpan from './MarkCom/PrismSpan';
+// import PrismSpan from './MarkCom/PrismSpan';
 import SpanMark from './MarkCom/SpanMark';
 
 export default (types?: any, hotkey?: string): any => {
@@ -27,9 +27,9 @@ export default (types?: any, hotkey?: string): any => {
         case MARK.SPAN:
           return <SpanMark {...props} />;
         default:
-          if (type) { // 高亮代码
-            return <PrismSpan {...props} />;
-          }
+          // if (type) { // 高亮代码
+          //   return <PrismSpan {...props} />;
+          // }
           return next();
       }
     },
@@ -37,7 +37,8 @@ export default (types?: any, hotkey?: string): any => {
       if (hotkey && isHotkey(hotkey, event)) {
         event.preventDefault();
         console.log('types=====>', types);
-        editor.command((change: Editor): Editor => change.toggleMark(types.type));
+        editor.toggleMark(types.type);
+        // editor.command((change: Editor): Editor => change.toggleMark(types.type));
       } else {
         return next();
       }
