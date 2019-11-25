@@ -6,7 +6,7 @@ export interface SlateValue { value: any; }
 export interface ToolBarProps {
   visible: boolean;
   tools?: any;
-  containerClassName?: string;
+  toolBarClassName?: string;
   containerStyle?: object;
 }
 // 编辑器props

@@ -52,7 +52,12 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
     return (
       <div className={`me ${className}`}>
         <ToolBar {...toolBarProps} />
-        <div id="me-editor" style={editorContainerStyle}>
+        <div
+          id="me-editor"
+          className="me-editor"
+          style={editorContainerStyle}
+          onClick={this.onFocusEditContainer}
+        >
           <Editor
             spellCheck={false}
             autoFocus={true}
@@ -61,11 +66,23 @@ class MaybeEditor extends React.Component<MaybeEditorProps, {}> {
             value={this.state.value}
             plugins={plugins}
             onChange={this.onChange}
+            onFocus={this.onFocus}
             ref={this.ref}
           />
         </div>
       </div>
     );
+  }
+  private onFocusEditContainer = (event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+    if (this.editor) {
+      console.log('editor----->', this.editor);
+      this.editor.moveFocusToEndOfDocument();
+    }
+  }
+  private onFocus = (...args) => {
+    console.log('args---->', args);
   }
 }
 export default MaybeEditor;
