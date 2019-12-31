@@ -1,6 +1,6 @@
 module.exports = {
   extends: "stylelint-config-standard",
-  ignoreFiles: ['node_modules/**/*.less', '**/*.md', '**/*.ts', '**/*.tsx', '**/*.js'],
+  ignoreFiles: ['node_modules/**/*.less', '**/*.md', '**/*.json', '**/*.ts', '**/*.tsx', '**/*.js'],
   rules: {
     "string-quotes": "single",
     "color-hex-length": null,
